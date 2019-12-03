@@ -8,7 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const DisplayUsers = props => {
-  const { user } = props;
+  const { user, callErrors } = props;
   const [state, setState] = useState({
     admin: user.admin,
     angel: user.angel,
@@ -18,13 +18,14 @@ const DisplayUsers = props => {
 
   const handleChangeAdmin = e => {
     setState({ ...state, admin: !admin });
-
     updateStatus(user.id, !admin, angel);
+    callErrors(!admin);
   };
 
   const handleChangeAngel = e => {
     setState({ ...state, angel: !angel });
     updateStatus(user.id, admin, !angel);
+    callErrors(!angel);
   };
 
   return (
