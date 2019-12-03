@@ -19,11 +19,11 @@ const AdminPage = props => {
   const classes = useStyles();
   const [page, setPage] = useState(0);
   const { users } = props.location.state;
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [errorMsg, setErrorMsg] = useState('');
   const [errorStatus, setErrorStatus] = useState('');
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = newPage => {
     setPage(newPage);
   };
 
