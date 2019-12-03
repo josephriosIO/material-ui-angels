@@ -79,7 +79,7 @@ export default function Page() {
       <CssBaseline />
       {/* Hero unit */}
       <Container maxWidth='sm' component='main' className={classes.heroContent}>
-        <Typography component='h1' variant='h2' align='center' gutterBottom>
+        <Typography component='h4' variant='h4' align='center' gutterBottom>
           <div className={classes.tableWrapper}>
             {users
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
