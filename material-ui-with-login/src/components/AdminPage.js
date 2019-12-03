@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import DisplayUsers from './DisplayUsers';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-
+import Error from './Errors/Error';
 import TablePagination from '@material-ui/core/TablePagination';
 
 const useStyles = makeStyles(theme => ({
@@ -20,8 +20,10 @@ const useStyles = makeStyles(theme => ({
 const AdminPage = props => {
   const classes = useStyles();
   const { users } = props.location.state;
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [errorMsg, setErrorMsg] = useState('');
+  const [errorStatus, setErrorStatus] = useState('');
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -32,18 +34,34 @@ const AdminPage = props => {
     setPage(0);
   };
 
+  const callErrors = boolean => {
+    if (boolean) {
+      setErrorMsg('Saved.');
+      setErrorStatus('success');
+      setTimeout(() => {
+        setErrorMsg('');
+      }, 3000);
+    } else {
+      setErrorMsg('Removed.');
+      setErrorStatus('success');
+      setTimeout(() => {
+        setErrorMsg('');
+      }, 3000);
+    }
+  };
+
   return (
     <>
+      <Error errorMsg={errorMsg} color={errorStatus} />
       <CssBaseline />
       <Container maxWidth='sm' component='main' className={classes.heroContent}>
         <div className={classes.tableWrapper}>
           <Table stickyHeader aria-label='sticky table'>
-            
             <TableBody>
               {users
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(user => (
-                  <DisplayUsers user={user} />
+                  <DisplayUsers callErrors={callErrors} user={user} />
                 ))}
             </TableBody>
           </Table>
