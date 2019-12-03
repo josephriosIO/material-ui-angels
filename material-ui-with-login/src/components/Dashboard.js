@@ -50,7 +50,7 @@ export default function Page() {
     fetchData();
   }, []);
 
-  const handleChangePage = newPage => {
+  const handleChangePage = (e, newPage) => {
     setPage(newPage);
   };
 

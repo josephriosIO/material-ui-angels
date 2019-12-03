@@ -23,7 +23,7 @@ const AdminPage = props => {
   const { users } = props.location.state;
   const classes = useStyles();
 
-  const handleChangePage = newPage => {
+  const handleChangePage = (e, newPage) => {
     setPage(newPage);
   };
 
