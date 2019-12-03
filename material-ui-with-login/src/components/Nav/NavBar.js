@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button';
 import { setUsersToBackend, getUsers } from '../../../backend/backend';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
 import { NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
@@ -93,8 +92,8 @@ const Navbar = () => {
                       }}
                     >
                       <Button
-                        color='primary'
-                        variant='solid'
+                        color='secondary'
+                        variant='outlined'
                         className={classes.link}
                       >
                         Admin
