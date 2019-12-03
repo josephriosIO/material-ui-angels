@@ -2,10 +2,10 @@ import { get, update } from '@reshuffle/db';
 import { getCurrentUser } from '@reshuffle/server-function';
 
 /* @expose */
-export async function testing(name, pic) {
+export async function setUsersToBackend(name, pic) {
   const { id } = getCurrentUser(true);
 
-  return update('testagainagainagain', (users = []) => {
+  return update('users', (users = []) => {
     let allUsers = JSON.parse(JSON.stringify(users));
 
     const user = {
@@ -32,7 +32,23 @@ export async function testing(name, pic) {
 
 /* @expose */
 export async function getUsers() {
-  const users = await get('testagainagainagain');
+  const users = await get('users');
 
   return users;
+}
+
+/* @expose */
+export async function updateStatus(id, admin, angel) {
+  return update('users', (users = []) => {
+    let allUsers = JSON.parse(JSON.stringify(users));
+
+    allUsers.map(user => {
+      if (user.id === id) {
+        user.admin = admin;
+        user.angel = angel;
+      }
+    });
+
+    return allUsers;
+  });
 }
