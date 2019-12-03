@@ -1,4 +1,6 @@
-import React from 'react';
+import '@reshuffle/code-transform/macro';
+import React, { useState } from 'react';
+import { updateStatus } from '../../backend/backend';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
@@ -7,6 +9,24 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const DisplayUsers = props => {
   const { user } = props;
+  const [state, setState] = useState({
+    admin: user.admin,
+    angel: user.angel,
+  });
+
+  const { admin, angel } = state;
+
+  const handleChangeAdmin = e => {
+    setState({ ...state, admin: !admin });
+
+    updateStatus(user.id, !admin, angel);
+  };
+
+  const handleChangeAngel = e => {
+    setState({ ...state, angel: !angel });
+    updateStatus(user.id, admin, !angel);
+  };
+
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
@@ -14,7 +34,6 @@ const DisplayUsers = props => {
           <Typography
             component='h3'
             variant='h4'
-            align='center'
             color='textSecondary'
             gutterBottom
           >
@@ -23,7 +42,9 @@ const DisplayUsers = props => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={user.admin}
+                onChange={e => handleChangeAdmin(e)}
+                name='admin'
+                checked={admin}
                 value='admin'
                 inputProps={{
                   'aria-label': 'primary checkbox',
@@ -36,7 +57,9 @@ const DisplayUsers = props => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={user.angel}
+                checked={angel}
+                onChange={e => handleChangeAngel(e)}
+                name='angel'
                 value='angel'
                 color='primary'
                 inputProps={{
