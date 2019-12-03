@@ -6,10 +6,9 @@ const app = express();
 app.use(authRouter());
 
 app.get('/hi', async (req, res) => {
-  res.send('hi');
+  res.send('hello');
 });
 
 app.use(defaultHandler);
 
 export default app;
-
