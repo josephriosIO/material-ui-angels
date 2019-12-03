@@ -38,14 +38,23 @@ export async function getUsers() {
 }
 
 /* @expose */
-export async function updateStatus(id, admin, angel) {
+export async function updateStatus(userId, admin, angel) {
+  const { id } = getCurrentUser(true);
   return update('users', (users = []) => {
     let allUsers = JSON.parse(JSON.stringify(users));
 
     allUsers.map(user => {
       if (user.id === id) {
-        user.admin = admin;
-        user.angel = angel;
+        if (user.admin === true) {
+          allUsers.map(user => {
+            if (user.id === userId) {
+              user.admin = admin;
+              user.angel = angel;
+            }
+          });
+        } else {
+          throw 'dont do that!';
+        }
       }
     });
 
