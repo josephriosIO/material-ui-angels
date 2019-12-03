@@ -70,7 +70,7 @@ export default function Page() {
         >
           {users.length > 0 ? (
             users.map(user => (
-              <div>
+              <div key={user.id}>
                 {user.name} <img src={user.img} alt={user.name} />
               </div>
             ))
