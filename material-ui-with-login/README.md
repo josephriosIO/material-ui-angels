@@ -1,4 +1,6 @@
-Reshuffle Identity powered Material UI login example. Wraps the Reshuffle Identity experience in a polished Material-UI interface. Provides login/logout along with clean examples of managing users on the backend.
+# material-ui-angelsgroup
+
+Reshuffle Identity powered Material UI multi user example. Wraps the Reshuffle Identity experience in a polished Material-UI interface. Provides login/logout along with clean examples of managing users on the backend.
 
 To learn more about Reshuffle Identity, [check out the docs](dev.reshuffle.app/identity).
 
@@ -6,7 +8,7 @@ To learn more about Reshuffle Identity, [check out the docs](dev.reshuffle.app/i
 
 ## Screenshots and Demo:
 
-- [Live Demo](https://reshuffle.com/template/identity-starter-material-ui)
+- [Live Demo](https://laid-back-roadrunner-11.reshuffle.app/)
 
 <img src="./app-screen.png" width="50%" height="50%">
 
