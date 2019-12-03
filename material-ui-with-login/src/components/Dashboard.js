@@ -48,13 +48,7 @@ const useStyles = makeStyles(theme => ({
 export default function Page() {
   const [users, setUsers] = useState([]);
   const classes = useStyles();
-  const {
-    loading,
-    authenticated,
-    profile,
-    getLoginURL,
-    getLogoutURL,
-  } = useAuth();
+  const { loading, authenticated, profile } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,61 +76,6 @@ export default function Page() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <AppBar
-        position='static'
-        color='default'
-        elevation={0}
-        className={classes.appBar}
-      >
-        <Toolbar className={classes.toolbar}>
-          <Typography
-            variant='h6'
-            color='inherit'
-            noWrap
-            className={classes.toolbarTitle}
-          >
-            Company name
-          </Typography>
-          <nav>
-            {users.length > 0 && authenticated
-              ? users.map(user =>
-                  user.admin && user.id === profile.id ? (
-                    <NavLink to='/admin'>
-                      <Link
-                        variant='button'
-                        color='textPrimary'
-                        className={classes.link}
-                      >
-                        Admin
-                      </Link>
-                    </NavLink>
-                  ) : null,
-                )
-              : null}
-          </nav>
-          {authenticated ? (
-            <>
-              <Button
-                color='primary'
-                variant='outlined'
-                className={classes.link}
-                href={getLogoutURL()}
-              >
-                Logout
-              </Button>
-            </>
-          ) : (
-            <Button
-              color='primary'
-              variant='outlined'
-              className={classes.link}
-              href={getLoginURL()}
-            >
-              Login
-            </Button>
-          )}
-        </Toolbar>
-      </AppBar>
       {/* Hero unit */}
       <Container maxWidth='sm' component='main' className={classes.heroContent}>
         <Typography
