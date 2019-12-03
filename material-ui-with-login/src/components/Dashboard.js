@@ -93,10 +93,16 @@ export default function Page() {
                 {users
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map(user => (
-                    <>
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
                       <p style={{ marginBottom: '15px' }}>{user.name}</p>
                       <Avatar src={user.img} alt={user.name} />
-                    </>
+                    </div>
                   ))}
               </TableBody>
             </Table>
