@@ -81,20 +81,15 @@ export default function Page() {
       <CssBaseline />
       {/* Hero unit */}
       <Container maxWidth='sm' component='main' className={classes.heroContent}>
-        <Typography
-          component='h1'
-          variant='h2'
-          align='center'
-          color='textMain'
-          gutterBottom
-        >
+        <Typography component='h1' variant='h2' align='center' gutterBottom>
           <div className={classes.tableWrapper}>
             <Table stickyHeader aria-label='sticky table'>
               <TableBody>
                 {users
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map(user => (
-                    <div
+                    <tr
+                      key={user.id}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
@@ -103,7 +98,7 @@ export default function Page() {
                     >
                       <p style={{ marginBottom: '15px' }}>{user.name}</p>
                       <Avatar src={user.img} alt={user.name} />
-                    </div>
+                    </tr>
                   ))}
               </TableBody>
             </Table>
