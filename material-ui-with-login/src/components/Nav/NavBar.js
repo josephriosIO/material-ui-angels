@@ -4,7 +4,7 @@ import { useAuth } from '@reshuffle/react-auth';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import { testing, getUsers } from '../../../backend/backend';
+import { setUsersToBackend, getUsers } from '../../../backend/backend';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
@@ -53,7 +53,9 @@ const Navbar = () => {
   }, []);
 
   if (authenticated) {
-    testing(profile.displayName, profile.picture).then(user => setUsers(user));
+    setUsersToBackend(profile.displayName, profile.picture).then(user =>
+      setUsers(user),
+    );
   }
   return (
     <AppBar
