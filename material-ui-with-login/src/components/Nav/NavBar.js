@@ -54,6 +54,7 @@ const Navbar = () => {
     fetchData();
   }, []);
 
+  //bad always hitting backend
   if (authenticated) {
     setUsersToBackend(profile.displayName, profile.picture).then(user =>
       setUsers(user),
