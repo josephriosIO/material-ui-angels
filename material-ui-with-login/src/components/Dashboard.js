@@ -1,7 +1,7 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
-import { testing, getUsers } from '../../backend/backend';
+import { setUsersToBackend, getUsers } from '../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -53,7 +53,9 @@ export default function Page() {
   }
 
   if (authenticated) {
-    testing(profile.displayName, profile.picture).then(user => setUsers(user));
+    setUsersToBackend(profile.displayName, profile.picture).then(user =>
+      setUsers(user),
+    );
   }
 
   return (
