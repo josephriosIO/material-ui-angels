@@ -9,7 +9,6 @@ import Container from '@material-ui/core/Container';
 import Avatar from '@material-ui/core/Avatar';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 
 const useStyles = makeStyles(theme => ({
@@ -30,6 +29,9 @@ const useStyles = makeStyles(theme => ({
   },
   cardHeader: {
     backgroundColor: theme.palette.grey[200],
+  },
+  tableWrapper: {
+    overflowX: 'auto',
   },
 }));
 
@@ -88,7 +90,6 @@ export default function Page() {
         >
           <div className={classes.tableWrapper}>
             <Table stickyHeader aria-label='sticky table'>
-              <TableHead></TableHead>
               <TableBody>
                 {users
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)

@@ -5,12 +5,15 @@ import { makeStyles } from '@material-ui/core/styles';
 import DisplayUsers from './DisplayUsers';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import TableHead from '@material-ui/core/TableHead';
+
 import TablePagination from '@material-ui/core/TablePagination';
 
 const useStyles = makeStyles(theme => ({
   heroContent: {
     padding: theme.spacing(8, 0, 6),
+  },
+  tableWrapper: {
+    overflowX: 'auto',
   },
 }));
 
@@ -35,7 +38,7 @@ const AdminPage = props => {
       <Container maxWidth='sm' component='main' className={classes.heroContent}>
         <div className={classes.tableWrapper}>
           <Table stickyHeader aria-label='sticky table'>
-            <TableHead></TableHead>
+            
             <TableBody>
               {users
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
