@@ -70,7 +70,6 @@ const Navbar = () => {
           className={classes.toolbarTitle}
         >
           <NavLink style={{ textDecoration: 'none', color: 'black' }} to='/'>
-            {' '}
             Company name
           </NavLink>
         </Typography>
@@ -78,7 +77,15 @@ const Navbar = () => {
           {users.length > 0 && authenticated
             ? users.map(user =>
                 user.admin && user.id === profile.id ? (
-                  <NavLink to='/admin'>
+                  <NavLink
+                    key={user.id}
+                    to={{
+                      pathname: `/admin`,
+                      state: {
+                        users: users,
+                      },
+                    }}
+                  >
                     <Link
                       variant='button'
                       color='textPrimary'
