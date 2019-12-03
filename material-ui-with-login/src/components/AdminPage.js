@@ -3,8 +3,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import DisplayUsers from './DisplayUsers';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
 import Error from './Errors/Error';
 import TablePagination from '@material-ui/core/TablePagination';
 
@@ -19,8 +17,8 @@ const useStyles = makeStyles(theme => ({
 
 const AdminPage = props => {
   const classes = useStyles();
-  const { users } = props.location.state;
   const [page, setPage] = useState(0);
+  const { users } = props.location.state;
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [errorMsg, setErrorMsg] = useState('');
   const [errorStatus, setErrorStatus] = useState('');
@@ -56,19 +54,11 @@ const AdminPage = props => {
       <CssBaseline />
       <Container maxWidth='sm' component='main' className={classes.heroContent}>
         <div className={classes.tableWrapper}>
-          <Table stickyHeader aria-label='sticky table'>
-            <TableBody>
-              {users
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(user => (
-                  <DisplayUsers
-                    key={user.id}
-                    callErrors={callErrors}
-                    user={user}
-                  />
-                ))}
-            </TableBody>
-          </Table>
+          {users
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map(user => (
+              <DisplayUsers key={user.id} callErrors={callErrors} user={user} />
+            ))}
         </div>
         <TablePagination
           rowsPerPageOptions={[1, 5, 10]}
