@@ -33,7 +33,10 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
   link: {
-    margin: theme.spacing(1, 1.5),
+    margin: theme.spacing(0.5, 0.5),
+    textDecoration: 'none',
+    fontSize: '.9rem',
+    color: 'black',
   },
 }));
 
@@ -79,23 +82,25 @@ const Navbar = () => {
           {users.length > 0 && authenticated
             ? users.map(user =>
                 user.admin && user.id === profile.id ? (
-                  <NavLink
-                    key={user.id}
-                    to={{
-                      pathname: `/admin`,
-                      state: {
-                        users: users,
-                      },
-                    }}
-                  >
-                    <Link
-                      variant='button'
-                      color='textPrimary'
+                  <div key={user.id}>
+                    <NavLink
                       className={classes.link}
+                      to={{
+                        pathname: `/admin`,
+                        state: {
+                          users: users,
+                        },
+                      }}
                     >
-                      Admin
-                    </Link>
-                  </NavLink>
+                      <Button
+                        color='primary'
+                        variant='solid'
+                        className={classes.link}
+                      >
+                        Admin
+                      </Button>
+                    </NavLink>
+                  </div>
                 ) : null,
               )
             : null}
