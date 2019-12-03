@@ -6,6 +6,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import Avatar from '@material-ui/core/Avatar';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -32,6 +37,8 @@ export default function Page() {
   const [users, setUsers] = useState([]);
   const classes = useStyles();
   const { loading, authenticated, profile } = useAuth();
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,6 +49,15 @@ export default function Page() {
     };
     fetchData();
   }, []);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = event => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
   // wait for the user data to load.
   if (loading) {
@@ -70,23 +86,30 @@ export default function Page() {
           color='textMain'
           gutterBottom
         >
-          {users.length > 0 ? (
-            users.map(user => (
-              <div key={user.id}>
-                {user.name} <img src={user.img} alt={user.name} />
-              </div>
-            ))
-          ) : (
-            <Typography
-              component='h1'
-              variant='h2'
-              align='center'
-              color='textSecondary'
-              gutterBottom
-            >
-              No users
-            </Typography>
-          )}
+          <div className={classes.tableWrapper}>
+            <Table stickyHeader aria-label='sticky table'>
+              <TableHead></TableHead>
+              <TableBody>
+                {users
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map(user => (
+                    <>
+                      <p style={{ marginBottom: '15px' }}>{user.name}</p>
+                      <Avatar src={user.img} alt={user.name} />
+                    </>
+                  ))}
+              </TableBody>
+            </Table>
+          </div>
+          <TablePagination
+            rowsPerPageOptions={[1, 5, 10]}
+            component='div'
+            count={users.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onChangePage={handleChangePage}
+            onChangeRowsPerPage={handleChangeRowsPerPage}
+          />
         </Typography>
       </Container>
       {/* End hero unit */}
