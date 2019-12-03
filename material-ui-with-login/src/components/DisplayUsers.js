@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import Avatar from '@material-ui/core/Avatar';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const DisplayUsers = props => {
@@ -38,7 +39,14 @@ const DisplayUsers = props => {
             color='textSecondary'
             gutterBottom
           >
-            {user.name}
+            <div
+              style={{
+                display: 'flex',
+              }}
+            >
+              <p style={{ marginBottom: '15px' }}>{user.name}</p>
+              <Avatar src={user.img} alt={user.name} />
+            </div>
           </Typography>
           <FormControlLabel
             control={
