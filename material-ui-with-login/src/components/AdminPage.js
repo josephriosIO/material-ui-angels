@@ -4,6 +4,10 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import DisplayUsers from './DisplayUsers';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
 
 const useStyles = makeStyles(theme => ({
   heroContent: {
@@ -14,24 +18,43 @@ const useStyles = makeStyles(theme => ({
 const AdminPage = props => {
   const classes = useStyles();
   const { users } = props.location.state;
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = event => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
   return (
     <>
       <CssBaseline />
       <Container maxWidth='sm' component='main' className={classes.heroContent}>
-        {users.length > 0 ? (
-          users.map(user => <DisplayUsers user={user} />)
-        ) : (
-          <Typography
-            component='h1'
-            variant='h2'
-            align='center'
-            color='textSecondary'
-            gutterBottom
-          >
-            No Users
-          </Typography>
-        )}
+        <div className={classes.tableWrapper}>
+          <Table stickyHeader aria-label='sticky table'>
+            <TableHead></TableHead>
+            <TableBody>
+              {users
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map(user => (
+                  <DisplayUsers user={user} />
+                ))}
+            </TableBody>
+          </Table>
+        </div>
+        <TablePagination
+          rowsPerPageOptions={[1, 5, 10]}
+          component='div'
+          count={users.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
       </Container>
     </>
   );
