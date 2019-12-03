@@ -9,6 +9,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
+import { NavLink } from 'react-router-dom';
 import Container from '@material-ui/core/Container';
 
 const useStyles = makeStyles(theme => ({
@@ -100,14 +101,15 @@ export default function Page() {
             {users.length > 0 && authenticated
               ? users.map(user =>
                   user.admin && user.id === profile.id ? (
-                    <Link
-                      variant='button'
-                      color='textPrimary'
-                      href='#'
-                      className={classes.link}
-                    >
-                      Admin
-                    </Link>
+                    <NavLink to='/admin'>
+                      <Link
+                        variant='button'
+                        color='textPrimary'
+                        className={classes.link}
+                      >
+                        Admin
+                      </Link>
+                    </NavLink>
                   ) : null,
                 )
               : null}
