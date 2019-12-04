@@ -133,7 +133,7 @@ const Navbar = () => {
                       flexFlow: 'column',
                     }}
                   >
-                    <Typography variant='h8' color='inherit'>
+                    <Typography variant='subtitle1' color='inherit'>
                       Welcome {profile.displayName}
                     </Typography>
                     <Button
