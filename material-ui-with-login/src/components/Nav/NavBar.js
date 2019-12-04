@@ -131,7 +131,6 @@ const Navbar = () => {
                     style={{
                       display: 'flex',
                       flexFlow: 'column',
-                      width: '100%',
                     }}
                   >
                     <Typography variant='h8' color='inherit'>
@@ -149,11 +148,8 @@ const Navbar = () => {
                 </Fade>
               )}
             </Popper>
-
             <Avatar
-              style={{ cursor: 'pointer' }}
               aria-describedby={id}
-              type='button'
               onClick={handleClick}
               src={profile.picture}
               alt={profile.name}
