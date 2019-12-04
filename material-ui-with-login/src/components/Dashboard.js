@@ -36,13 +36,16 @@ const useStyles = makeStyles(theme => ({
 export default function Page() {
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const classes = useStyles();
   const { loading, authenticated, profile } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
       const result = await getUsers();
+      if (profile) {
+        await setUsersToBackend(profile.displayName, profile.picture);
+      }
       if (result) {
         setUsers(result);
       }
@@ -69,11 +72,11 @@ export default function Page() {
   }
 
   // not best case constantly hitting backend
-  if (authenticated) {
-    setUsersToBackend(profile.displayName, profile.picture).then(user =>
-      setUsers(user),
-    );
-  }
+  // if (authenticated) {
+  //   setUsersToBackend(profile.displayName, profile.picture).then(user =>
+  //     setUsers(user),
+  //   );
+  // }
 
   return (
     <React.Fragment>
