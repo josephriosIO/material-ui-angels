@@ -45,6 +45,7 @@ const useStyles = makeStyles(theme => ({
 
 const Navbar = () => {
   const [users, setUsers] = useState([]);
+  const [addedUser, setAddedUser] = useState(true);
   const classes = useStyles();
   const { authenticated, profile, getLoginURL, getLogoutURL } = useAuth();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -66,12 +67,13 @@ const Navbar = () => {
     fetchData();
   }, []);
 
-  //bad always hitting backend
-  if (authenticated) {
+  if (authenticated && addedUser) {
     setUsersToBackend(profile.displayName, profile.picture).then(user =>
       setUsers(user),
     );
+    setAddedUser(false);
   }
+
   return (
     <AppBar
       position='static'
