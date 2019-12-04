@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import DisplayUsers from './DisplayUsers';
+import Error from './Errors/Error';
+import SearchBar from './SearchBar';
+
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
-import DisplayUsers from './DisplayUsers';
-import Error from './Errors/Error';
 import TablePagination from '@material-ui/core/TablePagination';
 
 const useStyles = makeStyles(theme => ({
@@ -20,6 +22,7 @@ const AdminPage = props => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [errorMsg, setErrorMsg] = useState('');
   const [errorStatus, setErrorStatus] = useState('');
+  const [filter, setFilter] = useState([]);
   const { users } = props.location.state;
   const classes = useStyles();
 
@@ -30,6 +33,18 @@ const AdminPage = props => {
   const handleChangeRowsPerPage = event => {
     setRowsPerPage(+event.target.value);
     setPage(0);
+  };
+
+  const search = e => {
+    const filteredUsers = users.filter(user => {
+      if (user.name.toLowerCase().includes(e.target.value)) {
+        return user;
+      }
+
+      return null;
+    });
+
+    setFilter(filteredUsers);
   };
 
   const callErrors = boolean => {
@@ -54,11 +69,26 @@ const AdminPage = props => {
       <CssBaseline />
       <Container maxWidth='sm' component='main' className={classes.heroContent}>
         <div className={classes.tableWrapper}>
-          {users
-            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            .map(user => (
-              <DisplayUsers key={user.id} callErrors={callErrors} user={user} />
-            ))}
+          <SearchBar search={search} />
+          {filter.length > 0
+            ? filter
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map(user => (
+                  <DisplayUsers
+                    key={user.id}
+                    callErrors={callErrors}
+                    user={user}
+                  />
+                ))
+            : users
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map(user => (
+                  <DisplayUsers
+                    key={user.id}
+                    callErrors={callErrors}
+                    user={user}
+                  />
+                ))}
         </div>
         <TablePagination
           rowsPerPageOptions={[1, 5, 10]}
