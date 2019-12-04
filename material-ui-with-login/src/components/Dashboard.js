@@ -42,7 +42,7 @@ export default function Page() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const classes = useStyles();
-  const { loading, authenticated, profile } = useAuth();
+  const { loading, profile } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -55,6 +55,7 @@ export default function Page() {
       }
     };
     fetchData();
+    // eslint-disable-next-line
   }, []);
 
   const handleChangePage = (e, newPage) => {
@@ -87,6 +88,9 @@ export default function Page() {
       <CssBaseline />
       {/* Hero unit */}
       <Container maxWidth='sm' component='main' className={classes.heroContent}>
+        <Typography component='h4' variant='h4' align='center' gutterBottom>
+          List of Angels
+        </Typography>
         <Typography component='h4' variant='h4' align='center' gutterBottom>
           <div className={classes.tableWrapper}>
             {users
