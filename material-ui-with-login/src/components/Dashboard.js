@@ -89,49 +89,61 @@ export default function Page() {
       <CssBaseline />
       {/* Hero unit */}
       <Container maxWidth='sm' component='main' className={classes.heroContent}>
-        <Typography component='h4' variant='h4' align='center' gutterBottom>
-          <TableCell align='center'>List of Angels</TableCell>
-
-          <div className={classes.tableWrapper}>
-            {users
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map(user =>
-                user.angel ? (
-                  <Grid key={user.id} container spacing={3}>
-                    <Grid item xs={12}>
-                      <Paper>
-                        <div
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}
-                        >
-                          <p style={{ marginBottom: '15px' }}>{user.name}</p>
-                          {user.angel ? (
-                            <Tooltip title='Angel'>
-                              <Avatar src={user.img} alt={user.name} />
-                            </Tooltip>
-                          ) : (
-                            <Avatar src={user.img} alt={user.name} />
-                          )}
-                        </div>
-                      </Paper>
-                    </Grid>
-                  </Grid>
-                ) : null,
-              )}
+        {users.length < 1 ? (
+          <div class='empty'>
+            <div class='empty-icon'>
+              <i class='icon icon-people'></i>
+            </div>
+            <p class='empty-title h5'>No Angels :(</p>
+            <p class='empty-subtitle'>
+              Click login for an admin to set you as an angel.
+            </p>
           </div>
-          <TablePagination
-            rowsPerPageOptions={[1, 5, 10]}
-            component='div'
-            count={users.filter(user => user.angel === true).length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangeRowsPerPage}
-          />
-        </Typography>
+        ) : (
+          <Typography component='h4' variant='h4' align='center' gutterBottom>
+            <TableCell align='center'>List of Angels</TableCell>
+
+            <div className={classes.tableWrapper}>
+              {users
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map(user =>
+                  user.angel ? (
+                    <Grid key={user.id} container spacing={3}>
+                      <Grid item xs={12}>
+                        <Paper>
+                          <div
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}
+                          >
+                            <p style={{ marginBottom: '15px' }}>{user.name}</p>
+                            {user.angel ? (
+                              <Tooltip title='Angel'>
+                                <Avatar src={user.img} alt={user.name} />
+                              </Tooltip>
+                            ) : (
+                              <Avatar src={user.img} alt={user.name} />
+                            )}
+                          </div>
+                        </Paper>
+                      </Grid>
+                    </Grid>
+                  ) : null,
+                )}
+            </div>
+            <TablePagination
+              rowsPerPageOptions={[1, 5, 10]}
+              component='div'
+              count={users.filter(user => user.angel === true).length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onChangePage={handleChangePage}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
+            />
+          </Typography>
+        )}
       </Container>
       {/* End hero unit */}
     </React.Fragment>
