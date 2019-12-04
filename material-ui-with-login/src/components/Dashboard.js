@@ -91,31 +91,32 @@ export default function Page() {
           <div className={classes.tableWrapper}>
             {users
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map(user => (
-                <Grid container spacing={3}>
-                  <Grid item xs={12}>
-                    <Paper>
-                      <div
-                        key={user.id}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <p style={{ marginBottom: '15px' }}>{user.name}</p>
-                        {user.angel ? (
-                          <Tooltip title='Angel'>
+              .map(user =>
+                user.angel ? (
+                  <Grid key={user.id} container spacing={3}>
+                    <Grid item xs={12}>
+                      <Paper>
+                        <div
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <p style={{ marginBottom: '15px' }}>{user.name}</p>
+                          {user.angel ? (
+                            <Tooltip title='Angel'>
+                              <Avatar src={user.img} alt={user.name} />
+                            </Tooltip>
+                          ) : (
                             <Avatar src={user.img} alt={user.name} />
-                          </Tooltip>
-                        ) : (
-                          <Avatar src={user.img} alt={user.name} />
-                        )}
-                      </div>
-                    </Paper>
+                          )}
+                        </div>
+                      </Paper>
+                    </Grid>
                   </Grid>
-                </Grid>
-              ))}
+                ) : null,
+              )}
           </div>
           <TablePagination
             rowsPerPageOptions={[1, 5, 10]}
