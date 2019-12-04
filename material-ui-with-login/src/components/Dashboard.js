@@ -89,7 +89,8 @@ export default function Page() {
       <CssBaseline />
       {/* Hero unit */}
       <Container maxWidth='sm' component='main' className={classes.heroContent}>
-        {users.length < 1 ? (
+        {users.length < 1 ||
+        users.filter(user => user.angel === true).length <= 0 ? (
           <div class='empty'>
             <div class='empty-icon'>
               <i class='icon icon-people'></i>
@@ -100,39 +101,43 @@ export default function Page() {
             </p>
           </div>
         ) : (
-          <Typography component='h4' variant='h4' align='center' gutterBottom>
-            <TableCell align='center'>List of Angels</TableCell>
+          <>
+            <Typography component='h4' variant='h4' align='center' gutterBottom>
+              <TableCell align='center'>List of Angels</TableCell>
 
-            <div className={classes.tableWrapper}>
-              {users
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(user =>
-                  user.angel ? (
-                    <Grid key={user.id} container spacing={3}>
-                      <Grid item xs={12}>
-                        <Paper>
-                          <div
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                            }}
-                          >
-                            <p style={{ marginBottom: '15px' }}>{user.name}</p>
-                            {user.angel ? (
-                              <Tooltip title='Angel'>
+              <div className={classes.tableWrapper}>
+                {users
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map(user =>
+                    user.angel ? (
+                      <Grid key={user.id} container spacing={3}>
+                        <Grid item xs={12}>
+                          <Paper>
+                            <div
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              }}
+                            >
+                              <p style={{ marginBottom: '15px' }}>
+                                {user.name}
+                              </p>
+                              {user.angel ? (
+                                <Tooltip title='Angel'>
+                                  <Avatar src={user.img} alt={user.name} />
+                                </Tooltip>
+                              ) : (
                                 <Avatar src={user.img} alt={user.name} />
-                              </Tooltip>
-                            ) : (
-                              <Avatar src={user.img} alt={user.name} />
-                            )}
-                          </div>
-                        </Paper>
+                              )}
+                            </div>
+                          </Paper>
+                        </Grid>
                       </Grid>
-                    </Grid>
-                  ) : null,
-                )}
-            </div>
+                    ) : null,
+                  )}
+              </div>
+            </Typography>
             <TablePagination
               rowsPerPageOptions={[1, 5, 10]}
               component='div'
@@ -142,7 +147,7 @@ export default function Page() {
               onChangePage={handleChangePage}
               onChangeRowsPerPage={handleChangeRowsPerPage}
             />
-          </Typography>
+          </>
         )}
       </Container>
       {/* End hero unit */}
