@@ -12,6 +12,7 @@ import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import TablePagination from '@material-ui/core/TablePagination';
 import Tooltip from '@material-ui/core/Tooltip';
+import TableCell from '@material-ui/core/TableCell';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -89,9 +90,8 @@ export default function Page() {
       {/* Hero unit */}
       <Container maxWidth='sm' component='main' className={classes.heroContent}>
         <Typography component='h4' variant='h4' align='center' gutterBottom>
-          List of Angels
-        </Typography>
-        <Typography component='h4' variant='h4' align='center' gutterBottom>
+          <TableCell align='center'>List of Angels</TableCell>
+
           <div className={classes.tableWrapper}>
             {users
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
