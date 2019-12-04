@@ -67,9 +67,10 @@ const AdminPage = props => {
     <>
       <Error errorMsg={errorMsg} color={errorStatus} />
       <CssBaseline />
+      <p>Welcome User!</p>
       <Container maxWidth='sm' component='main' className={classes.heroContent}>
+        <SearchBar search={search} />
         <div className={classes.tableWrapper}>
-          <SearchBar search={search} />
           {filter.length > 0
             ? filter
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
