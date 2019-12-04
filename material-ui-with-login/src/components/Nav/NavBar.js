@@ -7,6 +7,10 @@ import Button from '@material-ui/core/Button';
 import { setUsersToBackend, getUsers } from '../../../backend/backend';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import Avatar from '@material-ui/core/Avatar';
+import Popper from '@material-ui/core/Popper';
+import Fade from '@material-ui/core/Fade';
+import Paper from '@material-ui/core/Paper';
 import { NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
@@ -43,6 +47,14 @@ const Navbar = () => {
   const [users, setUsers] = useState([]);
   const classes = useStyles();
   const { authenticated, profile, getLoginURL, getLogoutURL } = useAuth();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = event => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'transitions-popper' : undefined;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,7 +87,7 @@ const Navbar = () => {
           className={classes.toolbarTitle}
         >
           <NavLink style={{ textDecoration: 'none', color: 'black' }} to='/'>
-            Angel List
+            Angels List
           </NavLink>
         </Typography>
         <nav>
@@ -107,14 +119,35 @@ const Navbar = () => {
         </nav>
         {authenticated ? (
           <>
-            <Button
-              color='primary'
-              variant='outlined'
-              className={classes.link}
-              href={getLogoutURL()}
+            <Popper
+              open={open}
+              anchorEl={anchorEl}
+              placement='bottom-end'
+              transition
             >
-              Logout
-            </Button>
+              {({ TransitionProps }) => (
+                <Fade {...TransitionProps} timeout={350}>
+                  <Paper>
+                    <Button
+                      color='primary'
+                      variant='outlined'
+                      className={classes.link}
+                      href={getLogoutURL()}
+                    >
+                      Logout
+                    </Button>
+                  </Paper>
+                </Fade>
+              )}
+            </Popper>
+
+            <Avatar
+              aria-describedby={id}
+              type='button'
+              onClick={handleClick}
+              src={profile.picture}
+              alt={profile.name}
+            />
           </>
         ) : (
           <Button
