@@ -102,51 +102,52 @@ export default function Page() {
           </div>
         ) : (
           <>
-            <Typography component='h4' variant='h4' align='center' gutterBottom>
-              <TableCell align='center'>List of Angels</TableCell>
+            <div style={{ width: '100%' }}>
+              <Typography
+                component='h4'
+                variant='h4'
+                align='center'
+                gutterBottom
+              >
+                <TableCell align='center'>List of Angels</TableCell>
 
-              <div className={classes.tableWrapper}>
-                {users
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map(user =>
-                    user.angel ? (
-                      <Grid key={user.id} container spacing={3}>
-                        <Grid item xs={12}>
-                          <Paper>
-                            <div
-                              style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                              }}
-                            >
-                              <p style={{ marginBottom: '15px' }}>
-                                {user.name}
-                              </p>
-                              {user.angel ? (
-                                <Tooltip title='Angel'>
-                                  <Avatar src={user.img} alt={user.name} />
-                                </Tooltip>
-                              ) : (
+                <div className={classes.tableWrapper}>
+                  {users
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map(user =>
+                      user.angel ? (
+                        <Grid key={user.id} container spacing={3}>
+                          <Grid item xs={12}>
+                            <Paper>
+                              <div
+                                style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                }}
+                              >
+                                <p style={{ marginBottom: '15px' }}>
+                                  {user.name}
+                                </p>
                                 <Avatar src={user.img} alt={user.name} />
-                              )}
-                            </div>
-                          </Paper>
+                              </div>
+                            </Paper>
+                          </Grid>
                         </Grid>
-                      </Grid>
-                    ) : null,
-                  )}
-              </div>
-            </Typography>
-            <TablePagination
-              rowsPerPageOptions={[1, 5, 10]}
-              component='div'
-              count={users.filter(user => user.angel === true).length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onChangePage={handleChangePage}
-              onChangeRowsPerPage={handleChangeRowsPerPage}
-            />
+                      ) : null,
+                    )}
+                </div>
+              </Typography>
+              <TablePagination
+                rowsPerPageOptions={[1, 5, 10]}
+                component='div'
+                count={users.filter(user => user.angel === true).length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
+              />
+            </div>
           </>
         )}
       </Container>
