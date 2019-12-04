@@ -10,7 +10,7 @@
     "fullstack"
   ],
   "dependencies": {
-    "@material-ui/core": "^4.6.1",
+    "@material-ui/core": "^4.7.1",
     "@material-ui/icons": "^4.5.1",
     "@reshuffle/code-transform": "^0.1.0",
     "@reshuffle/db": "^0.5.5",
@@ -22,6 +22,7 @@
     "eslint-config-react-app": "^5.0.2",
     "eslint-plugin-prettier": "^3.1.1",
     "express": "^4.17.1",
+    "material-table": "^1.54.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-router-dom": "^5.1.2",
