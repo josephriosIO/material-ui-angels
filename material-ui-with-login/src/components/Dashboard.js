@@ -125,7 +125,7 @@ export default function Page() {
           <TablePagination
             rowsPerPageOptions={[1, 5, 10]}
             component='div'
-            count={users.length}
+            count={users.filter(user => user.angel === true).length}
             rowsPerPage={rowsPerPage}
             page={page}
             onChangePage={handleChangePage}
