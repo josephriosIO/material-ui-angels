@@ -75,7 +75,7 @@ const Navbar = () => {
           className={classes.toolbarTitle}
         >
           <NavLink style={{ textDecoration: 'none', color: 'black' }} to='/'>
-            Company name
+            Angel List
           </NavLink>
         </Typography>
         <nav>
