@@ -96,6 +96,7 @@ const Navbar = () => {
                 user.admin && user.id === profile.id ? (
                   <div key={user.id} style={{ marginRight: '10px' }}>
                     <NavLink
+                      style={{ textDecoration: 'none', color: 'black' }}
                       className={classes.link}
                       to={{
                         pathname: `/admin`,
