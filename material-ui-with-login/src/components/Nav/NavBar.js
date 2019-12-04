@@ -87,14 +87,14 @@ const Navbar = () => {
           className={classes.toolbarTitle}
         >
           <NavLink style={{ textDecoration: 'none', color: 'black' }} to='/'>
-            Angels List
+            Angel's List
           </NavLink>
         </Typography>
         <nav>
           {users.length > 0 && authenticated
             ? users.map(user =>
                 user.admin && user.id === profile.id ? (
-                  <div key={user.id}>
+                  <div key={user.id} style={{ marginRight: '10px' }}>
                     <NavLink
                       className={classes.link}
                       to={{
@@ -127,7 +127,16 @@ const Navbar = () => {
             >
               {({ TransitionProps }) => (
                 <Fade {...TransitionProps} timeout={350}>
-                  <Paper>
+                  <Paper
+                    style={{
+                      display: 'flex',
+                      flexFlow: 'column',
+                      width: '100%',
+                    }}
+                  >
+                    <Typography variant='h8' color='inherit'>
+                      Welcome {profile.displayName}
+                    </Typography>
                     <Button
                       color='primary'
                       variant='outlined'
@@ -142,6 +151,7 @@ const Navbar = () => {
             </Popper>
 
             <Avatar
+              style={{ cursor: 'pointer' }}
               aria-describedby={id}
               type='button'
               onClick={handleClick}
