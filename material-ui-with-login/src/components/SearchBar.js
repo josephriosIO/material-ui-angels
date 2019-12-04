@@ -1,10 +1,11 @@
 import React from 'react';
+import TextField from '@material-ui/core/TextField';
 
 const SearchBar = props => {
   return (
-    <div>
-      <input type='search' onKeyDown={props.search} placeholder='Search' />
-    </div>
+    <form noValidate autoComplete='off'>
+      <TextField id='standard-basic' onKeyDown={props.search} label='Search' />
+    </form>
   );
 };
 
