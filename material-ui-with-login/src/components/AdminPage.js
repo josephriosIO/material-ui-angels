@@ -67,7 +67,6 @@ const AdminPage = props => {
     <>
       <Error errorMsg={errorMsg} color={errorStatus} />
       <CssBaseline />
-      <p>Welcome User!</p>
       <Container maxWidth='sm' component='main' className={classes.heroContent}>
         <SearchBar search={search} />
         <div className={classes.tableWrapper}>
