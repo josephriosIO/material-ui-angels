@@ -80,3 +80,11 @@ code {
 .btn:hover {
   opacity: 0.8;
 }
+
+.MuiTablePagination-actions {
+  margin-left: 5px !important;
+}
+
+.MuiTablePagination-selectRoot {
+  margin-right: 10px !important;
+}
