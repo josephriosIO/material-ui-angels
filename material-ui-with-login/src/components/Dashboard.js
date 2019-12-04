@@ -2,12 +2,16 @@ import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
 import { setUsersToBackend, getUsers } from '../../backend/backend';
+
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import TablePagination from '@material-ui/core/TablePagination';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -88,17 +92,29 @@ export default function Page() {
             {users
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map(user => (
-                <div
-                  key={user.id}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <p style={{ marginBottom: '15px' }}>{user.name}</p>
-                  <Avatar src={user.img} alt={user.name} />
-                </div>
+                <Grid container spacing={3}>
+                  <Grid item xs={12}>
+                    <Paper>
+                      <div
+                        key={user.id}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <p style={{ marginBottom: '15px' }}>{user.name}</p>
+                        {user.angel ? (
+                          <Tooltip title='Angel'>
+                            <Avatar src={user.img} alt={user.name} />
+                          </Tooltip>
+                        ) : (
+                          <Avatar src={user.img} alt={user.name} />
+                        )}
+                      </div>
+                    </Paper>
+                  </Grid>
+                </Grid>
               ))}
           </div>
           <TablePagination
