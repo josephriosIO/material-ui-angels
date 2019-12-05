@@ -1,5 +1,6 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
+import Profile from '../Profile/Profile';
 import { useAuth } from '@reshuffle/react-auth';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -8,9 +9,8 @@ import { setUsersToBackend, getUsers } from '../../../backend/backend';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
-import Popper from '@material-ui/core/Popper';
-import Fade from '@material-ui/core/Fade';
-import Paper from '@material-ui/core/Paper';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import { NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
@@ -67,6 +67,10 @@ const Navbar = () => {
     fetchData();
   }, []);
 
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   if (authenticated && addedUser) {
     setUsersToBackend(profile).then(user => setUsers(user));
     setAddedUser(false);
@@ -90,65 +94,57 @@ const Navbar = () => {
             Angels Group
           </NavLink>
         </Typography>
-        <nav>
-          {users.length > 0 && authenticated
-            ? users.map(user =>
-                user.admin && user.id === profile.id ? (
-                  <div key={user.id} style={{ marginRight: '10px' }}>
-                    <NavLink
-                      style={{ textDecoration: 'none', color: 'black' }}
-                      className={classes.link}
-                      to={{
-                        pathname: `/admin`,
-                        state: {
-                          users: users,
-                        },
-                      }}
-                    >
-                      <Button
-                        color='secondary'
-                        variant='outlined'
-                        className={classes.link}
-                      >
-                        Admin
-                      </Button>
-                    </NavLink>
-                  </div>
-                ) : null,
-              )
-            : null}
-        </nav>
+        <nav></nav>
         {authenticated ? (
           <>
-            <Popper
-              open={open}
+            <Menu
+              id='simple-menu'
               anchorEl={anchorEl}
-              placement='bottom-end'
-              transition
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
             >
-              {({ TransitionProps }) => (
-                <Fade {...TransitionProps} timeout={350}>
-                  <Paper
-                    style={{
-                      display: 'flex',
-                      flexFlow: 'column',
-                    }}
-                  >
-                    <Typography variant='subtitle1' color='inherit'>
-                      Welcome {profile.displayName}
-                    </Typography>
-                    <Button
-                      color='primary'
-                      variant='outlined'
-                      className={classes.link}
-                      href={getLogoutURL()}
-                    >
-                      Logout
-                    </Button>
-                  </Paper>
-                </Fade>
-              )}
-            </Popper>
+              <MenuItem onClick={handleClose}>
+                {' '}
+                Welcome {profile.displayName}!
+              </MenuItem>
+              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              {users.length > 0 && authenticated
+                ? users.map(user =>
+                    user.admin && user.id === profile.id ? (
+                      <div key={user.id} style={{ marginRight: '10px' }}>
+                        <NavLink
+                          style={{ textDecoration: 'none', color: 'black' }}
+                          className={classes.link}
+                          to={{
+                            pathname: `/admin`,
+                            state: {
+                              users: users,
+                            },
+                          }}
+                        >
+                          <Button
+                            color='secondary'
+                            variant='outlined'
+                            className={classes.link}
+                          >
+                            Admin
+                          </Button>
+                        </NavLink>
+                      </div>
+                    ) : null,
+                  )
+                : null}
+              <Button
+                color='primary'
+                variant='outlined'
+                className={classes.link}
+                href={getLogoutURL()}
+              >
+                Logout
+              </Button>
+            </Menu>
+
             <Avatar
               aria-describedby={id}
               onClick={handleClick}
