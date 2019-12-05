@@ -113,7 +113,7 @@ const Navbar = () => {
                 to={`/profile/${profile.id}`}
               >
                 <Button
-                  color='success'
+                  color='primary'
                   variant='outlined'
                   className={classes.link}
                 >
