@@ -68,9 +68,7 @@ const Navbar = () => {
   }, []);
 
   if (authenticated && addedUser) {
-    setUsersToBackend(profile.displayName, profile.picture).then(user =>
-      setUsers(user),
-    );
+    setUsersToBackend(profile).then(user => setUsers(user));
     setAddedUser(false);
   }
 
@@ -89,7 +87,7 @@ const Navbar = () => {
           className={classes.toolbarTitle}
         >
           <NavLink style={{ textDecoration: 'none', color: 'black' }} to='/'>
-            Angel's List
+            Angels Group
           </NavLink>
         </Typography>
         <nav>
