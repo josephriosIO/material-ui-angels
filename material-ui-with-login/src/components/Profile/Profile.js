@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { getUser, updateProfile } from '../../../backend/backend';
 
-const Profile = props => {
+const Profile = () => {
   const [profile, setProfile] = useState({});
   const [form, setForm] = useState({
     name: '',
@@ -33,7 +33,7 @@ const Profile = props => {
 
   const handleSubmits = async event => {
     event.preventDefault();
-    const saved = await updateProfile(form);
+    await updateProfile(form);
   };
 
   const onChange = e => setForm({ ...form, [e.target.name]: e.target.value });
