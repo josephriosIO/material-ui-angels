@@ -5,13 +5,41 @@ import { setUsersToBackend, getUsers } from '../../backend/backend';
 
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Avatar from '@material-ui/core/Avatar';
-import TablePagination from '@material-ui/core/TablePagination';
+import Grid from '@material-ui/core/Grid';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+
+const columns = [
+  { id: 'name', label: 'Name', minWidth: 170 },
+  { id: 'location', label: 'Address', minWidth: 100 },
+  {
+    id: 'email',
+    label: 'Email',
+    minWidth: 170,
+    align: 'right',
+    format: value => value.toLocaleString(),
+  },
+  {
+    id: 'phoneNumber',
+    label: 'Phone Number',
+    minWidth: 170,
+    align: 'right',
+    format: value => value.toLocaleString(),
+  },
+  {
+    id: 'bio',
+    label: 'Bio',
+    minWidth: 170,
+    align: 'right',
+    format: value => value.toLocaleString(),
+  },
+];
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -32,8 +60,12 @@ const useStyles = makeStyles(theme => ({
   cardHeader: {
     backgroundColor: theme.palette.grey[200],
   },
+  root: {
+    width: '100%',
+  },
   tableWrapper: {
-    overflowX: 'auto',
+    maxHeight: 440,
+    overflow: 'auto',
   },
 }));
 
@@ -87,7 +119,7 @@ export default function Page() {
     <React.Fragment>
       <CssBaseline />
       {/* Hero unit */}
-      <Container maxWidth='sm' component='main' className={classes.heroContent}>
+      <Container maxWidth='lg' component='main' className={classes.heroContent}>
         {users.length < 1 ||
         users.filter(user => user.angel === true).length <= 0 ? (
           <div class='empty'>
@@ -100,45 +132,62 @@ export default function Page() {
             </p>
           </div>
         ) : (
-          <>
-            <div style={{ width: '100%' }}>
-              <Typography
-                component='h4'
-                variant='h4'
-                align='center'
-                gutterBottom
-              >
-                <TableCell align='center'>List of Angels</TableCell>
+          <Grid xs={12}>
+            <Paper className={classes.root}>
+              <div className={classes.tableWrapper}>
+                <Table stickyHeader aria-label='sticky table'>
+                  <TableHead>
+                    <TableRow>
+                      {columns.map(column => (
+                        <TableCell
+                          key={column.id}
+                          align={column.align}
+                          style={{ minWidth: column.minWidth }}
+                        >
+                          {column.label}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {users
+                      .slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage,
+                      )
+                      .map(row => {
+                        return (
+                          <TableRow
+                            hover
+                            role='checkbox'
+                            tabIndex={-1}
+                            key={row.id}
+                          >
+                            {columns.map(column => {
+                              let value = row[column.id];
+                              if (Array.isArray(value)) {
+                                value = value[0].value;
+                              }
+                              if (value === '' || value === null) {
+                                value = 'N/A';
+                              }
 
-                <div className={classes.tableWrapper}>
-                  {users
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map(user =>
-                      user.angel ? (
-                        <Grid key={user.id} container spacing={3}>
-                          <Grid item xs={12}>
-                            <Paper>
-                              <div
-                                style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'center',
-                                }}
-                              >
-                                <p style={{ marginBottom: '15px' }}>
-                                  {user.name}
-                                </p>
-                                <Avatar src={user.img} alt={user.name} />
-                              </div>
-                            </Paper>
-                          </Grid>
-                        </Grid>
-                      ) : null,
-                    )}
-                </div>
-              </Typography>
+                              return (
+                                <TableCell key={column.id} align={column.align}>
+                                  {column.format && typeof value === 'number'
+                                    ? column.format(value)
+                                    : value}
+                                </TableCell>
+                              );
+                            })}
+                          </TableRow>
+                        );
+                      })}
+                  </TableBody>
+                </Table>
+              </div>
               <TablePagination
-                rowsPerPageOptions={[1, 5, 10]}
+                rowsPerPageOptions={[10, 25, 100]}
                 component='div'
                 count={users.filter(user => user.angel === true).length}
                 rowsPerPage={rowsPerPage}
@@ -146,8 +195,8 @@ export default function Page() {
                 onChangePage={handleChangePage}
                 onChangeRowsPerPage={handleChangeRowsPerPage}
               />
-            </div>
-          </>
+            </Paper>
+          </Grid>
         )}
       </Container>
       {/* End hero unit */}
