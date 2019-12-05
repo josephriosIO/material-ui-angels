@@ -108,7 +108,19 @@ const Navbar = () => {
                 {' '}
                 Welcome {profile.displayName}!
               </MenuItem>
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
+              <NavLink
+                style={{ textDecoration: 'none', color: 'black' }}
+                className={classes.link}
+                to={`/profile/${profile.id}`}
+              >
+                <Button
+                  color='success'
+                  variant='outlined'
+                  className={classes.link}
+                >
+                  Profile
+                </Button>
+              </NavLink>
               {users.length > 0 && authenticated
                 ? users.map(user =>
                     user.admin && user.id === profile.id ? (
