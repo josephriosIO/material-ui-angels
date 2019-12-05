@@ -87,5 +87,19 @@ export async function getUser() {
 /* @expose */
 export async function updateProfile(profile) {
   const { id } = getCurrentUser(true);
+  const { name, location, bio, phoneNumber } = profile;
   console.log(id, profile);
+  return update('testusersss', (users = []) => {
+    let allUsers = JSON.parse(JSON.stringify(users));
+    allUsers.map(user => {
+      if (user.id === id) {
+        user.name = name;
+        user.location = location;
+        user.phoneNumber = phoneNumber;
+        user.bio = bio;
+      }
+    });
+
+    return allUsers;
+  });
 }
