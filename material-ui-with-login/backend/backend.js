@@ -2,16 +2,18 @@ import { get, update } from '@reshuffle/db';
 import { getCurrentUser } from '@reshuffle/server-function';
 
 /* @expose */
-export async function setUsersToBackend(name, pic) {
+export async function setUsersToBackend(profile) {
   const { id } = getCurrentUser(true);
-
   return update('testusers', (users = []) => {
     let allUsers = JSON.parse(JSON.stringify(users));
-
     const user = {
       id,
-      name,
-      img: pic,
+      name: profile.displayName,
+      img: profile.picture,
+      email: profile.emails,
+      phoneNumber: null,
+      bio: '',
+      location: '',
       admin: true,
       angel: false,
       user: true,
@@ -19,13 +21,10 @@ export async function setUsersToBackend(name, pic) {
     if (allUsers.length > 0) {
       user.admin = false;
     }
-
     allUsers.push(user);
-
     allUsers = allUsers.filter(
       (user, index, self) => index === self.findIndex(t => t.id === user.id),
     );
-
     return allUsers;
   });
 }
@@ -37,12 +36,24 @@ export async function getUsers() {
   return users;
 }
 
+// async function validateRole(user) {
+//   console.log('running');
+//   const { id } = getCurrentUser(true);
+//   if (user.id === id) {
+//     if (user.admin === false) {
+//       return true;
+//     } else {
+//       throw new Error(`User with id: ${user.id} does not have a valid role for this
+//       action`);
+//     }
+//   }
+// }
+
 /* @expose */
 export async function updateStatus(userId, admin, angel) {
   const { id } = getCurrentUser(true);
   return update('testusers', (users = []) => {
     let allUsers = JSON.parse(JSON.stringify(users));
-
     allUsers.map(user => {
       if (user.id === id) {
         if (user.admin === true) {
@@ -57,7 +68,6 @@ export async function updateStatus(userId, admin, angel) {
         }
       }
     });
-
     return allUsers;
   });
 }
