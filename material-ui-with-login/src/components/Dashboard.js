@@ -17,7 +17,7 @@ import TableRow from '@material-ui/core/TableRow';
 
 const columns = [
   { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'location', label: 'Address', minWidth: 100 },
+  { id: 'location', label: 'Location', minWidth: 100 },
   {
     id: 'email',
     label: 'Email',
@@ -132,7 +132,7 @@ export default function Page() {
             </p>
           </div>
         ) : (
-          <Grid xs={12}>
+          <Grid>
             <Paper className={classes.root}>
               <div className={classes.tableWrapper}>
                 <Table stickyHeader aria-label='sticky table'>
