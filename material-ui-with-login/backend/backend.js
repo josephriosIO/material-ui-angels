@@ -4,7 +4,7 @@ import { getCurrentUser } from '@reshuffle/server-function';
 /* @expose */
 export async function setUsersToBackend(profile) {
   const { id } = getCurrentUser(true);
-  return update('testusers', (users = []) => {
+  return update('testusersss', (users = []) => {
     let allUsers = JSON.parse(JSON.stringify(users));
     const user = {
       id,
@@ -31,7 +31,7 @@ export async function setUsersToBackend(profile) {
 
 /* @expose */
 export async function getUsers() {
-  const users = await get('testusers');
+  const users = await get('testusersss');
 
   return users;
 }
@@ -52,7 +52,7 @@ export async function getUsers() {
 /* @expose */
 export async function updateStatus(userId, admin, angel) {
   const { id } = getCurrentUser(true);
-  return update('testusers', (users = []) => {
+  return update('testusersss', (users = []) => {
     let allUsers = JSON.parse(JSON.stringify(users));
     allUsers.map(user => {
       if (user.id === id) {
@@ -64,10 +64,28 @@ export async function updateStatus(userId, admin, angel) {
             }
           });
         } else {
-          throw 'dont do that!';
+          throw new Error(`Don't do that!`);
         }
       }
     });
     return allUsers;
   });
+}
+
+/* @expose */
+export async function getUser() {
+  const { id } = getCurrentUser(true);
+  const users = await get('testusersss');
+
+  return users.map(user => {
+    if (user.id === id) {
+      return { ...user };
+    }
+  });
+}
+
+/* @expose */
+export async function updateProfile(profile) {
+  const { id } = getCurrentUser(true);
+  console.log(id);
 }
