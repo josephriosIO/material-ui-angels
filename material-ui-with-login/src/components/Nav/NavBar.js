@@ -1,6 +1,5 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
-import Profile from '../Profile/Profile';
 import { useAuth } from '@reshuffle/react-auth';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
