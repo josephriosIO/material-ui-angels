@@ -20,20 +20,24 @@ const Profile = props => {
       const user = await getUser();
 
       setProfile(...user);
+
+      setForm({
+        name: user[0].name,
+        bio: user[0].bio,
+        location: user[0].location,
+        phoneNumber: user[0].phoneNumber,
+      });
     };
     fetchData();
   }, []);
 
   const handleSubmits = async event => {
-    console.log('running');
     event.preventDefault();
     const saved = await updateProfile(form);
-    console.log(saved);
   };
 
   const onChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
-  console.log(form);
   return (
     <React.Fragment>
       <Typography variant='h6' gutterBottom>
@@ -44,7 +48,7 @@ const Profile = props => {
           <Grid item xs={12}>
             <TextField
               onChange={e => onChange(e)}
-              defaultValue={profile.name}
+              value={form.name}
               placeholder='Placeholder'
               id='standard-normal'
               name='name'
@@ -56,7 +60,7 @@ const Profile = props => {
           <Grid item xs={12}>
             <TextField
               onChange={e => onChange(e)}
-              defaultValue={profile.location}
+              value={form.location}
               id='location'
               name='location'
               label='Location'
@@ -66,7 +70,7 @@ const Profile = props => {
 
           <Grid item xs={12} sm={6}>
             <TextField
-              defaultValue={profile.phoneNumber}
+              value={form.phoneNumber}
               onChange={e => onChange(e)}
               id='number'
               name='phoneNumber'
@@ -77,7 +81,7 @@ const Profile = props => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
-              defaultValue={profile.bio}
+              value={form.bio}
               onChange={e => onChange(e)}
               id='bio'
               name='bio'
