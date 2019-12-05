@@ -87,5 +87,5 @@ export async function getUser() {
 /* @expose */
 export async function updateProfile(profile) {
   const { id } = getCurrentUser(true);
-  console.log(id);
+  console.log(id, profile);
 }
