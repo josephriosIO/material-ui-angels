@@ -155,8 +155,8 @@ export default function Page() {
                         page * rowsPerPage,
                         page * rowsPerPage + rowsPerPage,
                       )
-                      .map(row => {
-                        return (
+                      .map(row =>
+                        row.angel ? (
                           <TableRow
                             hover
                             role='checkbox'
@@ -181,8 +181,8 @@ export default function Page() {
                               );
                             })}
                           </TableRow>
-                        );
-                      })}
+                        ) : null,
+                      )}
                   </TableBody>
                 </Table>
               </div>
