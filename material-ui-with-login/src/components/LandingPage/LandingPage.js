@@ -126,7 +126,9 @@ const LandingPage = () => {
         </div>
       </div>
       <div className={`${matches ? classes.footer : classes.footerMobile}`}>
-        <h1>Bottom Text</h1>
+        <p>
+          Powered by <a href='https://reshuffle.com'>Reshuffle</a>
+        </p>
       </div>
     </>
   );
