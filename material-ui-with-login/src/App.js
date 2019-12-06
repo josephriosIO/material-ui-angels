@@ -6,6 +6,7 @@ import AdminPage from './components/Angels/AdminPage';
 import NavBar from './components/Angels/Nav/NavBar';
 import Profile from './components/Angels/Profile/Profile';
 import LandingPage from './components/LandingPage/LandingPage';
+import StartupsDashboard from './components/Startups/Dashboard';
 
 const App = props => {
   const { pathname } = window.location;
@@ -15,6 +16,7 @@ const App = props => {
       {pathname !== '/' ? <NavBar /> : null}
       <Route exact path='/' component={LandingPage} />
       <Route exact path='/angels' component={Dashboard} />
+      <Route exact path='/startups' component={StartupsDashboard} />
       <Protected exact path='/admin' component={AdminPage} />
       <Protected exact path='/profile/:id' component={Profile} />
     </>
