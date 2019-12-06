@@ -117,7 +117,9 @@ const LandingPage = () => {
       >
         <div className={`${matches ? classes.boxes : classes.boxesMobile}`}>
           <p>Are you a Start-up?</p>
-          <ColorButton href='/startups'>Login</ColorButton>
+          <ColorButton disabled style={{ background: 'grey' }} href='/startups'>
+            Login
+          </ColorButton>
         </div>
 
         <div className={`${matches ? classes.boxes : classes.boxesMobile}`}>
