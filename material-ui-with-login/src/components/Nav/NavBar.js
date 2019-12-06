@@ -89,7 +89,10 @@ const Navbar = () => {
           noWrap
           className={classes.toolbarTitle}
         >
-          <NavLink style={{ textDecoration: 'none', color: 'black' }} to='/'>
+          <NavLink
+            style={{ textDecoration: 'none', color: 'black' }}
+            to='/angel'
+          >
             Angels Group
           </NavLink>
         </Typography>
