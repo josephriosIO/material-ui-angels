@@ -113,7 +113,7 @@ const Navbar = () => {
               <NavLink
                 style={{ textDecoration: 'none', color: 'black' }}
                 className={classes.link}
-                to={`/profile/${profile.id}`}
+                to={`/angels/profile/${profile.id}`}
               >
                 <Button
                   color='primary'
@@ -131,7 +131,7 @@ const Navbar = () => {
                           style={{ textDecoration: 'none', color: 'black' }}
                           className={classes.link}
                           to={{
-                            pathname: `/admin`,
+                            pathname: `/angels/admin`,
                             state: {
                               users: users,
                             },
