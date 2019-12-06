@@ -5,8 +5,6 @@ import LandingPage from './components/LandingPage/LandingPage';
 import StartupsDashboard from './components/Startups/Dashboard';
 
 const App = props => {
-  const { pathname } = window.location;
-
   return (
     <>
       <Route exact path='/' component={LandingPage} />

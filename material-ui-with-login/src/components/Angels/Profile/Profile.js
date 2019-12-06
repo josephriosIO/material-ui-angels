@@ -38,6 +38,10 @@ const Profile = () => {
 
   const onChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
+  if (!profile) {
+    console.error('Profile is empty!');
+  }
+
   return (
     <React.Fragment>
       <Typography variant='h6' gutterBottom>
