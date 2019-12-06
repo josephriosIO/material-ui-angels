@@ -91,7 +91,7 @@ const Navbar = () => {
         >
           <NavLink
             style={{ textDecoration: 'none', color: 'black' }}
-            to='/angel'
+            to='/angels'
           >
             Angels Group
           </NavLink>
