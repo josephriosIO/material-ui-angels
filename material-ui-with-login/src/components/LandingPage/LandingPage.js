@@ -2,6 +2,7 @@ import React from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Helmet } from 'react-helmet';
 
 const useStyles = makeStyles({
   boxContainer: {
@@ -106,6 +107,21 @@ const LandingPage = () => {
 
   return (
     <>
+      <Helmet>
+        <style>
+          {`
+            html { 
+                height: 100%;
+            } 
+            body { 
+                height: 100vh;
+                margin: 0;
+                background-repeat: no-repeat;
+                background-attachment: fixed; 
+                background: #FE6B8B;
+                 }`}
+        </style>
+      </Helmet>
       <div className={classes.header}>
         <p>Angels Group</p>
         <h1 className={classes.title}>Where Start-ups meet angels</h1>
