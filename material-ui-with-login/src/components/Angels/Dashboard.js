@@ -14,10 +14,11 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+import Avatar from '@material-ui/core/Avatar';
 
 const columns = [
-  { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'location', label: 'Location', minWidth: 100 },
+  { id: 'name', align: 'right', label: 'Name', minWidth: 170 },
+  { id: 'location', align: 'right', label: 'Location', minWidth: 100 },
   {
     id: 'email',
     label: 'Email',
@@ -163,20 +164,34 @@ export default function Page() {
                             tabIndex={-1}
                             key={row.id}
                           >
-                            {columns.map(column => {
+                            {columns.map((column, count = 0) => {
+                              count += 1;
                               let value = row[column.id];
+
                               if (Array.isArray(value)) {
                                 value = value[0].value;
                               }
+
                               if (value === '' || value === null) {
                                 value = 'N/A';
                               }
 
                               return (
                                 <TableCell key={column.id} align={column.align}>
-                                  {column.format && typeof value === 'number'
-                                    ? column.format(value)
-                                    : value}
+                                  <div
+                                    style={{
+                                      display: 'flex',
+                                      alignItems: 'flex-end',
+                                      justifyContent: 'flex-end',
+                                    }}
+                                  >
+                                    {column.format && typeof value === 'name'
+                                      ? column.format(value)
+                                      : value}
+                                    {count < 2 ? (
+                                      <Avatar src={row.img} alt={row.name} />
+                                    ) : null}
+                                  </div>
                                 </TableCell>
                               );
                             })}
