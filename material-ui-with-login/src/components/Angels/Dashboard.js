@@ -184,9 +184,7 @@ export default function Page() {
                                       justifyContent: 'flex-end',
                                     }}
                                   >
-                                    {column.format && typeof value === 'name'
-                                      ? column.format(value)
-                                      : value}
+                                    {value}
                                     {count < 2 ? (
                                       <Avatar src={row.img} alt={row.name} />
                                     ) : null}
