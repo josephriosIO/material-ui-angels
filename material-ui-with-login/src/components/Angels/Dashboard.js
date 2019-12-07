@@ -109,13 +109,6 @@ export default function Page() {
     );
   }
 
-  // not best case constantly hitting backend
-  // if (authenticated) {
-  //   setUsersToBackend(profile.displayName, profile.picture).then(user =>
-  //     setUsers(user),
-  //   );
-  // }
-
   return (
     <React.Fragment>
       <CssBaseline />
