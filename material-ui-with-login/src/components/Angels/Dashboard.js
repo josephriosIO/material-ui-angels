@@ -62,7 +62,12 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.grey[200],
   },
   root: {
-    width: '100%',
+    overflowX: 'auto',
+    marginRight: 'auto',
+    marginLeft: 'auto',
+    marginTop: '50px',
+    padding: '10px',
+    margin: '10px',
   },
   tableWrapper: {
     maxHeight: 440,
