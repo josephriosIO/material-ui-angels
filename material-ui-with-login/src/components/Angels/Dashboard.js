@@ -17,13 +17,13 @@ import TableRow from '@material-ui/core/TableRow';
 import Avatar from '@material-ui/core/Avatar';
 
 const columns = [
-  { id: 'name', align: 'right', label: 'Name', minWidth: 170 },
+  { id: 'name', align: 'center', label: 'Name', minWidth: 170 },
   { id: 'location', align: 'right', label: 'Location', minWidth: 100 },
   {
     id: 'email',
     label: 'Email',
     minWidth: 170,
-    align: 'right',
+    align: 'center',
     format: value => value.toLocaleString(),
   },
   {
@@ -181,7 +181,6 @@ export default function Page() {
                                   <div
                                     style={{
                                       display: 'flex',
-                                      alignItems: 'flex-end',
                                       justifyContent: 'flex-end',
                                     }}
                                   >
