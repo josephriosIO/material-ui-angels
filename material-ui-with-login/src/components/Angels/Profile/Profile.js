@@ -59,7 +59,7 @@ const Profile = () => {
         Update Profile
       </Typography>
       <form onSubmit={handleSubmits}>
-        <Grid container spacing={3}>
+        <Grid container spacing={5}>
           <Grid item xs={12}>
             <TextField
               onChange={e => onChange(e)}
@@ -103,13 +103,15 @@ const Profile = () => {
               label='Bio'
               fullWidth
               multiline
-              rows='4'
+              rows='6'
             />
           </Grid>
         </Grid>
-        <Button type='submit' variant='contained' color='primary'>
-          Submit
-        </Button>
+        <Grid item xs={12} sm={6} style={{ marginTop: '20px' }}>
+          <Button type='submit' variant='contained' color='primary'>
+            Submit
+          </Button>
+        </Grid>
       </form>
     </React.Fragment>
   );
