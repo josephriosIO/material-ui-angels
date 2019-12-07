@@ -5,8 +5,11 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { getUser, updateProfile } from '../../../../backend/backend';
+import Error from '../../Errors/Error';
 
 const Profile = () => {
+  const [errorMsg, setErrorMsg] = useState('');
+  const [errorStatus, setErrorStatus] = useState('');
   const [profile, setProfile] = useState({});
   const [form, setForm] = useState({
     name: '',
@@ -21,6 +24,8 @@ const Profile = () => {
 
       setProfile(...user);
 
+      console.log(user);
+
       setForm({
         name: user[0].name,
         bio: user[0].bio,
@@ -34,6 +39,11 @@ const Profile = () => {
   const handleSubmits = async event => {
     event.preventDefault();
     await updateProfile(form);
+    setErrorMsg('Saved.');
+    setErrorStatus('success');
+    setTimeout(() => {
+      setErrorMsg('');
+    }, 3000);
   };
 
   const onChange = e => setForm({ ...form, [e.target.name]: e.target.value });
@@ -44,6 +54,7 @@ const Profile = () => {
 
   return (
     <React.Fragment>
+      <Error errorMsg={errorMsg} color={errorStatus} />
       <Typography variant='h6' gutterBottom>
         Update Profile
       </Typography>
