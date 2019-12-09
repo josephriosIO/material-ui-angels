@@ -33,8 +33,6 @@ const Profile = () => {
 
       setProfile(...user);
 
-      console.log(...user);
-
       setForm({
         companyName: user[0].companyName,
         missionStatement: user[0].missionStatement,
@@ -75,11 +73,6 @@ const Profile = () => {
     console.error('Profile is empty!');
   }
 
-  console.log(
-    form.funded,
-    typeof form.funded === 'boolean',
-    typeof form.funded,
-  );
   return (
     <React.Fragment>
       <Error errorMsg={errorMsg} color={errorStatus} />
