@@ -4,6 +4,10 @@ import { updateStartupProfile, getStartup } from '../../../../backend/backend';
 import Error from '../../Errors/Error';
 import { Redirect } from 'react-router-dom';
 import { useAuth } from '@reshuffle/react-auth';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormLabel from '@material-ui/core/FormLabel';
 
 const Questionaire = () => {
   const [errorMsg, setErrorMsg] = useState('');
@@ -96,11 +100,27 @@ const Questionaire = () => {
         </div>
         <div>
           <label>Is the company funded?</label>
-          <input
+          <RadioGroup
+            aria-label='position'
+            name='funded'
             value={form.funded}
             onChange={e => onChange(e)}
-            name='funded'
-          />
+            row
+          >
+            <FormLabel component='legend'>Funded</FormLabel>
+            <FormControlLabel
+              value='true'
+              control={<Radio color='primary' />}
+              label='True'
+              labelPlacement='top'
+            />
+            <FormControlLabel
+              value='false'
+              control={<Radio color='primary' />}
+              label='False'
+              labelPlacement='top'
+            />
+          </RadioGroup>
         </div>
         <div>
           <label>What is your companys mission statement?</label>

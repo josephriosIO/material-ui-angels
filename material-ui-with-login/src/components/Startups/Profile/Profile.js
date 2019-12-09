@@ -7,12 +7,10 @@ import Button from '@material-ui/core/Button';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import { getStartup, updateStartupProfile } from '../../../../backend/backend';
 import Error from '../../Errors/Error';
 import { useAuth } from '@reshuffle/react-auth';
-import { formatMs } from '@material-ui/core';
 
 const Profile = () => {
   const [errorMsg, setErrorMsg] = useState('');
