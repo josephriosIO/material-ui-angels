@@ -2,6 +2,34 @@ import { get, update } from '@reshuffle/db';
 import { getCurrentUser } from '@reshuffle/server-function';
 
 /* @expose */
+export async function setStartupsToBackend(profile) {
+  const { id } = getCurrentUser(true);
+  return update('startupstesting', (users = []) => {
+    let allStartups = JSON.parse(JSON.stringify(users));
+    const user = {
+      id,
+      name: profile.displayName,
+      img: profile.picture,
+      email: profile.emails,
+      companyName: '',
+      phoneNumber: null,
+      companySize: 0,
+      funded: false,
+      missionStatement: '',
+      location: '',
+      startup: true,
+      user: true,
+    };
+
+    allStartups.push(user);
+    allStartups = allStartups.filter(
+      (user, index, self) => index === self.findIndex(t => t.id === user.id),
+    );
+    return allStartups;
+  });
+}
+
+/* @expose */
 export async function setUsersToBackend(profile) {
   const { id } = getCurrentUser(true);
   return update('userTesting', (users = []) => {
@@ -37,18 +65,12 @@ export async function getUsers() {
   return users;
 }
 
-// async function validateRole(user) {
-//   console.log('running');
-//   const { id } = getCurrentUser(true);
-//   if (user.id === id) {
-//     if (user.admin === false) {
-//       return true;
-//     } else {
-//       throw new Error(`User with id: ${user.id} does not have a valid role for this
-//       action`);
-//     }
-//   }
-// }
+/* @expose */
+export async function getStartups() {
+  const startups = await get('startupstesting');
+
+  return startups;
+}
 
 /* @expose */
 export async function updateStatus(userId, admin, angel) {
@@ -98,5 +120,34 @@ export async function updateProfile(profile) {
     });
 
     return allUsers;
+  });
+}
+
+/* @expose */
+export async function updateStartupProfile(profile) {
+  const { id } = getCurrentUser(true);
+  const {
+    location,
+    missionStatement,
+    phoneNumber,
+    companyName,
+    companySize,
+    funded,
+  } = profile;
+
+  return update('startupstesting', (users = []) => {
+    let allStartups = JSON.parse(JSON.stringify(users));
+    allStartups.map(user => {
+      if (user.id === id) {
+        user.companySize = companyName;
+        user.location = location;
+        user.phoneNumber = phoneNumber;
+        user.missionStatement = missionStatement;
+        user.companySize = companySize;
+        user.funded = funded;
+      }
+    });
+
+    return allStartups;
   });
 }
