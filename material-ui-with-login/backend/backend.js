@@ -147,7 +147,7 @@ export async function updateStartupProfile(profile) {
     let allStartups = JSON.parse(JSON.stringify(users));
     allStartups.map(user => {
       if (user.id === id) {
-        user.companySize = companyName;
+        user.companyName = companyName;
         user.location = location;
         user.phoneNumber = phoneNumber;
         user.missionStatement = missionStatement;
