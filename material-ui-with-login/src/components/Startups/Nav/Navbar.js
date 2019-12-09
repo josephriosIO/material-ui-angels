@@ -92,7 +92,7 @@ const Navbar = () => {
           {authenticated ? (
             <NavLink
               style={{ textDecoration: 'none', color: 'black' }}
-              to={`/startups/profile/${profile.displayName}`}
+              to={`/startups/profile/${profile.id}`}
             >
               Angels Group for Startups
             </NavLink>

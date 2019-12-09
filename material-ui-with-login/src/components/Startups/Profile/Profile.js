@@ -48,15 +48,25 @@ const Profile = () => {
   }, []);
 
   const handleSubmits = async event => {
-    event.preventDefault();
-    await updateStartupProfile(form);
-    setErrorMsg('Saved.');
-    setErrorStatus('success');
+    try {
+      event.preventDefault();
+      await updateStartupProfile(form);
+      setErrorMsg('Saved.');
+      setErrorStatus('success');
 
-    setTimeout(() => {
-      setErrorMsg('');
-    }, 3000);
-    setSubmitted(true);
+      setTimeout(() => {
+        setErrorMsg('');
+      }, 3000);
+      setSubmitted(true);
+    } catch (err) {
+      setErrorMsg('Please be logged into the right account.');
+      setErrorStatus('danger');
+
+      setTimeout(() => {
+        setErrorMsg('');
+      }, 3000);
+      setSubmitted(true);
+    }
   };
 
   const onChange = e => setForm({ ...form, [e.target.name]: e.target.value });

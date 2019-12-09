@@ -62,15 +62,13 @@ const Questionaire = () => {
 
   if (formProfile.startup && formProfile.companyName.length > 1) {
     if (profile) {
-      return <Redirect to={`/startups/profile/${profile.displayName}`} />;
+      return <Redirect to={`/startups/profile/${profile.id}`} />;
     }
   }
 
   return (
     <div>
-      {submitted ? (
-        <Redirect to={`/startups/profile/${profile.displayName}`} />
-      ) : null}
+      {submitted ? <Redirect to={`/startups/profile/${profile.id}`} /> : null}
       <Error errorMsg={errorMsg} color={errorStatus} />
       <h2>Fill out some info about your startup below!</h2>
       <form onSubmit={handleSubmits}>
