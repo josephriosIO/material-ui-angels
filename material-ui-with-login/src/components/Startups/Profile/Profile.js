@@ -85,9 +85,8 @@ const Profile = () => {
             <TextField
               onChange={e => onChange(e)}
               value={form.companyName}
-              placeholder='Placeholder'
-              id='standard-normal'
-              name='CompanyName'
+              id='companyName'
+              name='companyName'
               label='Company Name'
               fullWidth
             />
@@ -120,7 +119,7 @@ const Profile = () => {
             <TextField
               value={form.companySize}
               onChange={e => onChange(e)}
-              id='number'
+              id='companySize'
               type='number'
               name='companySize'
               label='Company Size'
