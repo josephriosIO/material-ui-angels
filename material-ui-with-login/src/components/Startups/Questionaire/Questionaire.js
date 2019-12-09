@@ -7,9 +7,37 @@ import { useAuth } from '@reshuffle/react-auth';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormLabel from '@material-ui/core/FormLabel';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+
+const useStyles = makeStyles(theme => ({
+  layout: {
+    width: 'auto',
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
+      width: 600,
+      marginLeft: 'auto',
+      marginRight: 'auto',
+    },
+  },
+  paper: {
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
+    padding: theme.spacing(2),
+    [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
+      marginTop: theme.spacing(6),
+      marginBottom: theme.spacing(6),
+      padding: theme.spacing(3),
+    },
+  },
+}));
 
 const Questionaire = () => {
+  const classes = useStyles();
   const [errorMsg, setErrorMsg] = useState('');
   const [errorStatus, setErrorStatus] = useState('');
   const [formProfile, setProfile] = useState({});
@@ -67,69 +95,75 @@ const Questionaire = () => {
   }
 
   return (
-    <div>
-      {submitted ? <Redirect to={`/startups/profile/${profile.id}`} /> : null}
-      <Error errorMsg={errorMsg} color={errorStatus} />
-      <h2>Fill out some info about your startup below!</h2>
-      <form onSubmit={handleSubmits}>
-        <div>
-          <label>What is your companys name?</label>
-          <input
-            value={form.companyName}
-            onChange={e => onChange(e)}
-            name='companyName'
-          />
-        </div>
-        <div>
-          <label>What is your company located?</label>
-          <input
-            value={form.location}
-            onChange={e => onChange(e)}
-            name='location'
-          />
-        </div>
-        <div>
-          <label>How many people does your company employee?</label>
-          <input
-            value={form.companySize}
-            onChange={e => onChange(e)}
-            name='companySize'
-          />
-        </div>
-        <div>
-          <label>Is the company funded?</label>
-          <RadioGroup
-            aria-label='position'
-            name='funded'
-            value={form.funded}
-            onChange={e => onChange(e)}
-            row
-          >
-            <FormLabel component='legend'>Funded</FormLabel>
-            <FormControlLabel
-              value='true'
-              control={<Radio color='primary' />}
-              label='True'
-              labelPlacement='top'
-            />
-            <FormControlLabel
-              value='false'
-              control={<Radio color='primary' />}
-              label='False'
-              labelPlacement='top'
-            />
-          </RadioGroup>
-        </div>
-        <div>
-          <label>What is your companys mission statement?</label>
-          <input
-            value={form.missionStatement}
-            onChange={e => onChange(e)}
-            name='missionStatement'
-          />
-        </div>
-        <button type='submit'>submit</button>
-      </form>
+    <div className={classes.layout}>
+      <Paper className={classes.paper}>
+        {submitted ? <Redirect to={`/startups/profile/${profile.id}`} /> : null}
+        <Error errorMsg={errorMsg} color={errorStatus} />
+        <Typography variant='h6' gutterBottom>
+          Fill out some info about your startup below!
+        </Typography>
+        <Grid container spacing={3}>
+          <form onSubmit={handleSubmits}>
+            <Grid item xs={12} sm={6}>
+              <label>What is your companys name?</label>
+              <TextField
+                value={form.companyName}
+                onChange={e => onChange(e)}
+                name='companyName'
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <label>What is your company located?</label>
+              <TextField
+                value={form.location}
+                onChange={e => onChange(e)}
+                name='location'
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <label>How many people does your company employee?</label>
+              <TextField
+                value={form.companySize}
+                onChange={e => onChange(e)}
+                name='companySize'
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <label>Is the company funded?</label>
+              <RadioGroup
+                aria-label='position'
+                name='funded'
+                value={form.funded}
+                onChange={e => onChange(e)}
+                row
+              >
+                <FormControlLabel
+                  value='true'
+                  control={<Radio color='primary' />}
+                  label='True'
+                  labelPlacement='top'
+                />
+                <FormControlLabel
+                  value='false'
+                  control={<Radio color='primary' />}
+                  label='False'
+                  labelPlacement='top'
+                />
+              </RadioGroup>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <label>What is your companys mission statement?</label>
+              <TextField
+                value={form.missionStatement}
+                onChange={e => onChange(e)}
+                name='missionStatement'
+              />
+            </Grid>
+
+            <button type='submit'>submit</button>
+          </form>
+        </Grid>
+      </Paper>
     </div>
   );
 };
