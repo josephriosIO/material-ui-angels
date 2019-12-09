@@ -1,12 +1,9 @@
 import '@reshuffle/code-transform/macro';
-import React, { useState, useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
+import React from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Helmet } from 'react-helmet';
-import { getUser } from '../../../backend/backend';
-import { useAuth } from '@reshuffle/react-auth';
 
 const useStyles = makeStyles({
   boxContainer: {
@@ -108,22 +105,6 @@ const ColorButton = withStyles(theme => ({
 const LandingPage = () => {
   const classes = useStyles();
   const matches = useMediaQuery('(min-width:600px)');
-  const [user, setUser] = useState({});
-  const { authenticated } = useAuth();
-
-  if (authenticated) {
-    getUser().then(res => {
-      setUser(...res);
-    });
-  }
-
-  if (authenticated) {
-    if (user.angel && !user.startup) {
-      return <Redirect to='/angels' />;
-    } else if (!user.angel && user.startup) {
-      return <Redirect to='/startups' />;
-    }
-  }
 
   return (
     <>
