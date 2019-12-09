@@ -104,6 +104,14 @@ export async function getUser() {
 }
 
 /* @expose */
+export async function getStartup() {
+  const { id } = getCurrentUser(true);
+  const startups = await get('startupstesting');
+
+  return startups.filter(user => user.id === id);
+}
+
+/* @expose */
 export async function updateProfile(profile) {
   const { id } = getCurrentUser(true);
   const { name, location, bio, phoneNumber } = profile;
