@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
     [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-      width: 600,
+      width: 800,
       marginLeft: 'auto',
       marginRight: 'auto',
     },
@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(3),
-    padding: theme.spacing(2),
+    padding: theme.spacing(6),
     [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
       marginTop: theme.spacing(6),
       marginBottom: theme.spacing(6),
@@ -99,65 +99,81 @@ const Questionaire = () => {
       <Paper className={classes.paper}>
         {submitted ? <Redirect to={`/startups/profile/${profile.id}`} /> : null}
         <Error errorMsg={errorMsg} color={errorStatus} />
-        <Typography variant='h6' gutterBottom>
-          Fill out some info about your startup below!
-        </Typography>
-        <Grid container spacing={3}>
+        <Paper style={{ marginBottom: '40px' }}>
+          <Typography variant='h6' gutterBottom style={{ textAlign: 'center' }}>
+            Fill out some info about your startup below!
+          </Typography>
+        </Paper>
+        <Grid container spacing={6}>
           <form onSubmit={handleSubmits}>
-            <Grid item xs={12} sm={6}>
-              <label>What is your companys name?</label>
-              <TextField
-                value={form.companyName}
-                onChange={e => onChange(e)}
-                name='companyName'
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <label>What is your company located?</label>
-              <TextField
-                value={form.location}
-                onChange={e => onChange(e)}
-                name='location'
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <label>How many people does your company employee?</label>
-              <TextField
-                value={form.companySize}
-                onChange={e => onChange(e)}
-                name='companySize'
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <label>Is the company funded?</label>
-              <RadioGroup
-                aria-label='position'
-                name='funded'
-                value={form.funded}
-                onChange={e => onChange(e)}
-                row
-              >
-                <FormControlLabel
-                  value='true'
-                  control={<Radio color='primary' />}
-                  label='True'
-                  labelPlacement='top'
+            <Grid item xs={12}>
+              <div style={{ display: 'flex', flexFlow: 'column' }}>
+                <label>What is your companys name?</label>
+                <TextField
+                  value={form.companyName}
+                  onChange={e => onChange(e)}
+                  name='companyName'
                 />
-                <FormControlLabel
-                  value='false'
-                  control={<Radio color='primary' />}
-                  label='False'
-                  labelPlacement='top'
-                />
-              </RadioGroup>
+              </div>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <label>What is your companys mission statement?</label>
-              <TextField
-                value={form.missionStatement}
-                onChange={e => onChange(e)}
-                name='missionStatement'
-              />
+            <Grid item xs={12}>
+              <div style={{ display: 'flex', flexFlow: 'column' }}>
+                <label>What is your company located?</label>
+                <TextField
+                  value={form.location}
+                  onChange={e => onChange(e)}
+                  name='location'
+                />
+              </div>
+            </Grid>
+            <Grid item xs={12}>
+              <div style={{ display: 'flex', flexFlow: 'column' }}>
+                <label>How many people does your company employee?</label>
+                <TextField
+                  value={form.companySize}
+                  onChange={e => onChange(e)}
+                  name='companySize'
+                />
+              </div>
+            </Grid>
+            <Grid item xs={12}>
+              <div style={{ display: 'flex', flexFlow: 'column' }}>
+                <label>Is the company funded?</label>
+                <div style={{ display: 'flex' }}>
+                  <RadioGroup
+                    aria-label='position'
+                    name='funded'
+                    value={form.funded}
+                    onChange={e => onChange(e)}
+                    row
+                  >
+                    <FormControlLabel
+                      value='true'
+                      control={<Radio color='primary' />}
+                      label='True'
+                      labelPlacement='top'
+                    />
+                    <FormControlLabel
+                      value='false'
+                      control={<Radio color='primary' />}
+                      label='False'
+                      labelPlacement='top'
+                    />
+                  </RadioGroup>
+                </div>
+              </div>
+            </Grid>
+            <Grid item xs={12}>
+              <div style={{ display: 'flex', flexFlow: 'column' }}>
+                <label>What is your companys mission statement?</label>
+                <TextField
+                  value={form.missionStatement}
+                  onChange={e => onChange(e)}
+                  name='missionStatement'
+                  multiline
+                  rows='4'
+                />
+              </div>
             </Grid>
 
             <button type='submit'>submit</button>
