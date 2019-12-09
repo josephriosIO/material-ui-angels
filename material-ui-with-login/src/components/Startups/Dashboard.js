@@ -1,6 +1,13 @@
+import '@reshuffle/code-transform/macro';
 import React from 'react';
+import { useAuth } from '@reshuffle/react-auth';
+import { Redirect } from 'react-router-dom';
 
 const Dashboard = () => {
+  const { authenticated } = useAuth();
+  if (authenticated) {
+    return <Redirect to='/startups/questionaire' />;
+  }
   return (
     <div>
       <div>
