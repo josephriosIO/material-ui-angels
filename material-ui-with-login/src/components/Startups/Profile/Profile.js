@@ -121,8 +121,16 @@ const Profile = () => {
               value={form.companySize}
               onChange={e => onChange(e)}
               id='number'
+              type='number'
               name='companySize'
               label='Company Size'
+              inputProps={{
+                step: 1,
+                min: 0,
+                max: 100,
+                type: 'number',
+                'aria-labelledby': 'input-slider',
+              }}
               fullWidth
             />
           </Grid>
