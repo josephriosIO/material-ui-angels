@@ -16,6 +16,7 @@ export async function setUsersToBackend(profile) {
       location: '',
       admin: true,
       angel: false,
+      startup: false,
       user: true,
     };
     if (allUsers.length > 0) {
