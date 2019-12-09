@@ -4,7 +4,7 @@ const Dashboard = () => {
   return (
     <div>
       <div>
-        <p>Dashboard</p>
+        <h1 style={{ textAlign: 'center' }}>Please Sign in to proceed.</h1>
       </div>
     </div>
   );
