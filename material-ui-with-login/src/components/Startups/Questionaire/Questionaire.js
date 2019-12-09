@@ -23,7 +23,6 @@ const Questionaire = () => {
   useEffect(() => {
     const fetchData = async () => {
       const user = await getStartup();
-      console.log(user);
 
       setProfile(...user);
 
@@ -55,6 +54,12 @@ const Questionaire = () => {
 
   if (!formProfile) {
     console.error('Profile is empty!');
+  }
+
+  if (formProfile.startup && formProfile.companyName.length > 1) {
+    if (profile) {
+      return <Redirect to={`/startups/profile/${profile.displayName}`} />;
+    }
   }
 
   return (
