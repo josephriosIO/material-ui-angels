@@ -1,11 +1,15 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import { updateStartupProfile, getStartup } from '../../../../backend/backend';
+import Error from '../../Errors/Error';
+import { Redirect } from 'react-router-dom';
+import { useAuth } from '@reshuffle/react-auth';
 
 const Questionaire = () => {
   const [errorMsg, setErrorMsg] = useState('');
   const [errorStatus, setErrorStatus] = useState('');
-  const [profile, setProfile] = useState({});
+  const [formProfile, setProfile] = useState({});
+  const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
     companyName: '',
     location: '',
@@ -14,10 +18,12 @@ const Questionaire = () => {
     companySize: 0,
     funded: false,
   });
+  const { profile } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
       const user = await getStartup();
+      console.log(user);
 
       setProfile(...user);
 
@@ -38,19 +44,25 @@ const Questionaire = () => {
     await updateStartupProfile(form);
     setErrorMsg('Saved.');
     setErrorStatus('success');
+
     setTimeout(() => {
       setErrorMsg('');
     }, 3000);
+    setSubmitted(true);
   };
 
   const onChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
-  if (!profile) {
+  if (!formProfile) {
     console.error('Profile is empty!');
   }
 
   return (
     <div>
+      {submitted ? (
+        <Redirect to={`/startups/profile/${profile.displayName}`} />
+      ) : null}
+      <Error errorMsg={errorMsg} color={errorStatus} />
       <h2>Fill out some info about your startup below!</h2>
       <form onSubmit={handleSubmits}>
         <div>
