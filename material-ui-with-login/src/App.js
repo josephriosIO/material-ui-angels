@@ -1,10 +1,11 @@
+import '@reshuffle/code-transform/macro';
 import React from 'react';
 import { Route } from 'react-router-dom';
 import Routes from './components/Angels/Routes';
 import LandingPage from './components/LandingPage/LandingPage';
 import StartupRoutes from './components/Startups/Routes';
 
-const App = props => {
+const App = () => {
   return (
     <>
       <Route exact path='/' component={LandingPage} />
