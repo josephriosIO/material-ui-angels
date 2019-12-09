@@ -89,12 +89,21 @@ const Navbar = () => {
           noWrap
           className={classes.toolbarTitle}
         >
-          <NavLink
-            style={{ textDecoration: 'none', color: 'black' }}
-            to='/startups'
-          >
-            Angels Group for Startups
-          </NavLink>
+          {authenticated ? (
+            <NavLink
+              style={{ textDecoration: 'none', color: 'black' }}
+              to={`/startups/profile/${profile.displayName}`}
+            >
+              Angels Group for Startups
+            </NavLink>
+          ) : (
+            <NavLink
+              style={{ textDecoration: 'none', color: 'black' }}
+              to={`/startups}`}
+            >
+              Angels Group for Startups
+            </NavLink>
+          )}
         </Typography>
         <nav></nav>
         {authenticated ? (
