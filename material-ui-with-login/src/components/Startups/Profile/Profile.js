@@ -4,9 +4,15 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 import { getStartup, updateStartupProfile } from '../../../../backend/backend';
 import Error from '../../Errors/Error';
 import { useAuth } from '@reshuffle/react-auth';
+import { formatMs } from '@material-ui/core';
 
 const Profile = () => {
   const [errorMsg, setErrorMsg] = useState('');
@@ -28,6 +34,8 @@ const Profile = () => {
       const user = await getStartup();
 
       setProfile(...user);
+
+      console.log(...user);
 
       setForm({
         companyName: user[0].companyName,
@@ -58,11 +66,17 @@ const Profile = () => {
   if (!formProfile) {
     console.error('Profile is empty!');
   }
+
+  console.log(
+    form.funded,
+    typeof form.funded === 'boolean',
+    typeof form.funded,
+  );
   return (
     <React.Fragment>
       <Error errorMsg={errorMsg} color={errorStatus} />
       <Typography variant='h6' gutterBottom>
-        Update Profile
+        Profile
       </Typography>
       <form onSubmit={handleSubmits}>
         <Grid container spacing={5}>
@@ -113,14 +127,27 @@ const Profile = () => {
           </Grid>
 
           <Grid item xs={12} sm={6}>
-            <TextField
+            <RadioGroup
+              aria-label='position'
+              name='funded'
               value={form.funded}
               onChange={e => onChange(e)}
-              id='number'
-              name='funded'
-              label='Funded'
-              fullWidth
-            />
+              row
+            >
+              <FormLabel component='legend'>Funded</FormLabel>
+              <FormControlLabel
+                value='true'
+                control={<Radio color='primary' />}
+                label='True'
+                labelPlacement='top'
+              />
+              <FormControlLabel
+                value='false'
+                control={<Radio color='primary' />}
+                label='False'
+                labelPlacement='top'
+              />
+            </RadioGroup>
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextField
