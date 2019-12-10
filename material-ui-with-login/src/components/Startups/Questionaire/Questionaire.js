@@ -12,6 +12,7 @@ import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
 
 const useStyles = makeStyles(theme => ({
   layout: {
@@ -104,7 +105,7 @@ const Questionaire = () => {
             Fill out some info about your startup below!
           </Typography>
         </Paper>
-        <Grid container spacing={6}>
+        <Grid container spacing={6} justify='center' alignItems='center'>
           <form onSubmit={handleSubmits}>
             <Grid item xs={12}>
               <div style={{ display: 'flex', flexFlow: 'column' }}>
@@ -175,8 +176,18 @@ const Questionaire = () => {
                 />
               </div>
             </Grid>
-
-            <button type='submit'>submit</button>
+            <Grid
+              style={{ margin: '20px 0' }}
+              item
+              xs={12}
+              container
+              justify='center'
+              alignItems='center'
+            >
+              <Button variant='contained' color='primary' type='submit'>
+                submit
+              </Button>
+            </Grid>
           </form>
         </Grid>
       </Paper>
