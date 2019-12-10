@@ -113,7 +113,7 @@ const Questionaire = () => {
           <form onSubmit={handleSubmits}>
             <Grid item xs={12}>
               <div className={classes.flex}>
-                <label>What is your companys name?</label>
+                <label>What is your company's name?</label>
                 <TextField
                   value={form.companyName}
                   onChange={e => onChange(e)}
@@ -170,7 +170,7 @@ const Questionaire = () => {
             </Grid>
             <Grid item xs={12}>
               <div className={classes.flex}>
-                <label>What is your companys mission statement?</label>
+                <label>What is your company's mission statement?</label>
                 <TextField
                   value={form.missionStatement}
                   onChange={e => onChange(e)}
@@ -189,7 +189,7 @@ const Questionaire = () => {
               alignItems='center'
             >
               <Button variant='contained' color='primary' type='submit'>
-                submit
+                Submit
               </Button>
             </Grid>
           </form>
