@@ -161,8 +161,8 @@ const Profile = () => {
             <TextField
               value={form.missionStatement}
               onChange={e => onChange(e)}
-              id='bio'
-              name='missionStatment'
+              id='missionStatement'
+              name='missionStatement'
               label='Mission Statement'
               fullWidth
               multiline
