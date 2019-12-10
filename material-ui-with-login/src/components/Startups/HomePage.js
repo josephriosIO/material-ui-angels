@@ -9,11 +9,6 @@ const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
   },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  },
 }));
 
 const HomePage = () => {
@@ -29,17 +24,13 @@ const HomePage = () => {
     fetchData();
   }, []);
 
-  //use new component to display all items from startup profile
+  //use new component to display all items from startup profile CHECK
   //have an edit button which will take you to Profile.js component || in navbar?
   // choose a nice styling for all components maybe look up components or templates with nicer CMS styles?
   // clean up code to make it more readable
   return (
     <div className={classes.root}>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <StartupProfile item={user} />
-        </Grid>
-      </Grid>
+      <StartupProfile item={user} />
     </div>
   );
 };
