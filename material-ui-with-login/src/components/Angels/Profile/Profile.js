@@ -6,9 +6,12 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { getUser, updateProfile } from '../../../../backend/backend';
 import Error from '../../Errors/Error';
+import CreateIcon from '@material-ui/icons/Create';
+import ProfileForm from './ProfileForm';
 
 const Profile = () => {
   const [errorMsg, setErrorMsg] = useState('');
+  const [editable, setEditable] = useState(true);
   const [errorStatus, setErrorStatus] = useState('');
   const [profile, setProfile] = useState({});
   const [form, setForm] = useState({
@@ -23,8 +26,6 @@ const Profile = () => {
       const user = await getUser();
 
       setProfile(...user);
-
-      console.log(user);
 
       setForm({
         name: user[0].name,
@@ -58,61 +59,13 @@ const Profile = () => {
       <Typography variant='h6' gutterBottom>
         Update Profile
       </Typography>
-      <form onSubmit={handleSubmits}>
-        <Grid container spacing={5}>
-          <Grid item xs={12}>
-            <TextField
-              onChange={e => onChange(e)}
-              value={form.name}
-              placeholder='Placeholder'
-              id='standard-normal'
-              name='name'
-              label='Name'
-              fullWidth
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              onChange={e => onChange(e)}
-              value={form.location}
-              id='location'
-              name='location'
-              label='Location'
-              fullWidth
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <TextField
-              value={form.phoneNumber}
-              onChange={e => onChange(e)}
-              id='number'
-              name='phoneNumber'
-              label='Phone Number'
-              fullWidth
-              autoComplete='phone-number'
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              value={form.bio}
-              onChange={e => onChange(e)}
-              id='bio'
-              name='bio'
-              label='Bio'
-              fullWidth
-              multiline
-              rows='6'
-            />
-          </Grid>
-        </Grid>
-        <Grid item xs={12} sm={6} style={{ marginTop: '20px' }}>
-          <Button type='submit' variant='contained' color='primary'>
-            Submit
-          </Button>
-        </Grid>
-      </form>
+      <ProfileForm
+        editable={editable}
+        setEditable={setEditable}
+        form={form}
+        onChange={onChange}
+        onSubmit={handleSubmits}
+      />
     </React.Fragment>
   );
 };
