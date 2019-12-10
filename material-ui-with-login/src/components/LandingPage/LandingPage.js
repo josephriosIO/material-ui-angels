@@ -106,7 +106,6 @@ const LandingPage = () => {
       <div className={classes.header}>
         <div className={classes.logo}>
           <p>MeetAngels</p>
-          {'  '}
           <span>
             <AllInclusiveIcon />
           </span>

@@ -6,10 +6,10 @@ import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import { setUsersToBackend, getUsers } from '../../../../backend/backend';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
 import { NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
@@ -30,9 +30,15 @@ const useStyles = makeStyles(theme => ({
   },
   toolbar: {
     flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
   toolbarTitle: {
     flexGrow: 1,
+  },
+  logo: {
+    color: 'black',
+    display: 'flex',
+    alignItems: 'baseline',
   },
   link: {
     margin: theme.spacing(0.5, 0.5),
@@ -83,19 +89,26 @@ const Navbar = () => {
       className={classes.appBar}
     >
       <Toolbar className={classes.toolbar}>
-        <Typography
-          variant='h6'
-          color='inherit'
-          noWrap
-          className={classes.toolbarTitle}
-        >
+        <div className={classes.logo}>
           <NavLink
             style={{ textDecoration: 'none', color: 'black' }}
             to='/angels'
           >
-            Angels Group
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <span>MeetAngels</span>
+              <span>
+                <AllInclusiveIcon />
+              </span>
+            </div>
           </NavLink>
-        </Typography>
+        </div>
+
         <nav></nav>
         {authenticated ? (
           <>
