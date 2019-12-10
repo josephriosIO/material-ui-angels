@@ -111,7 +111,7 @@ const LandingPage = () => {
           </span>
         </div>
 
-        <h1 className={classes.title}>Where Start-ups meet angels</h1>
+        <h1 className={classes.title}>Where startups meet angels</h1>
       </div>
       <div className={`${matches ? classes.body : classes.bodyMobile}`}>
         <div className={`${matches ? null : classes.mobileBodyItems}`}>
