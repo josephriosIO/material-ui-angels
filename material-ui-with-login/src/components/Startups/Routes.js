@@ -4,6 +4,7 @@ import Dashboard from './Dashboard';
 import NavBar from './Nav/Navbar';
 import Questionaire from './Questionaire/Questionaire';
 import Profile from './Profile/Profile';
+import HomePage from './HomePage';
 import Protected from '../PrivateRoute/PrivateRoute';
 
 const Routes = props => {
@@ -16,6 +17,7 @@ const Routes = props => {
         component={Questionaire}
       />
       <Protected path={`${props.match.path}/profile/:id`} component={Profile} />
+      <Protected path={`${props.match.path}/dashboard`} component={HomePage} />
     </>
   );
 };
