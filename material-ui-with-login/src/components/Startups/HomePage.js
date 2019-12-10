@@ -1,8 +1,8 @@
 import '@reshuffle/code-transform/macro';
 import React, { useEffect, useState } from 'react';
+import StartupProfile from './Profile/StartupProfile';
 import { getStartup } from '../../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles(theme => ({
@@ -37,7 +37,7 @@ const HomePage = () => {
     <div className={classes.root}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <Paper className={classes.paper}>{user.companyName}</Paper>
+          <StartupProfile item={user} />
         </Grid>
       </Grid>
     </div>
