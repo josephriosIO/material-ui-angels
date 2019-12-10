@@ -35,6 +35,10 @@ const useStyles = makeStyles(theme => ({
       padding: theme.spacing(3),
     },
   },
+  flex: {
+    display: 'flex',
+    flexFlow: 'column',
+  },
 }));
 
 const Questionaire = () => {
@@ -108,7 +112,7 @@ const Questionaire = () => {
         <Grid container spacing={6} justify='center' alignItems='center'>
           <form onSubmit={handleSubmits}>
             <Grid item xs={12}>
-              <div style={{ display: 'flex', flexFlow: 'column' }}>
+              <div className={classes.flex}>
                 <label>What is your companys name?</label>
                 <TextField
                   value={form.companyName}
@@ -118,7 +122,7 @@ const Questionaire = () => {
               </div>
             </Grid>
             <Grid item xs={12}>
-              <div style={{ display: 'flex', flexFlow: 'column' }}>
+              <div className={classes.flex}>
                 <label>What is your company located?</label>
                 <TextField
                   value={form.location}
@@ -128,7 +132,7 @@ const Questionaire = () => {
               </div>
             </Grid>
             <Grid item xs={12}>
-              <div style={{ display: 'flex', flexFlow: 'column' }}>
+              <div className={classes.flex}>
                 <label>How many people does your company employee?</label>
                 <TextField
                   value={form.companySize}
@@ -138,7 +142,7 @@ const Questionaire = () => {
               </div>
             </Grid>
             <Grid item xs={12}>
-              <div style={{ display: 'flex', flexFlow: 'column' }}>
+              <div className={classes.flex}>
                 <label>Is the company funded?</label>
                 <div style={{ display: 'flex' }}>
                   <RadioGroup
@@ -165,7 +169,7 @@ const Questionaire = () => {
               </div>
             </Grid>
             <Grid item xs={12}>
-              <div style={{ display: 'flex', flexFlow: 'column' }}>
+              <div className={classes.flex}>
                 <label>What is your companys mission statement?</label>
                 <TextField
                   value={form.missionStatement}
