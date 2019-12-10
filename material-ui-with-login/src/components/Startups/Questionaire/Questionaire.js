@@ -95,14 +95,14 @@ const Questionaire = () => {
 
   if (formProfile.startup && formProfile.companyName.length > 1) {
     if (profile) {
-      return <Redirect to={`/startups/profile/${profile.id}`} />;
+      return <Redirect to={`/startups/dashboard`} />;
     }
   }
 
   return (
     <div className={classes.layout}>
       <Paper className={classes.paper}>
-        {submitted ? <Redirect to={`/startups/profile/${profile.id}`} /> : null}
+        {submitted ? <Redirect to={`/startups/dashboard`} /> : null}
         <Error errorMsg={errorMsg} color={errorStatus} />
         <Paper style={{ marginBottom: '40px' }}>
           <Typography variant='h6' gutterBottom style={{ textAlign: 'center' }}>
