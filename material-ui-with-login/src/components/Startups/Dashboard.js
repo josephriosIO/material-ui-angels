@@ -4,16 +4,14 @@ import { useAuth } from '@reshuffle/react-auth';
 import { Redirect } from 'react-router-dom';
 
 const Dashboard = () => {
-  const { authenticated } = useAuth();
+  const { authenticated, getLoginURL } = useAuth();
   if (authenticated) {
     return <Redirect to='/startups/questionaire' />;
   }
   return (
-    <div>
-      <div>
-        <h1 style={{ textAlign: 'center' }}>Please Sign in to proceed.</h1>
-      </div>
-    </div>
+    <>
+      <p>Get rid of this page and go straight too login screen</p>
+    </>
   );
 };
 
