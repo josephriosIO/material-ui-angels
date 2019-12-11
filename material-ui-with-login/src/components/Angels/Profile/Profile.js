@@ -1,12 +1,8 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
 import { getUser, updateProfile } from '../../../../backend/backend';
 import Error from '../../Errors/Error';
-import CreateIcon from '@material-ui/icons/Create';
 import ProfileForm from './ProfileForm';
 
 const Profile = () => {

@@ -10,7 +10,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 import { getStartup, updateStartupProfile } from '../../../../backend/backend';
 import Error from '../../Errors/Error';
-import { useAuth } from '@reshuffle/react-auth';
 
 const Profile = () => {
   const [errorMsg, setErrorMsg] = useState('');
@@ -25,7 +24,6 @@ const Profile = () => {
     companySize: 0,
     funded: false,
   });
-  const { profile } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,7 +57,7 @@ const Profile = () => {
     } catch (err) {
       setErrorMsg('Please be logged into the right account.');
       setErrorStatus('danger');
-
+      console.error(submitted);
       setTimeout(() => {
         setErrorMsg('');
       }, 3000);

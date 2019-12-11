@@ -14,7 +14,6 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import Avatar from '@material-ui/core/Avatar';
 
 const columns = [
   { id: 'companyName', align: 'center', label: 'Company Name', minWidth: 170 },
@@ -87,7 +86,7 @@ export default function SeeStartups() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const classes = useStyles();
-  const { loading, profile } = useAuth();
+  const { loading } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {

@@ -1,10 +1,10 @@
 import '@reshuffle/code-transform/macro';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import { setStartupsToBackend, getStartups } from '../../../../backend/backend';
+import { setStartupsToBackend } from '../../../../backend/backend';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
@@ -55,16 +55,6 @@ const Navbar = () => {
 
   const open = Boolean(anchorEl);
   const id = open ? 'transitions-popper' : undefined;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await getStartups();
-      if (result) {
-        setUsers(result);
-      }
-    };
-    fetchData();
-  }, []);
 
   const handleClose = () => {
     setAnchorEl(null);
