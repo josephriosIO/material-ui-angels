@@ -5,6 +5,7 @@ import Dashboard from './Dashboard';
 import AdminPage from './AdminPage';
 import Profile from './Profile/Profile';
 import NavBar from './Nav/NavBar';
+import SeeStartups from './SeeStartups';
 
 import Protected from '../PrivateRoute/PrivateRoute';
 
@@ -22,6 +23,11 @@ const Routes = props => {
         exact
         path={`${props.match.path}/profile/:id`}
         component={Profile}
+      />
+      <Protected
+        exact
+        path={`${props.match.path}/startups`}
+        component={SeeStartups}
       />
     </>
   );
