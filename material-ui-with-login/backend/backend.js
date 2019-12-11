@@ -11,6 +11,7 @@ export async function setStartupsToBackend(profile) {
       name: profile.displayName,
       img: profile.picture,
       email: profile.emails,
+      website: '',
       companyName: '',
       phoneNumber: null,
       companySize: 0,
@@ -151,6 +152,7 @@ export async function updateStartupProfile(profile) {
     companyName,
     companySize,
     funded,
+    website,
   } = profile;
 
   return update('startups', (users = []) => {
@@ -163,6 +165,7 @@ export async function updateStartupProfile(profile) {
         user.missionStatement = missionStatement;
         user.companySize = companySize;
         user.funded = funded;
+        user.website = website;
         user.completed = true;
       }
     });
