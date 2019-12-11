@@ -116,15 +116,22 @@ const Navbar = () => {
             justifyContent: 'center',
           }}
         >
-          <NavLink
-            style={{ textDecoration: 'none', color: 'black' }}
-            className={classes.link}
-            to={`/angels/startups`}
-          >
-            <Button color='primary' variant='outlined' className={classes.link}>
-              See Startups
-            </Button>
-          </NavLink>
+          {authenticated ? (
+            <NavLink
+              style={{ textDecoration: 'none', color: 'black' }}
+              className={classes.link}
+              to={`/angels/startups`}
+            >
+              <Button
+                color='primary'
+                variant='outlined'
+                className={classes.link}
+              >
+                See Startups
+              </Button>
+            </NavLink>
+          ) : null}
+
           {authenticated ? (
             <>
               <Menu
