@@ -7,12 +7,19 @@ import { useAuth } from '@reshuffle/react-auth';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Typography from '@material-ui/core/Typography';
+import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
-import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+
+const employeesValues = [
+  '0 - 10',
+  '11 - 50',
+  '51 - 200',
+  '201 - 500',
+  '501 - 1000',
+  '1000+',
+];
 
 const useStyles = makeStyles(theme => ({
   layout: {
@@ -20,24 +27,41 @@ const useStyles = makeStyles(theme => ({
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
     [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-      width: 800,
-      marginLeft: 'auto',
+      maxWidth: '988px',
       marginRight: 'auto',
+      marginLeft: 'auto',
+      paddingLeft: '14px',
+      paddingRight: '14px',
     },
   },
-  paper: {
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(3),
-    padding: theme.spacing(6),
-    [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-      marginTop: theme.spacing(6),
-      marginBottom: theme.spacing(6),
-      padding: theme.spacing(3),
-    },
-  },
+
   flex: {
     display: 'flex',
     flexFlow: 'column',
+    marginBottom: '10px',
+    padding: '0 20px',
+  },
+  btn: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: '30px 0',
+    padding: '0 20px',
+  },
+  header: {
+    background: '#eee',
+    height: '120px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: '28px',
+  },
+  formContainer: {
+    border: '1px solid #e7e9eb',
+    padding: '28px',
+  },
+  footer: {
+    marginTop: '100px',
   },
 }));
 
@@ -54,6 +78,7 @@ const Questionaire = () => {
     phoneNumber: '',
     companySize: 0,
     funded: false,
+    website: '',
   });
   const { profile } = useAuth();
 
@@ -100,101 +125,78 @@ const Questionaire = () => {
   }
 
   return (
-    <div className={classes.layout}>
-      <Paper className={classes.paper}>
-        {submitted ? <Redirect to={`/startups/dashboard`} /> : null}
-        <Error errorMsg={errorMsg} color={errorStatus} />
-        <Paper style={{ marginBottom: '40px' }}>
-          <Typography variant='h6' gutterBottom style={{ textAlign: 'center' }}>
-            Fill out some info about your startup below!
-          </Typography>
-        </Paper>
-        <Grid container spacing={6} justify='center' alignItems='center'>
+    <div>
+      {submitted ? <Redirect to={`/startups/dashboard`} /> : null}
+      <Error errorMsg={errorMsg} color={errorStatus} />
+      <div className={classes.header}>
+        <h2 style={{ fontSize: '1rem' }}>Create a Startup Profile</h2>
+      </div>
+      <div className={classes.layout}>
+        <div className={classes.formContainer}>
           <form onSubmit={handleSubmits}>
-            <Grid item xs={12}>
-              <div className={classes.flex}>
-                <label>What is your company's name?</label>
-                <TextField
-                  value={form.companyName}
-                  onChange={e => onChange(e)}
-                  name='companyName'
-                />
+            <div className={classes.flex}>
+              <label>Company Name</label>
+              <TextField
+                value={form.companyName}
+                onChange={e => onChange(e)}
+                name='companyName'
+              />
+            </div>
+            <div className={classes.flex}>
+              <label>Company Website</label>
+              <TextField
+                value={form.website}
+                onChange={e => onChange(e)}
+                name='website'
+              />
+            </div>
+            <div className={classes.flex}>
+              <label>Location</label>
+              <TextField
+                value={form.location}
+                onChange={e => onChange(e)}
+                name='location'
+              />
+            </div>
+            <div className={classes.flex}>
+              <label># of Employees</label>
+              <TextField
+                value={form.companySize}
+                onChange={e => onChange(e)}
+                name='companySize'
+                select
+              >
+                {employeesValues.map(option => (
+                  <MenuItem key={option} value={option}>
+                    {option}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </div>
+            <div className={classes.flex}>
+              <label>What is your company's mission statement?</label>
+              <TextField
+                value={form.missionStatement}
+                onChange={e => onChange(e)}
+                name='missionStatement'
+                multiline
+                rows='4'
+                variant='outlined'
+              />
+            </div>
+            <div className={classes.btn}>
+              <div>
+                <Button variant='contained' color='primary' type='submit'>
+                  Submit
+                </Button>
               </div>
-            </Grid>
-            <Grid item xs={12}>
-              <div className={classes.flex}>
-                <label>where is your company located?</label>
-                <TextField
-                  value={form.location}
-                  onChange={e => onChange(e)}
-                  name='location'
-                />
-              </div>
-            </Grid>
-            <Grid item xs={12}>
-              <div className={classes.flex}>
-                <label>How many people does your company employee?</label>
-                <TextField
-                  value={form.companySize}
-                  onChange={e => onChange(e)}
-                  name='companySize'
-                />
-              </div>
-            </Grid>
-            <Grid item xs={12}>
-              <div className={classes.flex}>
-                <label>Is the company funded?</label>
-                <div style={{ display: 'flex' }}>
-                  <RadioGroup
-                    aria-label='position'
-                    name='funded'
-                    value={form.funded}
-                    onChange={e => onChange(e)}
-                    row
-                  >
-                    <FormControlLabel
-                      value='true'
-                      control={<Radio color='primary' />}
-                      label='True'
-                      labelPlacement='top'
-                    />
-                    <FormControlLabel
-                      value='false'
-                      control={<Radio color='primary' />}
-                      label='False'
-                      labelPlacement='top'
-                    />
-                  </RadioGroup>
-                </div>
-              </div>
-            </Grid>
-            <Grid item xs={12}>
-              <div className={classes.flex}>
-                <label>What is your company's mission statement?</label>
-                <TextField
-                  value={form.missionStatement}
-                  onChange={e => onChange(e)}
-                  name='missionStatement'
-                  multiline
-                  rows='4'
-                />
-              </div>
-            </Grid>
-            <Grid
-              style={{ margin: '20px 0' }}
-              item
-              xs={12}
-              container
-              justify='center'
-              alignItems='center'
-            >
-              <Button variant='contained' color='primary' type='submit'>
-                Submit
-              </Button>
-            </Grid>
+            </div>
           </form>
-        </Grid>
-      </Paper>
+        </div>
+        <footer className={classes.footer}>
+          <p>Powered By Reshuffle</p>
+        </footer>
+      </div>
     </div>
   );
 };
