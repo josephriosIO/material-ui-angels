@@ -40,6 +40,13 @@ const columns = [
     align: 'right',
     format: value => value.toLocaleString(),
   },
+  {
+    id: 'companySize',
+    label: 'Company Size',
+    minWidth: 170,
+    align: 'right',
+    format: value => value.toLocaleString(),
+  },
 ];
 
 const useStyles = makeStyles(theme => ({
