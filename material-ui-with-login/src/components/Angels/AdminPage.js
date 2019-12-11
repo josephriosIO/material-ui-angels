@@ -68,7 +68,7 @@ const AdminPage = props => {
       <Error errorMsg={errorMsg} color={errorStatus} />
       <CssBaseline />
       <Container maxWidth='sm' component='main' className={classes.heroContent}>
-        <SearchBar search={search} />
+        <SearchBar search={search} title={'name'} />
         <div className={classes.tableWrapper}>
           {filter.length > 0
             ? filter
