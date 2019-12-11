@@ -5,9 +5,10 @@ const SearchBar = props => {
   return (
     <form noValidate autoComplete='on' style={{ marginBottom: '30px' }}>
       <TextField
+        style={{ width: '260px' }}
         id='standard-basic'
         onKeyDown={props.search}
-        label='Search By Name'
+        label={`Search By ${props.title}`}
       />
     </form>
   );
