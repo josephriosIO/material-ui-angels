@@ -164,8 +164,7 @@ export default function SeeStartups() {
                             tabIndex={-1}
                             key={row.id}
                           >
-                            {columns.map((column, count = 0) => {
-                              count += 1;
+                            {columns.map(column => {
                               let value = row[column.id];
 
                               if (Array.isArray(value)) {

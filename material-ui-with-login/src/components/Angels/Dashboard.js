@@ -180,7 +180,8 @@ export default function Page() {
                                   <div
                                     style={{
                                       display: 'flex',
-                                      justifyContent: 'flex-end',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
                                     }}
                                   >
                                     {count < 2 ? (
