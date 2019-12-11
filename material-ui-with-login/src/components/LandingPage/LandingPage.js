@@ -7,6 +7,8 @@ import { Helmet } from 'react-helmet';
 import GroupIcon from '@material-ui/icons/Group';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
+import { useAuth } from '@reshuffle/react-auth';
+import { Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles({
   title: {
@@ -100,6 +102,11 @@ const ColorButton = withStyles(theme => ({
 const LandingPage = () => {
   const classes = useStyles();
   const matches = useMediaQuery('(min-width:800px)');
+  const { authenticated, getLoginURL } = useAuth();
+
+  if (authenticated) {
+    return <Redirect to='/startups' />;
+  }
 
   return (
     <>
@@ -129,7 +136,7 @@ const LandingPage = () => {
             Login and set up your startups profile to start meeting angels
             today!
           </p>
-          <ColorButton href='/startups'>Login As Startup</ColorButton>
+          <ColorButton href={getLoginURL()}>Login As Startup</ColorButton>
         </div>
 
         <div className={`${matches ? null : classes.mobileBodyItems}`}>
