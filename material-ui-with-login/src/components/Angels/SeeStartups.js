@@ -93,8 +93,6 @@ export default function SeeStartups() {
     const fetchData = async () => {
       const result = await getStartups();
 
-      console.log(result);
-
       if (result) {
         setUsers(result);
       }
@@ -189,9 +187,6 @@ export default function SeeStartups() {
                                     }}
                                   >
                                     {value}
-                                    {count < 2 ? (
-                                      <Avatar src={row.img} alt={row.name} />
-                                    ) : null}
                                   </div>
                                 </TableCell>
                               );

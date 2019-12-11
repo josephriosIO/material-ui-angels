@@ -182,10 +182,10 @@ export default function Page() {
                                       justifyContent: 'flex-end',
                                     }}
                                   >
-                                    {value}
                                     {count < 2 ? (
                                       <Avatar src={row.img} alt={row.name} />
                                     ) : null}
+                                    {value}
                                   </div>
                                 </TableCell>
                               );
