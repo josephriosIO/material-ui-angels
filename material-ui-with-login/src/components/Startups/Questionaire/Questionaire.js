@@ -93,6 +93,12 @@ const Questionaire = () => {
     console.error('Profile is empty!');
   }
 
+  if (formProfile.startup && formProfile.companyName.length > 1) {
+    if (profile) {
+      return <Redirect to={`/startups/dashboard`} />;
+    }
+  }
+
   return (
     <div className={classes.layout}>
       <Paper className={classes.paper}>
