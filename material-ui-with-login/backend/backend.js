@@ -4,7 +4,7 @@ import { getCurrentUser } from '@reshuffle/server-function';
 /* @expose */
 export async function setStartupsToBackend(profile) {
   const { id } = getCurrentUser(true);
-  return update('startupstestings', (users = []) => {
+  return update('startups', (users = []) => {
     let allStartups = JSON.parse(JSON.stringify(users));
     const user = {
       id,
@@ -33,7 +33,7 @@ export async function setStartupsToBackend(profile) {
 /* @expose */
 export async function setUsersToBackend(profile) {
   const { id } = getCurrentUser(true);
-  return update('userTesting', (users = []) => {
+  return update('angels', (users = []) => {
     let allUsers = JSON.parse(JSON.stringify(users));
     const user = {
       id,
@@ -61,7 +61,7 @@ export async function setUsersToBackend(profile) {
 
 /* @expose */
 export async function getUsers() {
-  const users = await get('userTesting');
+  const users = await get('angels');
 
   return users;
 }
@@ -69,7 +69,7 @@ export async function getUsers() {
 /* @expose */
 export async function getStartups() {
   try {
-    const startups = await get('startupstestings');
+    const startups = await get('startups');
 
     return startups;
   } catch (err) {
@@ -81,7 +81,7 @@ export async function getStartups() {
 /* @expose */
 export async function updateStatus(userId, admin, angel) {
   const { id } = getCurrentUser(true);
-  return update('userTesting', (users = []) => {
+  return update('angels', (users = []) => {
     let allUsers = JSON.parse(JSON.stringify(users));
     allUsers.map(user => {
       if (user.id === id) {
@@ -104,7 +104,7 @@ export async function updateStatus(userId, admin, angel) {
 /* @expose */
 export async function getUser() {
   const { id } = getCurrentUser(true);
-  const users = await get('userTesting');
+  const users = await get('angels');
 
   return users.filter(user => user.id === id);
 }
@@ -113,7 +113,7 @@ export async function getUser() {
 export async function getStartup() {
   try {
     const { id } = getCurrentUser(true);
-    const startups = await get('startupstestings');
+    const startups = await get('startups');
 
     return startups.filter(user => user.id === id);
   } catch (err) {
@@ -126,7 +126,7 @@ export async function updateProfile(profile) {
   const { id } = getCurrentUser(true);
   const { name, location, bio, phoneNumber } = profile;
 
-  return update('userTesting', (users = []) => {
+  return update('angels', (users = []) => {
     let allUsers = JSON.parse(JSON.stringify(users));
     allUsers.map(user => {
       if (user.id === id) {
@@ -153,7 +153,7 @@ export async function updateStartupProfile(profile) {
     funded,
   } = profile;
 
-  return update('startupstestings', (users = []) => {
+  return update('startups', (users = []) => {
     let allStartups = JSON.parse(JSON.stringify(users));
     allStartups.map(user => {
       if (user.id === id) {
