@@ -93,12 +93,6 @@ const Questionaire = () => {
     console.error('Profile is empty!');
   }
 
-  if (formProfile.startup && formProfile.companyName.length > 1) {
-    if (profile) {
-      return <Redirect to={`/startups/dashboard`} />;
-    }
-  }
-
   return (
     <div className={classes.layout}>
       <Paper className={classes.paper}>
@@ -123,7 +117,7 @@ const Questionaire = () => {
             </Grid>
             <Grid item xs={12}>
               <div className={classes.flex}>
-                <label>What is your company located?</label>
+                <label>where is your company located?</label>
                 <TextField
                   value={form.location}
                   onChange={e => onChange(e)}
