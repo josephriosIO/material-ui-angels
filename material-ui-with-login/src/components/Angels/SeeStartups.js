@@ -2,7 +2,7 @@ import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
 import { getStartups } from '../../../backend/backend';
-
+import SearchBar from './SearchBar';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
@@ -79,12 +79,19 @@ const useStyles = makeStyles(theme => ({
     maxHeight: 440,
     overflow: 'auto',
   },
+  flex: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+  },
 }));
 
 export default function SeeStartups() {
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [filter, setFilter] = useState([]);
   const classes = useStyles();
   const { loading } = useAuth();
 
@@ -118,6 +125,18 @@ export default function SeeStartups() {
     );
   }
 
+  const search = e => {
+    const filteredUsers = users.filter(user => {
+      if (user.companyName.toLowerCase().includes(e.target.value)) {
+        return user;
+      }
+
+      return null;
+    });
+
+    setFilter(filteredUsers);
+  };
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -134,7 +153,11 @@ export default function SeeStartups() {
         ) : (
           <Grid>
             <Paper className={classes.root}>
-              <h2>Startups</h2>
+              <div className={classes.flex}>
+                <h2>Startups</h2>
+                <SearchBar search={search} title={'Company Name'} />
+              </div>
+
               <div className={classes.tableWrapper}>
                 <Table stickyHeader aria-label='sticky table'>
                   <TableHead>
@@ -151,46 +174,93 @@ export default function SeeStartups() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {users
-                      .slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage,
-                      )
-                      .map(row =>
-                        row ? (
-                          <TableRow
-                            hover
-                            role='checkbox'
-                            tabIndex={-1}
-                            key={row.id}
-                          >
-                            {columns.map(column => {
-                              let value = row[column.id];
+                    {filter.length > 0
+                      ? filter
+                          .slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage,
+                          )
+                          .map(row =>
+                            row ? (
+                              <TableRow
+                                hover
+                                role='checkbox'
+                                tabIndex={-1}
+                                key={row.id}
+                              >
+                                {columns.map(column => {
+                                  let value = row[column.id];
 
-                              if (Array.isArray(value)) {
-                                value = value[0].value;
-                              }
+                                  if (Array.isArray(value)) {
+                                    value = value[0].value;
+                                  }
 
-                              if (value === '' || value === null) {
-                                value = 'N/A';
-                              }
+                                  if (value === '' || value === null) {
+                                    value = 'N/A';
+                                  }
 
-                              return (
-                                <TableCell key={column.id} align={column.align}>
-                                  <div
-                                    style={{
-                                      display: 'flex',
-                                      justifyContent: 'flex-end',
-                                    }}
-                                  >
-                                    {value}
-                                  </div>
-                                </TableCell>
-                              );
-                            })}
-                          </TableRow>
-                        ) : null,
-                      )}
+                                  return (
+                                    <TableCell
+                                      key={column.id}
+                                      align={column.align}
+                                    >
+                                      <div
+                                        style={{
+                                          display: 'flex',
+                                          justifyContent: 'flex-end',
+                                        }}
+                                      >
+                                        {value}
+                                      </div>
+                                    </TableCell>
+                                  );
+                                })}
+                              </TableRow>
+                            ) : null,
+                          )
+                      : users
+                          .slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage,
+                          )
+                          .map(row =>
+                            row ? (
+                              <TableRow
+                                hover
+                                role='checkbox'
+                                tabIndex={-1}
+                                key={row.id}
+                              >
+                                {columns.map(column => {
+                                  let value = row[column.id];
+
+                                  if (Array.isArray(value)) {
+                                    value = value[0].value;
+                                  }
+
+                                  if (value === '' || value === null) {
+                                    value = 'N/A';
+                                  }
+
+                                  return (
+                                    <TableCell
+                                      key={column.id}
+                                      align={column.align}
+                                    >
+                                      <div
+                                        style={{
+                                          display: 'flex',
+                                          justifyContent: 'flex-end',
+                                        }}
+                                      >
+                                        {value}
+                                      </div>
+                                    </TableCell>
+                                  );
+                                })}
+                              </TableRow>
+                            ) : null,
+                          )}
                   </TableBody>
                 </Table>
               </div>
