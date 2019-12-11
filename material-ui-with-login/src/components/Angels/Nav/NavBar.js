@@ -109,86 +109,103 @@ const Navbar = () => {
           </NavLink>
         </div>
 
-        <nav></nav>
-        {authenticated ? (
-          <>
-            <Menu
-              id='simple-menu'
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={handleClose}>
-                {' '}
-                Welcome {profile.displayName}!
-              </MenuItem>
-              <NavLink
-                style={{ textDecoration: 'none', color: 'black' }}
-                className={classes.link}
-                to={`/angels/profile/${profile.id}`}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <NavLink
+            style={{ textDecoration: 'none', color: 'black' }}
+            className={classes.link}
+            to={`/angels/startups`}
+          >
+            <Button color='primary' variant='outlined' className={classes.link}>
+              See Startups
+            </Button>
+          </NavLink>
+          {authenticated ? (
+            <>
+              <Menu
+                id='simple-menu'
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
               >
+                <MenuItem onClick={handleClose}>
+                  {' '}
+                  Welcome {profile.displayName}!
+                </MenuItem>
+                <NavLink
+                  style={{ textDecoration: 'none', color: 'black' }}
+                  className={classes.link}
+                  to={`/angels/profile/${profile.id}`}
+                >
+                  <Button
+                    color='primary'
+                    variant='outlined'
+                    className={classes.link}
+                  >
+                    Profile
+                  </Button>
+                </NavLink>
+
+                {users.length > 0 && authenticated
+                  ? users.map(user =>
+                      user.admin && user.id === profile.id ? (
+                        <div key={user.id} style={{ marginRight: '10px' }}>
+                          <NavLink
+                            style={{ textDecoration: 'none', color: 'black' }}
+                            className={classes.link}
+                            to={{
+                              pathname: `/angels/admin`,
+                              state: {
+                                users: users,
+                              },
+                            }}
+                          >
+                            <Button
+                              color='secondary'
+                              variant='outlined'
+                              className={classes.link}
+                            >
+                              Admin
+                            </Button>
+                          </NavLink>
+                        </div>
+                      ) : null,
+                    )
+                  : null}
                 <Button
                   color='primary'
                   variant='outlined'
                   className={classes.link}
+                  href={getLogoutURL()}
                 >
-                  Profile
+                  Logout
                 </Button>
-              </NavLink>
-              {users.length > 0 && authenticated
-                ? users.map(user =>
-                    user.admin && user.id === profile.id ? (
-                      <div key={user.id} style={{ marginRight: '10px' }}>
-                        <NavLink
-                          style={{ textDecoration: 'none', color: 'black' }}
-                          className={classes.link}
-                          to={{
-                            pathname: `/angels/admin`,
-                            state: {
-                              users: users,
-                            },
-                          }}
-                        >
-                          <Button
-                            color='secondary'
-                            variant='outlined'
-                            className={classes.link}
-                          >
-                            Admin
-                          </Button>
-                        </NavLink>
-                      </div>
-                    ) : null,
-                  )
-                : null}
-              <Button
-                color='primary'
-                variant='outlined'
-                className={classes.link}
-                href={getLogoutURL()}
-              >
-                Logout
-              </Button>
-            </Menu>
+              </Menu>
 
-            <Avatar
-              aria-describedby={id}
-              onClick={handleClick}
-              src={profile.picture}
-              alt={profile.name}
-            />
-          </>
-        ) : (
-          <Button
-            color='primary'
-            variant='outlined'
-            className={classes.link}
-            href={getLoginURL()}
-          >
-            Login
-          </Button>
-        )}
+              <Avatar
+                aria-describedby={id}
+                onClick={handleClick}
+                src={profile.picture}
+                alt={profile.name}
+              />
+            </>
+          ) : (
+            <Button
+              color='primary'
+              variant='outlined'
+              className={classes.link}
+              href={getLoginURL()}
+            >
+              Login
+            </Button>
+          )}
+        </div>
       </Toolbar>
     </AppBar>
   );
