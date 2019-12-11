@@ -4,7 +4,7 @@ import { getCurrentUser } from '@reshuffle/server-function';
 /* @expose */
 export async function setStartupsToBackend(profile) {
   const { id } = getCurrentUser(true);
-  return update('startupstesting', (users = []) => {
+  return update('startupstestings', (users = []) => {
     let allStartups = JSON.parse(JSON.stringify(users));
     const user = {
       id,
@@ -68,7 +68,7 @@ export async function getUsers() {
 
 /* @expose */
 export async function getStartups() {
-  const startups = await get('startupstesting');
+  const startups = await get('startupstestings');
 
   return startups;
 }
@@ -107,7 +107,7 @@ export async function getUser() {
 /* @expose */
 export async function getStartup() {
   const { id } = getCurrentUser(true);
-  const startups = await get('startupstesting');
+  const startups = await get('startupstestings');
 
   return startups.filter(user => user.id === id);
 }
@@ -144,7 +144,7 @@ export async function updateStartupProfile(profile) {
     funded,
   } = profile;
 
-  return update('startupstesting', (users = []) => {
+  return update('startupstestings', (users = []) => {
     let allStartups = JSON.parse(JSON.stringify(users));
     allStartups.map(user => {
       if (user.id === id) {
