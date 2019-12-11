@@ -117,22 +117,6 @@ const Navbar = () => {
           }}
         >
           {authenticated ? (
-            <NavLink
-              style={{ textDecoration: 'none', color: 'black' }}
-              className={classes.link}
-              to={`/angels/startups`}
-            >
-              <Button
-                color='primary'
-                variant='outlined'
-                className={classes.link}
-              >
-                See Startups
-              </Button>
-            </NavLink>
-          ) : null}
-
-          {authenticated ? (
             <>
               <Menu
                 id='simple-menu'
@@ -156,6 +140,20 @@ const Navbar = () => {
                     className={classes.link}
                   >
                     Profile
+                  </Button>
+                </NavLink>
+
+                <NavLink
+                  style={{ textDecoration: 'none', color: 'black' }}
+                  className={classes.link}
+                  to={`/angels/startups`}
+                >
+                  <Button
+                    color='primary'
+                    variant='outlined'
+                    className={classes.link}
+                  >
+                    See Startups
                   </Button>
                 </NavLink>
 
