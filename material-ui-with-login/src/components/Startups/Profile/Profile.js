@@ -10,8 +10,59 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 import { getStartup, updateStartupProfile } from '../../../../backend/backend';
 import Error from '../../Errors/Error';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  container: {
+    backgroundColor: '#f9f9fa',
+    height: '100vh',
+  },
+  layout: {
+    width: 'auto',
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
+      maxWidth: '988px',
+      marginRight: 'auto',
+      marginLeft: 'auto',
+      paddingLeft: '14px',
+      paddingRight: '14px',
+    },
+  },
+  header: {
+    borderBottom: '1px solid #e7e9eb',
+    padding: '56px 0',
+    marginBottom: '28px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItem: 'center',
+    [theme.breakpoints.down(600 + theme.spacing(2) * 2)]: {
+      justifyContent: 'flex-start',
+      flexFlow: 'column',
+    },
+  },
+  saveBtn: {
+    backgroundColor: '#3f81c7',
+    borderRadius: '3px',
+    cursor: 'pointer',
+    display: 'inline-block',
+    fontSize: '14px',
+    lineHeight: '21px',
+    padding: '7px 26px',
+    outline: 'none',
+    textDecoration: 'none',
+    textAlign: 'center',
+    userSelect: 'none',
+    color: '#f0f0f0',
+    [theme.breakpoints.down(600 + theme.spacing(2) * 2)]: {
+      padding: '7px 18px',
+      width: '100px',
+    },
+  },
+}));
 
 const Profile = () => {
+  const classes = useStyles();
   const [errorMsg, setErrorMsg] = useState('');
   const [errorStatus, setErrorStatus] = useState('');
   const [formProfile, setProfile] = useState({});
@@ -72,109 +123,116 @@ const Profile = () => {
   }
 
   return (
-    <React.Fragment>
+    <div className={classes.container}>
       <Error errorMsg={errorMsg} color={errorStatus} />
-      <Typography variant='h6' gutterBottom>
-        Profile
-      </Typography>
       <form onSubmit={handleSubmits}>
-        <Grid container spacing={5}>
-          <Grid item xs={12}>
-            <TextField
-              onChange={e => onChange(e)}
-              value={form.companyName}
-              id='companyName'
-              name='companyName'
-              label='Company Name'
-              fullWidth
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              onChange={e => onChange(e)}
-              value={form.location}
-              id='location'
-              name='location'
-              label='Location'
-              fullWidth
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <TextField
-              value={form.phoneNumber}
-              onChange={e => onChange(e)}
-              id='number'
-              name='phoneNumber'
-              label='Phone Number'
-              fullWidth
-              autoComplete='phone-number'
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <TextField
-              value={form.companySize}
-              onChange={e => onChange(e)}
-              id='companySize'
-              type='number'
-              name='companySize'
-              label='Company Size'
-              inputProps={{
-                step: 1,
-                min: 0,
-                max: 100,
-                type: 'number',
-                'aria-labelledby': 'input-slider',
-              }}
-              fullWidth
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <RadioGroup
-              aria-label='position'
-              name='funded'
-              value={form.funded}
-              onChange={e => onChange(e)}
-              row
+        <div className={classes.layout}>
+          <div className={classes.header}>
+            <Typography variant='h6' gutterBottom>
+              {form.companyName} / Edit Profile
+            </Typography>
+            <button
+              type='submit'
+              variant='contained'
+              className={classes.saveBtn}
             >
-              <FormLabel component='legend'>Funded</FormLabel>
-              <FormControlLabel
-                value='true'
-                control={<Radio color='primary' />}
-                label='True'
-                labelPlacement='top'
+              Save
+            </button>
+          </div>
+
+          <Grid container spacing={5}>
+            <Grid item xs={12}>
+              <TextField
+                onChange={e => onChange(e)}
+                value={form.companyName}
+                id='companyName'
+                name='companyName'
+                label='Company Name'
+                fullWidth
               />
-              <FormControlLabel
-                value='false'
-                control={<Radio color='primary' />}
-                label='False'
-                labelPlacement='top'
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                onChange={e => onChange(e)}
+                value={form.location}
+                id='location'
+                name='location'
+                label='Location'
+                fullWidth
               />
-            </RadioGroup>
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <TextField
+                value={form.phoneNumber}
+                onChange={e => onChange(e)}
+                id='number'
+                name='phoneNumber'
+                label='Phone Number'
+                fullWidth
+                autoComplete='phone-number'
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <TextField
+                value={form.companySize}
+                onChange={e => onChange(e)}
+                id='companySize'
+                type='number'
+                name='companySize'
+                label='Company Size'
+                inputProps={{
+                  step: 1,
+                  min: 0,
+                  max: 100,
+                  type: 'number',
+                  'aria-labelledby': 'input-slider',
+                }}
+                fullWidth
+              />
+            </Grid>
+
+            <Grid item xs={12} sm={6}>
+              <RadioGroup
+                aria-label='position'
+                name='funded'
+                value={form.funded}
+                onChange={e => onChange(e)}
+                row
+              >
+                <FormLabel component='legend'>Funded</FormLabel>
+                <FormControlLabel
+                  value='true'
+                  control={<Radio color='primary' />}
+                  label='True'
+                  labelPlacement='top'
+                />
+                <FormControlLabel
+                  value='false'
+                  control={<Radio color='primary' />}
+                  label='False'
+                  labelPlacement='top'
+                />
+              </RadioGroup>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                value={form.missionStatement}
+                onChange={e => onChange(e)}
+                id='missionStatement'
+                name='missionStatement'
+                label='Mission Statement'
+                fullWidth
+                multiline
+                rows='6'
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              value={form.missionStatement}
-              onChange={e => onChange(e)}
-              id='missionStatement'
-              name='missionStatement'
-              label='Mission Statement'
-              fullWidth
-              multiline
-              rows='6'
-            />
-          </Grid>
-        </Grid>
-        <Grid item xs={12} sm={6} style={{ marginTop: '20px' }}>
-          <Button type='submit' variant='contained' color='primary'>
-            Submit
-          </Button>
-        </Grid>
+        </div>
       </form>
-    </React.Fragment>
+    </div>
   );
 };
 
