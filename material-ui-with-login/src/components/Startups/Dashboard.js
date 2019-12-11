@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
 import { Redirect } from 'react-router-dom';
 import { getStartup } from '../../../backend/backend';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const Dashboard = () => {
   const { authenticated } = useAuth();
@@ -27,7 +28,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <p>Loading</p>
+      <CircularProgress />
     </>
   );
 };
