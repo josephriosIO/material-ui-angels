@@ -133,6 +133,7 @@ export default function Page() {
         ) : (
           <Grid>
             <Paper className={classes.root}>
+              <h2>Angels</h2>
               <div className={classes.tableWrapper}>
                 <Table stickyHeader aria-label='sticky table'>
                   <TableHead>

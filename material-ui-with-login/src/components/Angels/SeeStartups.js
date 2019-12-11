@@ -137,6 +137,7 @@ export default function SeeStartups() {
         ) : (
           <Grid>
             <Paper className={classes.root}>
+              <h2>Startups</h2>
               <div className={classes.tableWrapper}>
                 <Table stickyHeader aria-label='sticky table'>
                   <TableHead>
