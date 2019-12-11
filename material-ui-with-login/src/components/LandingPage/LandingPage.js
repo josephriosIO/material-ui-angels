@@ -104,10 +104,6 @@ const LandingPage = () => {
   const matches = useMediaQuery('(min-width:800px)');
   const { authenticated, getLoginURL } = useAuth();
 
-  if (authenticated) {
-    return <Redirect to='/startups' />;
-  }
-
   return (
     <>
       <div className={classes.header}>
@@ -136,7 +132,7 @@ const LandingPage = () => {
             Login and set up your startups profile to start meeting angels
             today!
           </p>
-          <ColorButton href={getLoginURL()}>Login As Startup</ColorButton>
+          <ColorButton href={'/startups'}>Login As Startup</ColorButton>
         </div>
 
         <div className={`${matches ? null : classes.mobileBodyItems}`}>
