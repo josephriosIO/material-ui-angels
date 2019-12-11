@@ -128,10 +128,8 @@ export default function SeeStartups() {
             <div class='empty-icon'>
               <i class='icon icon-people'></i>
             </div>
-            <p class='empty-title h5'>No Angels :(</p>
-            <p class='empty-subtitle'>
-              Click login for an admin to set you as an angel.
-            </p>
+            <p class='empty-title h5'>No Startups :(</p>
+            <p class='empty-subtitle'>Have some startups join the platform!</p>
           </div>
         ) : (
           <Grid>
