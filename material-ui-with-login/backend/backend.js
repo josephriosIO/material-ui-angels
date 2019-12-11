@@ -68,9 +68,14 @@ export async function getUsers() {
 
 /* @expose */
 export async function getStartups() {
-  const startups = await get('startupstestings');
+  try {
+    const startups = await get('startupstestings');
 
-  return startups;
+    return startups;
+  } catch (err) {
+    console.log(err);
+    return console.error(err);
+  }
 }
 
 /* @expose */
@@ -106,10 +111,14 @@ export async function getUser() {
 
 /* @expose */
 export async function getStartup() {
-  const { id } = getCurrentUser(true);
-  const startups = await get('startupstestings');
+  try {
+    const { id } = getCurrentUser(true);
+    const startups = await get('startupstestings');
 
-  return startups.filter(user => user.id === id);
+    return startups.filter(user => user.id === id);
+  } catch (err) {
+    return console.error(err);
+  }
 }
 
 /* @expose */
