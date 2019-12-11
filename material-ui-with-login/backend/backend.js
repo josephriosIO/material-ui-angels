@@ -19,6 +19,7 @@ export async function setStartupsToBackend(profile) {
       location: '',
       startup: true,
       user: true,
+      completed: false,
     };
 
     allStartups.push(user);
@@ -153,6 +154,7 @@ export async function updateStartupProfile(profile) {
         user.missionStatement = missionStatement;
         user.companySize = companySize;
         user.funded = funded;
+        user.completed = true;
       }
     });
 
