@@ -1,36 +1,45 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Button from '@material-ui/core/Button';
-
-const ColorButton = withStyles(theme => ({
-  root: {
-    color: '#494949 !important',
-    textTransform: 'uppercase',
-    textDecoration: 'none',
-    background: '#fff',
-    padding: '5px',
-    border: '4px solid #494949 !important',
-    display: 'inline-block',
-    transition: 'all 0.4s ease 0s',
-    '&:hover': {
-      color: '#ffffff !important',
-      background: '#f6b93b',
-      borderColor: '#f6b93b !important',
-      transition: 'all 0.4s ease 0s',
-    },
-  },
-}))(Button);
 
 const useStyles = makeStyles(theme => ({
   header: {
     display: 'flex',
     justifyContent: 'space-between',
+    margin: '50px 30px',
+  },
+  card: {
+    width: '50%',
+    marginBottom: '50px',
+    [theme.breakpoints.down(600 + theme.spacing(2) * 2)]: {
+      width: '80%',
+    },
+  },
+  media: {
+    height: 200,
+  },
+  center: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  infoItems: {
+    display: 'flex',
+    flexFlow: 'column',
+  },
+  items: {
+    lineHeight: 2.5,
   },
 }));
 
@@ -42,75 +51,59 @@ const StartupProfile = props => {
     <div>
       <div className={classes.header}>
         <h3>Welcome back, {item.name}</h3>
-        <ColorButton>
-          <Link
-            style={{ textDecoration: 'none', color: 'black' }}
-            to={`/startups/profile/${item.id}`}
-          >
-            EDIT PROFILE
-          </Link>
-        </ColorButton>
       </div>
-
-      <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls='panel1a-content'
-          id='panel1a-header'
-        >
-          <Typography className={classes.heading}>Company Name</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <Typography>
-            {item.companyName ? item.companyName : 'Not Entered'}
-          </Typography>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
-      <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls='panel2a-content'
-          id='panel2a-header'
-        >
-          <Typography className={classes.heading}> Company Location</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <Typography>
-            {item.location ? item.location : 'Not Entered'}
-          </Typography>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
-      <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls='panel2a-content'
-          id='panel2a-header'
-        >
-          <Typography className={classes.heading}>
-            {' '}
-            Company's Mission Statement
-          </Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <Typography>
-            {item.missionStatement ? item.missionStatement : 'Not Entered'}{' '}
-          </Typography>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
-      <ExpansionPanel>
-        <ExpansionPanelSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls='panel2a-content'
-          id='panel2a-header'
-        >
-          <Typography className={classes.heading}> Company Size</Typography>
-        </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
-          <Typography>
-            {item.companySize ? item.companySize : 'Not Entered'}{' '}
-          </Typography>
-        </ExpansionPanelDetails>
-      </ExpansionPanel>
+      <div className={classes.center}>
+        <Card className={classes.card}>
+          <CardActionArea>
+            <CardMedia
+              className={classes.media}
+              image='https://www.smallcellforum.org/site/wp-content/uploads/2018/01/SCF-Downtown-Silicon-Valley.jpg'
+              title='skyline'
+            />
+            <CardContent>
+              <Typography gutterBottom variant='h5' component='h2'>
+                {item.companyName ? item.companyName : 'Not Entered'}
+              </Typography>
+              <Typography variant='body2' color='textSecondary' component='p'>
+                {item.missionStatement ? item.missionStatement : 'Not Entered'}{' '}
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+          <CardActions>
+            <Link
+              style={{ textDecoration: 'none', color: 'black' }}
+              to={`/startups/profile/${item.id}`}
+            >
+              <Button size='small'>Edit Profile</Button>
+            </Link>
+          </CardActions>
+          <ExpansionPanel>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls='panel1a-content'
+              id='panel1a-header'
+            >
+              <Button size='small' color='primary'>
+                More Info
+              </Button>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <div className={classes.infoItems}>
+                <Typography className={classes.items}>
+                  Website: {item.website ? item.website : 'Not Entered'}{' '}
+                </Typography>
+                <Typography className={classes.items}>
+                  Location: {item.location ? item.location : 'Not Entered'}{' '}
+                </Typography>
+                <Typography className={classes.items}>
+                  # of Employees:{' '}
+                  {item.companySize ? item.companySize : 'Not Entered'}{' '}
+                </Typography>
+              </div>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+        </Card>
+      </div>
     </div>
   );
 };

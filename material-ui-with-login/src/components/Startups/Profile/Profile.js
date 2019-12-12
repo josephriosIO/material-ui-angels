@@ -3,14 +3,19 @@ import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormLabel from '@material-ui/core/FormLabel';
 import { getStartup, updateStartupProfile } from '../../../../backend/backend';
 import Error from '../../Errors/Error';
+import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
+
+const employeesValues = [
+  '0 - 10',
+  '11 - 50',
+  '51 - 200',
+  '201 - 500',
+  '501 - 1000',
+  '1000+',
+];
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -37,7 +42,7 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'space-between',
     alignItem: 'center',
     [theme.breakpoints.down(600 + theme.spacing(2) * 2)]: {
-      justifyContent: 'flex-start',
+      alignItems: 'center',
       flexFlow: 'column',
     },
   },
@@ -58,6 +63,45 @@ const useStyles = makeStyles(theme => ({
       padding: '7px 18px',
       width: '100px',
     },
+  },
+  body: {
+    display: 'flex',
+    [theme.breakpoints.down(600 + theme.spacing(2) * 2)]: {
+      flexFlow: 'column',
+    },
+  },
+  center: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  column: {
+    margin: '0 20px',
+    width: '50%',
+    display: 'flex',
+    flexFlow: 'column',
+    [theme.breakpoints.down(600 + theme.spacing(2) * 2)]: {
+      width: '100%',
+    },
+  },
+
+  columnItem: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between',
+    [theme.breakpoints.down(600 + theme.spacing(2) * 2)]: {
+      alignItems: 'flex-start',
+      flexFlow: 'column',
+    },
+  },
+
+  item: {
+    boxSizing: 'border-box',
+    float: 'left',
+    paddingLeft: '14px',
+    paddingRight: '14px',
+    position: 'relative',
+    marginBottom: '14px',
   },
 }));
 
@@ -85,6 +129,7 @@ const Profile = () => {
       setForm({
         companyName: user[0].companyName,
         missionStatement: user[0].missionStatement,
+        website: user[0].website,
         location: user[0].location,
         phoneNumber: user[0].phoneNumber,
         funded: user[0].funded,
@@ -139,97 +184,111 @@ const Profile = () => {
               Save
             </button>
           </div>
+          <div className={classes.body}>
+            <div className={classes.column}>
+              <div className={classes.columnItem}>
+                <div className={classes.item}>
+                  <label>Company Name</label>
+                </div>
+                <div className={classes.item}>
+                  <TextField
+                    onChange={e => onChange(e)}
+                    value={form.companyName}
+                    id='companyName'
+                    name='companyName'
+                    fullWidth
+                    variant='outlined'
+                  />
+                </div>
+              </div>
+              <div className={classes.columnItem}>
+                <div className={classes.item}>
+                  <label>Location</label>
+                </div>
+                <div className={classes.item}>
+                  <TextField
+                    onChange={e => onChange(e)}
+                    value={form.location}
+                    id='location'
+                    name='location'
+                    fullWidth
+                    variant='outlined'
+                  />
+                </div>
+              </div>
 
-          <Grid container spacing={5}>
-            <Grid item xs={12}>
-              <TextField
-                onChange={e => onChange(e)}
-                value={form.companyName}
-                id='companyName'
-                name='companyName'
-                label='Company Name'
-                fullWidth
-              />
-            </Grid>
+              <div className={classes.columnItem}>
+                <div className={(classes.item, classes.center)}>
+                  <label>Mission Statement</label>
+                </div>
+                <div className={classes.item}>
+                  <TextField
+                    value={form.missionStatement}
+                    onChange={e => onChange(e)}
+                    id='missionStatement'
+                    name='missionStatement'
+                    fullWidth
+                    multiline
+                    rows='6'
+                    variant='outlined'
+                  />
+                </div>
+              </div>
+            </div>
+            <div className={classes.column}>
+              <div className={classes.columnItem}>
+                <div className={(classes.item, classes.center)}>
+                  <label># of Employees</label>
+                </div>
+                <div className={classes.item}>
+                  <TextField
+                    value={form.companySize}
+                    onChange={e => onChange(e)}
+                    name='companySize'
+                    select
+                  >
+                    {employeesValues.map(option => (
+                      <MenuItem key={option} value={option}>
+                        {option}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </div>
+              </div>
+              <div className={classes.columnItem}>
+                <div className={(classes.item, classes.center)}>
+                  <label>Phone Number</label>
+                </div>
+                <div className={classes.item}>
+                  <TextField
+                    value={form.phoneNumber}
+                    onChange={e => onChange(e)}
+                    id='number'
+                    name='phoneNumber'
+                    fullWidth
+                    autoComplete='phone-number'
+                    variant='outlined'
+                  />
+                </div>
+              </div>
 
-            <Grid item xs={12}>
-              <TextField
-                onChange={e => onChange(e)}
-                value={form.location}
-                id='location'
-                name='location'
-                label='Location'
-                fullWidth
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                value={form.phoneNumber}
-                onChange={e => onChange(e)}
-                id='number'
-                name='phoneNumber'
-                label='Phone Number'
-                fullWidth
-                autoComplete='phone-number'
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <TextField
-                value={form.companySize}
-                onChange={e => onChange(e)}
-                id='companySize'
-                type='number'
-                name='companySize'
-                label='Company Size'
-                inputProps={{
-                  step: 1,
-                  min: 0,
-                  max: 100,
-                  type: 'number',
-                  'aria-labelledby': 'input-slider',
-                }}
-                fullWidth
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={6}>
-              <RadioGroup
-                aria-label='position'
-                name='funded'
-                value={form.funded}
-                onChange={e => onChange(e)}
-                row
-              >
-                <FormLabel component='legend'>Funded</FormLabel>
-                <FormControlLabel
-                  value='true'
-                  control={<Radio color='primary' />}
-                  label='True'
-                  labelPlacement='top'
-                />
-                <FormControlLabel
-                  value='false'
-                  control={<Radio color='primary' />}
-                  label='False'
-                  labelPlacement='top'
-                />
-              </RadioGroup>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                value={form.missionStatement}
-                onChange={e => onChange(e)}
-                id='missionStatement'
-                name='missionStatement'
-                label='Mission Statement'
-                fullWidth
-                multiline
-                rows='6'
-              />
-            </Grid>
-          </Grid>
+              <div className={classes.columnItem}>
+                <div className={(classes.item, classes.center)}>
+                  <label>Website</label>
+                </div>
+                <div className={classes.item}>
+                  <TextField
+                    value={form.website}
+                    onChange={e => onChange(e)}
+                    id='website'
+                    name='website'
+                    fullWidth
+                    variant='outlined'
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </form>
     </div>
