@@ -1,94 +1,203 @@
-import React from 'react';
+import '@reshuffle/code-transform/macro';
+import React, { useState, useEffect } from 'react';
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import CreateIcon from '@material-ui/icons/Create';
+import { getStartup, updateStartupProfile } from '../../../../backend/backend';
+import Error from '../../Errors/Error';
+import MenuItem from '@material-ui/core/MenuItem';
+import { makeStyles } from '@material-ui/core/styles';
+
+const employeesValues = [
+  '0 - 10',
+  '11 - 50',
+  '51 - 200',
+  '201 - 500',
+  '501 - 1000',
+  '1000+',
+];
+
+const useStyles = makeStyles(theme => ({
+  container: {
+    backgroundColor: '#f9f9fa',
+    height: '100vh',
+  },
+  layout: {
+    width: 'auto',
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
+      maxWidth: '988px',
+      marginRight: 'auto',
+      marginLeft: 'auto',
+      paddingLeft: '14px',
+      paddingRight: '14px',
+    },
+  },
+  header: {
+    borderBottom: '1px solid #e7e9eb',
+    padding: '56px 0',
+    marginBottom: '28px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItem: 'center',
+    [theme.breakpoints.down(600 + theme.spacing(2) * 2)]: {
+      alignItems: 'center',
+      flexFlow: 'column',
+    },
+  },
+  saveBtn: {
+    backgroundColor: '#3f81c7',
+    borderRadius: '3px',
+    cursor: 'pointer',
+    display: 'inline-block',
+    fontSize: '14px',
+    lineHeight: '21px',
+    padding: '7px 26px',
+    outline: 'none',
+    textDecoration: 'none',
+    textAlign: 'center',
+    userSelect: 'none',
+    color: '#f0f0f0',
+    [theme.breakpoints.down(600 + theme.spacing(2) * 2)]: {
+      padding: '7px 18px',
+      width: '100px',
+    },
+  },
+  body: {
+    display: 'flex',
+    [theme.breakpoints.down(600 + theme.spacing(2) * 2)]: {
+      flexFlow: 'column',
+    },
+  },
+  center: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  column: {
+    margin: '0 20px',
+    width: '50%',
+    display: 'flex',
+    flexFlow: 'column',
+    [theme.breakpoints.down(600 + theme.spacing(2) * 2)]: {
+      width: '100%',
+    },
+  },
+
+  columnItem: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between',
+    [theme.breakpoints.down(600 + theme.spacing(2) * 2)]: {
+      alignItems: 'flex-start',
+      flexFlow: 'column',
+    },
+  },
+
+  item: {
+    boxSizing: 'border-box',
+    float: 'left',
+    paddingLeft: '14px',
+    paddingRight: '14px',
+    position: 'relative',
+    marginBottom: '14px',
+  },
+}));
 
 const ProfileForm = props => {
-  const { form, handleSubmits, onChange, editable, setEditable } = props;
+  const classes = useStyles();
+  const { form, onSubmit, onChange } = props;
+
   return (
-    <form onSubmit={handleSubmits}>
-      <Grid container spacing={5}>
-        <Grid item xs={12}>
-          <div style={{ width: '85%', display: 'flex' }}>
-            <TextField
-              onChange={e => onChange(e)}
-              value={form.name}
-              placeholder='Placeholder'
-              id='standard-normal'
-              name='name'
-              label='Name'
-              fullWidth
-              disabled={editable}
-            />
-            <CreateIcon
-              style={{ cursor: 'pointer' }}
-              onClick={() => setEditable(!editable)}
-            />
+    <div className={classes.container}>
+      <form onSubmit={onSubmit}>
+        <div className={classes.layout}>
+          <div className={classes.header}>
+            <Typography variant='h6' gutterBottom>
+              {form.name} / Edit Profile
+            </Typography>
+            <button
+              type='submit'
+              variant='contained'
+              className={classes.saveBtn}
+            >
+              Save
+            </button>
           </div>
-        </Grid>
+          <div className={classes.body}>
+            <div className={classes.column}>
+              <div className={classes.columnItem}>
+                <div className={classes.item}>
+                  <label>Full Name</label>
+                </div>
+                <div className={classes.item}>
+                  <TextField
+                    onChange={e => onChange(e)}
+                    value={form.name}
+                    id='name'
+                    name='name'
+                    fullWidth
+                    variant='outlined'
+                  />
+                </div>
+              </div>
+              <div className={classes.columnItem}>
+                <div className={classes.item}>
+                  <label>Location</label>
+                </div>
+                <div className={classes.item}>
+                  <TextField
+                    onChange={e => onChange(e)}
+                    value={form.location}
+                    id='location'
+                    name='location'
+                    fullWidth
+                    variant='outlined'
+                  />
+                </div>
+              </div>
 
-        <Grid item xs={12}>
-          <div style={{ width: '85%', display: 'flex' }}>
-            <TextField
-              onChange={e => onChange(e)}
-              value={form.location}
-              id='location'
-              name='location'
-              label='Location'
-              fullWidth
-              disabled={editable}
-            />
-            <CreateIcon
-              style={{ cursor: 'pointer' }}
-              onClick={() => setEditable(!editable)}
-            />
+              <div className={classes.columnItem}>
+                <div className={(classes.item, classes.center)}>
+                  <label>Bio</label>
+                </div>
+                <div className={classes.item}>
+                  <TextField
+                    value={form.bio}
+                    onChange={e => onChange(e)}
+                    id='bio'
+                    name='bio'
+                    fullWidth
+                    multiline
+                    rows='6'
+                    variant='outlined'
+                  />
+                </div>
+              </div>
+            </div>
+            <div className={classes.column}>
+              <div className={classes.columnItem}>
+                <div className={(classes.item, classes.center)}>
+                  <label>Phone Number</label>
+                </div>
+                <div className={classes.item}>
+                  <TextField
+                    value={form.phoneNumber}
+                    onChange={e => onChange(e)}
+                    id='number'
+                    name='phoneNumber'
+                    fullWidth
+                    autoComplete='phone-number'
+                    variant='outlined'
+                  />
+                </div>
+              </div>
+            </div>
           </div>
-        </Grid>
-
-        <Grid item xs={12}>
-          <div style={{ width: '85%', display: 'flex' }}>
-            <TextField
-              value={form.phoneNumber}
-              onChange={e => onChange(e)}
-              id='number'
-              name='phoneNumber'
-              label='Phone Number'
-              fullWidth
-              disabled={editable}
-            />
-            <CreateIcon
-              style={{ cursor: 'pointer' }}
-              onClick={() => setEditable(!editable)}
-            />
-          </div>
-        </Grid>
-        <Grid item xs={12}>
-          <div style={{ width: '85%', display: 'flex' }}>
-            <TextField
-              value={form.bio}
-              onChange={e => onChange(e)}
-              id='bio'
-              name='bio'
-              label='Bio'
-              fullWidth
-              multiline
-              rows='6'
-              disabled={editable}
-            />
-            <CreateIcon
-              style={{ cursor: 'pointer' }}
-              onClick={() => setEditable(!editable)}
-            />
-          </div>
-        </Grid>
-      </Grid>
-      <Grid item xs={12} sm={6} style={{ marginTop: '20px' }}>
-        <Button type='submit' variant='contained' color='primary'>
-          Save
-        </Button>
-      </Grid>
-    </form>
+        </div>
+      </form>
+    </div>
   );
 };
 
