@@ -6,9 +6,20 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
+import { makeStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
+const useStyles = makeStyles(theme => ({
+  infoHolder: {
+    display: 'flex',
+    flexFlow: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+}));
+
 const DisplayUsers = props => {
+  const classes = useStyles();
   const { user, callErrors } = props;
   const [state, setState] = useState({
     admin: user.admin,
@@ -32,7 +43,7 @@ const DisplayUsers = props => {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12}>
-        <Paper>
+        <div className={classes.infoHolder}>
           <Typography
             component='h3'
             variant='h4'
@@ -44,41 +55,43 @@ const DisplayUsers = props => {
                 display: 'flex',
               }}
             >
-              <p style={{ marginBottom: '15px' }}>{user.name}</p>
               <Avatar src={user.img} alt={user.name} />
+              <p style={{ marginBottom: '15px' }}>{user.name}</p>
             </div>
           </Typography>
-          <FormControlLabel
-            control={
-              <Checkbox
-                onChange={e => handleChangeAdmin(e)}
-                name='admin'
-                checked={admin}
-                value='admin'
-                inputProps={{
-                  'aria-label': 'primary checkbox',
-                }}
-              />
-            }
-            label='Admin'
-          />
+          <div>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  onChange={e => handleChangeAdmin(e)}
+                  name='admin'
+                  checked={admin}
+                  value='admin'
+                  inputProps={{
+                    'aria-label': 'primary checkbox',
+                  }}
+                />
+              }
+              label='Admin'
+            />
 
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={angel}
-                onChange={e => handleChangeAngel(e)}
-                name='angel'
-                value='angel'
-                color='primary'
-                inputProps={{
-                  'aria-label': 'secondary checkbox',
-                }}
-              />
-            }
-            label='Angel'
-          />
-        </Paper>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={angel}
+                  onChange={e => handleChangeAngel(e)}
+                  name='angel'
+                  value='angel'
+                  color='primary'
+                  inputProps={{
+                    'aria-label': 'secondary checkbox',
+                  }}
+                />
+              }
+              label='Angel'
+            />
+          </div>
+        </div>
       </Grid>
     </Grid>
   );
