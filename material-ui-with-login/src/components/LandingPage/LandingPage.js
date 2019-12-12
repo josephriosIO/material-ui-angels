@@ -7,6 +7,7 @@ import GroupIcon from '@material-ui/icons/Group';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
 import { useAuth } from '@reshuffle/react-auth';
+import { Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles({
   title: {
@@ -100,7 +101,7 @@ const ColorButton = withStyles(theme => ({
 const LandingPage = () => {
   const classes = useStyles();
   const matches = useMediaQuery('(min-width:800px)');
-  const { getLoginURL } = useAuth();
+  const { getLoginURL, authenticated } = useAuth();
 
   return (
     <>
