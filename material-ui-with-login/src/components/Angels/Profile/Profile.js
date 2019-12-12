@@ -52,16 +52,7 @@ const Profile = () => {
   return (
     <React.Fragment>
       <Error errorMsg={errorMsg} color={errorStatus} />
-      <Typography variant='h6' gutterBottom>
-        Update Profile
-      </Typography>
-      <ProfileForm
-        editable={editable}
-        setEditable={setEditable}
-        form={form}
-        onChange={onChange}
-        onSubmit={handleSubmits}
-      />
+      <ProfileForm form={form} onChange={onChange} onSubmit={handleSubmits} />
     </React.Fragment>
   );
 };
