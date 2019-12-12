@@ -1,15 +1,19 @@
 import '@reshuffle/code-transform/macro';
 import React from 'react';
 import { useAuth } from '@reshuffle/react-auth';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const Dashboard = () => {
-  const { authenticated } = useAuth();
+  const { authenticated, getLoginURL } = useAuth();
 
-  if (authenticated) {
-    return <Redirect to='/startups/questionaire' />;
+  if (authenticated !== undefined) {
+    if (authenticated) {
+      return <Redirect to='/startups/questionaire' />;
+    } else {
+      return <Redirect to={getLoginURL()} />;
+    }
   }
 
   return (

@@ -8,6 +8,7 @@ import HomePage from './HomePage';
 import Protected from '../PrivateRoute/PrivateRoute';
 
 const Routes = props => {
+  console.log('running');
   return (
     <>
       <NavBar />
