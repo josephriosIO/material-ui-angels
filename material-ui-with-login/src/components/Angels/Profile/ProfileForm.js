@@ -1,21 +1,8 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import { getStartup, updateStartupProfile } from '../../../../backend/backend';
-import Error from '../../Errors/Error';
-import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
-
-const employeesValues = [
-  '0 - 10',
-  '11 - 50',
-  '51 - 200',
-  '201 - 500',
-  '501 - 1000',
-  '1000+',
-];
 
 const useStyles = makeStyles(theme => ({
   container: {
