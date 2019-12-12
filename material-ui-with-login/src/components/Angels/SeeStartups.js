@@ -10,43 +10,9 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-
-const columns = [
-  { id: 'companyName', align: 'center', label: 'Company Name', minWidth: 170 },
-  { id: 'location', align: 'right', label: 'Location', minWidth: 100 },
-  {
-    id: 'email',
-    label: 'Email',
-    minWidth: 170,
-    align: 'center',
-    format: value => value.toLocaleString(),
-  },
-  {
-    id: 'phoneNumber',
-    label: 'Phone Number',
-    minWidth: 170,
-    align: 'right',
-    format: value => value.toLocaleString(),
-  },
-  {
-    id: 'missionStatement',
-    label: 'Mission Statement',
-    minWidth: 170,
-    align: 'right',
-    format: value => value.toLocaleString(),
-  },
-  {
-    id: 'companySize',
-    label: 'Company Size',
-    minWidth: 170,
-    align: 'right',
-    format: value => value.toLocaleString(),
-  },
-];
+import CardView from './Cards/CardView';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -76,8 +42,13 @@ const useStyles = makeStyles(theme => ({
     margin: '10px',
   },
   tableWrapper: {
-    maxHeight: 440,
+    maxHeight: '100%',
     overflow: 'auto',
+  },
+  tableRow: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   flex: {
     display: 'flex',
@@ -90,7 +61,7 @@ const useStyles = makeStyles(theme => ({
 export default function SeeStartups() {
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(1);
   const [filter, setFilter] = useState([]);
   const classes = useStyles();
   const { loading } = useAuth();
@@ -137,6 +108,8 @@ export default function SeeStartups() {
     setFilter(filteredUsers);
   };
 
+  console.log(users);
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -152,7 +125,7 @@ export default function SeeStartups() {
           </div>
         ) : (
           <Grid>
-            <Paper className={classes.root}>
+            <div className={classes.root}>
               <div className={classes.flex}>
                 <h2>Startups</h2>
                 <SearchBar search={search} title={'Company Name'} />
@@ -160,19 +133,6 @@ export default function SeeStartups() {
 
               <div className={classes.tableWrapper}>
                 <Table stickyHeader aria-label='sticky table'>
-                  <TableHead>
-                    <TableRow>
-                      {columns.map(column => (
-                        <TableCell
-                          key={column.id}
-                          align={column.align}
-                          style={{ minWidth: column.minWidth }}
-                        >
-                          {column.label}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
                   <TableBody>
                     {filter.length > 0
                       ? filter
@@ -183,38 +143,12 @@ export default function SeeStartups() {
                           .map(row =>
                             row ? (
                               <TableRow
-                                hover
+                                className={classes.tableRow}
                                 role='checkbox'
                                 tabIndex={-1}
                                 key={row.id}
                               >
-                                {columns.map(column => {
-                                  let value = row[column.id];
-
-                                  if (Array.isArray(value)) {
-                                    value = value[0].value;
-                                  }
-
-                                  if (value === '' || value === null) {
-                                    value = 'N/A';
-                                  }
-
-                                  return (
-                                    <TableCell
-                                      key={column.id}
-                                      align={column.align}
-                                    >
-                                      <div
-                                        style={{
-                                          display: 'flex',
-                                          justifyContent: 'flex-end',
-                                        }}
-                                      >
-                                        {value}
-                                      </div>
-                                    </TableCell>
-                                  );
-                                })}
+                                <CardView row={row} />
                               </TableRow>
                             ) : null,
                           )
@@ -226,38 +160,12 @@ export default function SeeStartups() {
                           .map(row =>
                             row ? (
                               <TableRow
-                                hover
+                                className={classes.tableRow}
                                 role='checkbox'
                                 tabIndex={-1}
                                 key={row.id}
                               >
-                                {columns.map(column => {
-                                  let value = row[column.id];
-
-                                  if (Array.isArray(value)) {
-                                    value = value[0].value;
-                                  }
-
-                                  if (value === '' || value === null) {
-                                    value = 'N/A';
-                                  }
-
-                                  return (
-                                    <TableCell
-                                      key={column.id}
-                                      align={column.align}
-                                    >
-                                      <div
-                                        style={{
-                                          display: 'flex',
-                                          justifyContent: 'flex-end',
-                                        }}
-                                      >
-                                        {value}
-                                      </div>
-                                    </TableCell>
-                                  );
-                                })}
+                                <CardView row={row} />
                               </TableRow>
                             ) : null,
                           )}
@@ -265,7 +173,7 @@ export default function SeeStartups() {
                 </Table>
               </div>
               <TablePagination
-                rowsPerPageOptions={[5, 10, 20]}
+                rowsPerPageOptions={[1, 5, 10]}
                 component='div'
                 count={users.length}
                 rowsPerPage={rowsPerPage}
@@ -273,7 +181,7 @@ export default function SeeStartups() {
                 onChangePage={handleChangePage}
                 onChangeRowsPerPage={handleChangeRowsPerPage}
               />
-            </Paper>
+            </div>
           </Grid>
         )}
       </Container>
