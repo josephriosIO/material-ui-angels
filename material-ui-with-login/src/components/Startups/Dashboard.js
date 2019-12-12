@@ -11,8 +11,6 @@ const Dashboard = () => {
   if (authenticated !== undefined) {
     if (authenticated) {
       return <Redirect to='/startups/questionaire' />;
-    } else {
-      return <Redirect to={'/login?returnTo=%2Fstartups'} />;
     }
   }
 
