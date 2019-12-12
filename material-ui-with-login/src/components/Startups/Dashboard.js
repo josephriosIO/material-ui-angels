@@ -1,7 +1,7 @@
 import '@reshuffle/code-transform/macro';
 import React from 'react';
 import { useAuth } from '@reshuffle/react-auth';
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 
