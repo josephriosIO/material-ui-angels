@@ -10,7 +10,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -45,6 +45,8 @@ const useStyles = makeStyles(theme => ({
     textDecoration: 'none',
     fontSize: '.9rem',
     color: 'black',
+    cursor: 'pointer',
+    borderBottom: '1px solid black',
   },
 }));
 
@@ -90,10 +92,7 @@ const Navbar = () => {
     >
       <Toolbar className={classes.toolbar}>
         <div className={classes.logo}>
-          <NavLink
-            style={{ textDecoration: 'none', color: 'black' }}
-            to='/angels'
-          >
+          <Link style={{ textDecoration: 'none', color: 'black' }} to='/angels'>
             <div
               style={{
                 display: 'flex',
@@ -106,7 +105,7 @@ const Navbar = () => {
                 <AllInclusiveIcon />
               </span>
             </div>
-          </NavLink>
+          </Link>
         </div>
 
         <div
@@ -118,13 +117,12 @@ const Navbar = () => {
         >
           {authenticated ? (
             <>
-              <NavLink
+              <Link
                 style={{ color: 'black', marginRight: '20px' }}
-                className={classes.link}
                 to={`/angels/startups`}
               >
                 <p className={classes.link}> Startups</p>
-              </NavLink>
+              </Link>
               <Menu
                 id='simple-menu'
                 anchorEl={anchorEl}
@@ -133,28 +131,21 @@ const Navbar = () => {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>
-                  {' '}
                   Welcome {profile.displayName}!
                 </MenuItem>
-                <NavLink
+                <Link
                   style={{ textDecoration: 'none', color: 'black' }}
                   className={classes.link}
                   to={`/angels/profile/${profile.id}`}
                 >
-                  <Button
-                    color='primary'
-                    variant='outlined'
-                    className={classes.link}
-                  >
-                    Profile
-                  </Button>
-                </NavLink>
+                  Profile
+                </Link>
 
                 {users.length > 0 && authenticated
                   ? users.map(user =>
                       user.admin && user.id === profile.id ? (
                         <div key={user.id} style={{ marginRight: '10px' }}>
-                          <NavLink
+                          <Link
                             style={{ textDecoration: 'none', color: 'black' }}
                             className={classes.link}
                             to={{
@@ -164,29 +155,19 @@ const Navbar = () => {
                               },
                             }}
                           >
-                            <Button
-                              color='secondary'
-                              variant='outlined'
-                              className={classes.link}
-                            >
-                              Admin
-                            </Button>
-                          </NavLink>
+                            Admin
+                          </Link>
                         </div>
                       ) : null,
                     )
                   : null}
-                <Button
-                  color='primary'
-                  variant='outlined'
-                  className={classes.link}
-                  href={getLogoutURL()}
-                >
+                <p className={classes.link} href={getLogoutURL()}>
                   Logout
-                </Button>
+                </p>
               </Menu>
 
               <Avatar
+                style={{ cursor: 'pointer' }}
                 aria-describedby={id}
                 onClick={handleClick}
                 src={profile.picture}
@@ -194,14 +175,9 @@ const Navbar = () => {
               />
             </>
           ) : (
-            <Button
-              color='primary'
-              variant='outlined'
-              className={classes.link}
-              href={getLoginURL()}
-            >
+            <p className={classes.link} href={getLoginURL()}>
               Login
-            </Button>
+            </p>
           )}
         </div>
       </Toolbar>
