@@ -2,7 +2,7 @@ import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
 import { setUsersToBackend, getUsers } from '../../../backend/backend';
-
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
@@ -219,6 +219,18 @@ export default function Page() {
                 </div>
                 <p class='empty-title h5'>Admin View</p>
                 <p class='empty-subtitle'>Accept Some angels.</p>
+                <Link
+                  style={{ textDecoration: 'none', color: 'black' }}
+                  className={classes.link}
+                  to={{
+                    pathname: `/angels/admin`,
+                    state: {
+                      users: users,
+                    },
+                  }}
+                >
+                  Admin
+                </Link>
               </div>
             )
           ) : users.filter(user => {
@@ -320,17 +332,7 @@ export default function Page() {
               </Paper>
             </Grid>
           )
-        ) : (
-          <div class='empty'>
-            <div class='empty-icon'>
-              <i class='icon icon-people'></i>
-            </div>
-            <p class='empty-title h5'>Please login</p>
-            <p class='empty-subtitle'>
-              Click login for an admin accept your account.
-            </p>
-          </div>
-        )}
+        ) : null}
       </Container>
       {/* End hero unit */}
     </React.Fragment>
