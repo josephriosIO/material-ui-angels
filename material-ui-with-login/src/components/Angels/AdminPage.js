@@ -2,18 +2,56 @@ import React, { useState } from 'react';
 import DisplayUsers from './DisplayUsers';
 import Error from '../Errors/Error';
 import SearchBar from './SearchBar';
-
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import TablePagination from '@material-ui/core/TablePagination';
 
 const useStyles = makeStyles(theme => ({
+  header: {
+    borderBottom: '1px solid #e7e9eb',
+    padding: '56px 0',
+    marginBottom: '28px',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItem: 'center',
+    [theme.breakpoints.down(600 + theme.spacing(2) * 2)]: {
+      alignItems: 'center',
+      flexFlow: 'column',
+    },
+  },
   heroContent: {
     padding: theme.spacing(8, 0, 6),
   },
   tableWrapper: {
     overflowX: 'auto',
+  },
+  layout: {
+    width: 'auto',
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
+      maxWidth: '988px',
+      marginRight: 'auto',
+      marginLeft: 'auto',
+      paddingLeft: '14px',
+      paddingRight: '14px',
+    },
+  },
+  body: {
+    display: 'flex',
+    [theme.breakpoints.down(600 + theme.spacing(2) * 2)]: {
+      flexFlow: 'column',
+    },
+  },
+  column: {
+    margin: '0 20px',
+    width: '50%',
+    display: 'flex',
+    flexFlow: 'column',
+    [theme.breakpoints.down(600 + theme.spacing(2) * 2)]: {
+      width: '100%',
+    },
   },
 }));
 
@@ -67,39 +105,56 @@ const AdminPage = props => {
     <>
       <Error errorMsg={errorMsg} color={errorStatus} />
       <CssBaseline />
-      <Container maxWidth='sm' component='main' className={classes.heroContent}>
-        <SearchBar search={search} title={'name'} />
-        <div className={classes.tableWrapper}>
-          {filter.length > 0
-            ? filter
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(user => (
-                  <DisplayUsers
-                    key={user.id}
-                    callErrors={callErrors}
-                    user={user}
-                  />
-                ))
-            : users
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map(user => (
-                  <DisplayUsers
-                    key={user.id}
-                    callErrors={callErrors}
-                    user={user}
-                  />
-                ))}
+      <div className={classes.layout}>
+        <div className={classes.header}>
+          <Typography variant='h6' gutterBottom>
+            Admin
+          </Typography>
         </div>
-        <TablePagination
-          rowsPerPageOptions={[1, 5, 10]}
-          component='div'
-          count={users.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onChangePage={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
-      </Container>
+        <div className={classes.body}>
+          <div className={classes.column}>
+            <div>
+              <h2>Invite link</h2>
+              <input value='gnknaeklsrmht' />
+              <button>copy</button>
+            </div>
+          </div>
+
+          <div className={classes.column}>
+            <SearchBar search={search} title={'name'} />
+            <div className={classes.tableWrapper}>
+              {filter.length > 0
+                ? filter
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map(user => (
+                      <DisplayUsers
+                        key={user.id}
+                        callErrors={callErrors}
+                        user={user}
+                      />
+                    ))
+                : users
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map(user => (
+                      <DisplayUsers
+                        key={user.id}
+                        callErrors={callErrors}
+                        user={user}
+                      />
+                    ))}
+            </div>
+            <TablePagination
+              rowsPerPageOptions={[1, 5, 10]}
+              component='div'
+              count={users.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onChangePage={handleChangePage}
+              onChangeRowsPerPage={handleChangeRowsPerPage}
+            />
+          </div>
+        </div>
+      </div>
     </>
   );
 };
