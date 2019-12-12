@@ -34,7 +34,7 @@ export async function setStartupsToBackend(profile) {
 /* @expose */
 export async function setUsersToBackend(profile) {
   const { id } = getCurrentUser(true);
-  return update('angels', (users = []) => {
+  return update('angelss', (users = []) => {
     let allUsers = JSON.parse(JSON.stringify(users));
     const user = {
       id,
@@ -62,7 +62,7 @@ export async function setUsersToBackend(profile) {
 
 /* @expose */
 export async function getUsers() {
-  const users = await get('angels');
+  const users = await get('angelss');
 
   return users;
 }
@@ -82,7 +82,7 @@ export async function getStartups() {
 /* @expose */
 export async function updateStatus(userId, admin, angel) {
   const { id } = getCurrentUser(true);
-  return update('angels', (users = []) => {
+  return update('angelss', (users = []) => {
     let allUsers = JSON.parse(JSON.stringify(users));
     allUsers.map(user => {
       if (user.id === id) {
@@ -105,7 +105,7 @@ export async function updateStatus(userId, admin, angel) {
 /* @expose */
 export async function getUser() {
   const { id } = getCurrentUser(true);
-  const users = await get('angels');
+  const users = await get('angelss');
 
   return users.filter(user => user.id === id);
 }
@@ -127,7 +127,7 @@ export async function updateProfile(profile) {
   const { id } = getCurrentUser(true);
   const { name, location, bio, phoneNumber } = profile;
 
-  return update('angels', (users = []) => {
+  return update('angelss', (users = []) => {
     let allUsers = JSON.parse(JSON.stringify(users));
     allUsers.map(user => {
       if (user.id === id) {
