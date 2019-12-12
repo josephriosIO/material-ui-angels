@@ -12,7 +12,7 @@ const Dashboard = () => {
     if (authenticated) {
       return <Redirect to='/startups/questionaire' />;
     } else {
-      return <Redirect to={getLoginURL()} />;
+      return <Redirect to={'/login?returnTo=%2Fstartups'} />;
     }
   }
 
