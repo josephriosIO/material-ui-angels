@@ -1,6 +1,9 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
-import { updateStartupProfile, getStartup } from '../../../../backend/backend';
+import {
+  updateStartupProfile,
+  createOrGetStartup,
+} from '../../../../backend/backend';
 import Error from '../../Errors/Error';
 import { Redirect } from 'react-router-dom';
 import { useAuth } from '@reshuffle/react-auth';
@@ -81,17 +84,16 @@ const Questionaire = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const user = await getStartup();
-
-      setProfile(...user);
+      const startup = await createOrGetStartup();
+      setProfile(startup);
 
       setForm({
-        companyName: user[0].companyName,
-        missionStatement: user[0].missionStatement,
-        location: user[0].location,
-        phoneNumber: user[0].phoneNumber,
-        funded: user[0].funded,
-        companySize: user[0].companySize,
+        companyName: startup.companyName,
+        missionStatement: startup.missionStatement,
+        location: startup.location,
+        phoneNumber: startup.phoneNumber,
+        funded: startup.funded,
+        companySize: startup.companySize,
       });
     };
     fetchData();
@@ -115,7 +117,7 @@ const Questionaire = () => {
     console.error('Profile is empty!');
   }
 
-  if (formProfile.startup && formProfile.companyName.length > 1) {
+  if (formProfile.completed) {
     if (profile) {
       return <Redirect to={`/startups/dashboard`} />;
     }
