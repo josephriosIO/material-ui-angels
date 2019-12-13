@@ -3,12 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
-import {
-  setUsersToBackend,
-  getUsers,
-  createOrGetUser,
-} from '../../../../backend/backend';
+import { createOrGetUser, getRole } from '../../../../backend/backend';
 import Toolbar from '@material-ui/core/Toolbar';
 import Avatar from '@material-ui/core/Avatar';
 import Menu from '@material-ui/core/Menu';
@@ -55,9 +50,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Navbar = () => {
-  const [users, setUsers] = useState([]);
-  const [addedUser, setAddedUser] = useState(true);
   const classes = useStyles();
+  const [user, setUser] = useState([]);
+  const [roles, setRoles] = useState({});
+  const [addedUser, setAddedUser] = useState(true);
   const { authenticated, profile, getLoginURL, getLogoutURL } = useAuth();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -70,9 +66,12 @@ const Navbar = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await getUsers();
+      const result = await createOrGetUser();
+      const roles = await getRole();
+
+      setRoles(roles);
       if (result) {
-        setUsers(result);
+        setUser(result);
       }
     };
     fetchData();
@@ -85,7 +84,6 @@ const Navbar = () => {
   if (authenticated && addedUser) {
     createOrGetUser().then(user => console.log(user));
 
-    setUsersToBackend(profile).then(user => setUsers(user));
     setAddedUser(false);
   }
 
@@ -146,27 +144,19 @@ const Navbar = () => {
                 >
                   Profile
                 </Link>
-
-                {users.length > 0 && authenticated
-                  ? users.map(user =>
-                      user.admin && user.id === profile.id ? (
-                        <div key={user.id} style={{ marginRight: '10px' }}>
-                          <Link
-                            style={{ textDecoration: 'none', color: 'black' }}
-                            className={classes.link}
-                            to={{
-                              pathname: `/angels/admin`,
-                              state: {
-                                users: users,
-                              },
-                            }}
-                          >
-                            Admin
-                          </Link>
-                        </div>
-                      ) : null,
-                    )
-                  : null}
+                {roles.ADMIN ? (
+                  <div style={{ marginRight: '10px' }}>
+                    <Link
+                      style={{ textDecoration: 'none', color: 'black' }}
+                      className={classes.link}
+                      to={{
+                        pathname: `/angels/admin`,
+                      }}
+                    >
+                      Admin
+                    </Link>
+                  </div>
+                ) : null}
                 <a className={classes.link} href={getLogoutURL()}>
                   Logout
                 </a>
