@@ -111,13 +111,18 @@ export async function getRolesOfUsers(userId) {
 
 /* @expose */
 export async function getAllStartups() {
-  const profile = await validateRole([Roles.ANGEL, Roles.ADMIN]);
+  await validateRole([Roles.ANGEL, Roles.ADMIN]);
   const rolesQuery = await find(
-    Q.all(Q.key.startsWith(rolesPrefix), Q.value.STARTUP.eq(true)),
+    Q.filter(Q.all(Q.key.startsWith(rolesPrefix), Q.value.STARTUP.eq(true))),
   );
+
   const userIds = rolesQuery.map(({ key, value }) => {
     return key.slice(rolesPrefix.length, key.length);
   });
+
+  if (userIds.length < 1) {
+    return [];
+  }
   const usersQuery = await find(
     Q.filter(
       Q.any(
@@ -132,7 +137,7 @@ export async function getAllStartups() {
 
 /* @expose */
 export async function getAllAngels() {
-  // const profile = await validateRole([Roles.ANGEL, Roles.ADMIN]);
+  await validateRole([Roles.ANGEL, Roles.ADMIN]);
   const rolesQuery = await find(
     Q.filter(Q.all(Q.key.startsWith(rolesPrefix), Q.value.ANGEL.eq(true))),
   );
