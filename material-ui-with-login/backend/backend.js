@@ -24,14 +24,6 @@ const makeDefaultRole = () => {
   }, {});
 };
 
-// const uniqueInsert = (arr, ele) => {
-//   const copy = [...arr];
-//   if (!copy.includes(ele)) {
-//     copy.push(ele);
-//   }
-//   return copy;
-// };
-
 async function validateRole(roles) {
   const user = getCurrentUser(true);
   const userRoles =
@@ -281,7 +273,6 @@ export async function createOrGetUser() {
   const profile = getCurrentUser(true);
 
   const addUser = await update(`${usersPrefix}${profile.id}`, user => {
-    console.log(profile.emails[0]);
     if (profile.emails[0].value === ADMIN_USER_EMAIL) {
       addRoleToUser(profile.id, Roles.ADMIN);
     }
