@@ -1,7 +1,7 @@
 import '@reshuffle/code-transform/macro';
 import React, { useEffect, useState } from 'react';
 import StartupProfile from './Profile/StartupProfile';
-import { getStartup } from '../../../backend/backend';
+import { createOrGetStartup } from '../../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
@@ -16,9 +16,9 @@ const HomePage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const user = await getStartup();
+      const user = await createOrGetStartup();
 
-      setUser(...user);
+      setUser(user);
     };
     fetchData();
   }, []);
