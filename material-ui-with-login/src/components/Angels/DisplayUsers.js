@@ -1,12 +1,16 @@
 import '@reshuffle/code-transform/macro';
-import React, { useState } from 'react';
-import { updateStatus, makeUserAngel } from '../../../backend/backend';
+import React, { useState, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import {
+  getRolesOfUsers,
+  makeUserAdmin,
+  makeUserAngel,
+} from '../../../backend/backend';
 
 const useStyles = makeStyles(theme => ({
   infoHolder: {
@@ -20,23 +24,40 @@ const useStyles = makeStyles(theme => ({
 const DisplayUsers = props => {
   const classes = useStyles();
   const { user, callErrors } = props;
+  const [roles, setRoles] = useState([]);
   const [state, setState] = useState({
-    admin: user.admin,
-    angel: user.angel,
+    admin: false,
+    angel: false,
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const usersRoles = await getRolesOfUsers(user.id);
+
+      setState({
+        admin: usersRoles.ADMIN,
+        angel: usersRoles.ANGEL,
+      });
+
+      setRoles(usersRoles);
+    };
+    fetchData();
+  }, []);
 
   const { admin, angel } = state;
 
+  console.log(roles);
+
   const handleChangeAdmin = e => {
     setState({ ...state, admin: !admin });
-    updateStatus(user.id, !admin, angel);
+    makeUserAdmin(user.id);
     callErrors(!admin);
   };
 
   const handleChangeAngel = e => {
     setState({ ...state, angel: !angel });
-    makeUserAngel('yooo');
-    updateStatus(user.id, admin, !angel);
+    makeUserAngel(user.id);
+
     callErrors(!angel);
   };
 
