@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const EmptyState = props => {
-  const { title, subtitle, roles, users } = props;
+  const { title, subtitle, roles } = props;
   return (
     <div className='empty'>
       <div className='empty-icon'>
@@ -15,9 +15,6 @@ const EmptyState = props => {
           style={{ textDecoration: 'none', color: 'black' }}
           to={{
             pathname: `/angels/admin`,
-            state: {
-              users: users,
-            },
           }}
         >
           Admin
