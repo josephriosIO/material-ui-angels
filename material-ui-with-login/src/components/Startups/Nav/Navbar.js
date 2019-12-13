@@ -4,7 +4,7 @@ import { useAuth } from '@reshuffle/react-auth';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import { setStartupsToBackend } from '../../../../backend/backend';
+import { createOrGetStartup } from '../../../../backend/backend';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Avatar from '@material-ui/core/Avatar';
@@ -60,7 +60,7 @@ const Navbar = () => {
   };
 
   if (authenticated && addedUser) {
-    setStartupsToBackend(profile);
+    createOrGetStartup(profile);
 
     setAddedUser(false);
   }
