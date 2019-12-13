@@ -1,5 +1,5 @@
 import '@reshuffle/code-transform/macro';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import DisplayUsers from './DisplayUsers';
 import Error from '../Errors/Error';
 import SearchBar from './SearchBar';
@@ -69,10 +69,20 @@ const AdminPage = props => {
   const [users, setUsers] = useState([]);
   const [invite, setInvite] = useState({});
   const classes = useStyles();
-
   const url = window.location.href;
   const urlArr = url.split('/');
   const domain = urlArr[0] + '//' + urlArr[2];
+  const [copySuccess, setCopySuccess] = useState('');
+  const textAreaRef = useRef(null);
+
+  function copyToClipboard(e) {
+    textAreaRef.current.select();
+    document.execCommand('copy');
+    // This is just personal preference.
+    // I prefer to not show the the whole text area selected.
+    e.target.focus();
+    setCopySuccess('Copied!');
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -125,9 +135,6 @@ const AdminPage = props => {
     }
   };
 
-  console.log(invite);
-  console.log(domain);
-
   return (
     <>
       <Error errorMsg={errorMsg} color={errorStatus} />
@@ -142,8 +149,17 @@ const AdminPage = props => {
           <div className={classes.column}>
             <div>
               <h2>Invite link</h2>
-              <input value={`${domain}/invite/${invite.value}`} />
-              <button>copy</button>
+              <textarea
+                ref={textAreaRef}
+                value={`${domain}/invite/${invite.value}`}
+              />
+
+              <div>
+                <button onClick={copyToClipboard}>
+                  {' '}
+                  {copySuccess ? copySuccess : 'Copy'}
+                </button>
+              </div>
             </div>
           </div>
 
