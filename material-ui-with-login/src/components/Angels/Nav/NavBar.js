@@ -70,9 +70,7 @@ const Navbar = () => {
       const roles = await getRole();
 
       setRoles(roles);
-      if (result) {
-        setUser(result);
-      }
+      setUser(result);
     };
     fetchData();
   }, []);
@@ -82,7 +80,7 @@ const Navbar = () => {
   };
 
   if (authenticated && addedUser) {
-    createOrGetUser().then(user => console.log(user));
+    createOrGetUser();
 
     setAddedUser(false);
   }
