@@ -1,6 +1,6 @@
-require('dotenv').config();
 import { get, update, find, Q } from '@reshuffle/db';
 import { getCurrentUser } from '@reshuffle/server-function';
+require('dotenv').config();
 
 const { ADMIN_USER_EMAIL } = process.env;
 
@@ -73,7 +73,7 @@ async function removeRoleToUser(id, role) {
 // example of limiting access to a specific role(s)
 /* @expose */
 export async function makeUserAngel(userId) {
-  // await validateRole([Roles.ADMIN])
+  await validateRole([Roles.ADMIN]);
 
   if (await checkIfUserHasRole(userId, [Roles.ANGEL])) {
     await removeRoleToUser(userId, Roles.ANGEL);
@@ -81,6 +81,32 @@ export async function makeUserAngel(userId) {
   }
 
   await addRoleToUser(userId, Roles.ANGEL);
+}
+
+/* @expose */
+export async function makeUserAdmin(userId) {
+  await validateRole([Roles.ADMIN]);
+
+  if (await checkIfUserHasRole(userId, [Roles.ADMIN])) {
+    await removeRoleToUser(userId, Roles.ADMIN);
+    return;
+  }
+
+  await addRoleToUser(userId, Roles.ADMIN);
+}
+
+/* @expose */
+export async function getRolesOfUsers(userId) {
+  await validateRole([Roles.ADMIN]);
+
+  const usersRoles = await update(
+    `${rolesPrefix}${userId}`,
+    (roles = makeDefaultRole()) => {
+      return roles;
+    },
+  );
+
+  return usersRoles;
 }
 
 /* @expose */
@@ -115,8 +141,6 @@ export async function getAllAngels() {
     return key.slice(rolesPrefix.length, key.length);
   });
 
-  console.log(userIds);
-
   if (userIds.length < 1) {
     return [];
   }
@@ -135,14 +159,19 @@ export async function getAllAngels() {
 }
 
 /* @expose */
-export async function getAllUsersNotAStartup() {
-  const profile = await validateRole([Roles.ANGEL, Roles.ADMIN]);
+export async function getAllUsersThatAreNotAStartup() {
+  await validateRole([Roles.ANGEL, Roles.ADMIN]);
   const rolesQuery = await find(
-    Q.all(Q.key.startsWith(rolesPrefix), Q.value.STARTUP.eq(false)),
+    Q.filter(Q.all(Q.key.startsWith(rolesPrefix), Q.value.STARTUP.eq(false))),
   );
   const userIds = rolesQuery.map(({ key, value }) => {
     return key.slice(rolesPrefix.length, key.length);
   });
+
+  if (userIds.length < 1) {
+    return [];
+  }
+
   const usersQuery = await find(
     Q.filter(
       Q.any(
@@ -154,6 +183,7 @@ export async function getAllUsersNotAStartup() {
   );
   return usersQuery.map(({ value }) => value);
 }
+
 /* @expose */
 export async function getRole() {
   const { id } = getCurrentUser(true);
@@ -166,6 +196,25 @@ export async function getRole() {
 
   return usersRoles;
 }
+
+/* @expose */
+export async function updateUser(fields) {
+  const { id } = getCurrentUser(true);
+  const { name, location, phoneNumber, bio } = fields;
+  return update(`${usersPrefix}${id}`, userToUpdate => {
+    if (!userToUpdate) {
+      throw new Error('User does not exist');
+    }
+    const copy = { ...userToUpdate };
+    copy.name = name;
+    copy.location = location;
+    copy.phoneNumber = phoneNumber;
+    copy.bio = bio;
+
+    return copy;
+  });
+}
+
 /* @expose */
 export async function createOrGetUser() {
   const profile = getCurrentUser(true);
@@ -191,18 +240,6 @@ export async function createOrGetUser() {
   });
 
   return addUser;
-}
-/* expose */
-export async function updateUser(fields) {
-  const { id } = getCurrentUser(true);
-  return update(`${usersPrefix}${id}`, userToUpdate => {
-    if (!userToUpdate) {
-      throw new Error('User does not exist');
-    }
-    const copy = { ...userToUpdate };
-
-    return copy;
-  });
 }
 
 //OLD
