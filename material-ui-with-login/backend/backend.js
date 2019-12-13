@@ -5,6 +5,7 @@ require('dotenv').config();
 const { ADMIN_USER_EMAIL } = process.env;
 
 const usersPrefix = 'users__';
+const startupsPrefix = 'startups__';
 const rolesPrefix = 'roles__';
 
 const Roles = {
@@ -123,11 +124,12 @@ export async function getAllStartups() {
   if (userIds.length < 1) {
     return [];
   }
+
   const usersQuery = await find(
     Q.filter(
       Q.any(
         ...userIds.map(id => {
-          return Q.key.startsWith(`${usersPrefix}${id}`);
+          return Q.key.startsWith(`${startupsPrefix}${id}`);
         }),
       ),
     ),
@@ -192,12 +194,15 @@ export async function getAllUsersThatAreNotAStartup() {
 /* @expose */
 export async function getRole() {
   const { id } = getCurrentUser(true);
+  console.log(id);
   const usersRoles = await update(
     `${rolesPrefix}${id}`,
     (roles = makeDefaultRole()) => {
       return roles;
     },
   );
+
+  console.log(usersRoles);
 
   return usersRoles;
 }
@@ -218,6 +223,60 @@ export async function updateUser(fields) {
 
     return copy;
   });
+}
+
+/* @expose */
+export async function updateStartupProfile(fields) {
+  const { id } = getCurrentUser(true);
+  const {
+    companyName,
+    location,
+    website,
+    missionStatement,
+    companySize,
+  } = fields;
+  return update(`${startupsPrefix}${id}`, startupToUpdate => {
+    if (!startupToUpdate) {
+      throw new Error('User does not exist');
+    }
+    const copy = { ...startupToUpdate };
+    copy.companyName = companyName;
+    copy.location = location;
+    copy.website = website;
+    copy.missionStatement = missionStatement;
+    copy.companySize = companySize;
+    copy.completed = true;
+
+    return copy;
+  });
+}
+
+/* @expose */
+export async function createOrGetStartup() {
+  const profile = getCurrentUser(true);
+
+  const addStartup = await update(`${startupsPrefix}${profile.id}`, startup => {
+    addRoleToUser(profile.id, Roles.STARTUP);
+    if (startup) {
+      return startup;
+    }
+    return {
+      id: profile.id,
+      name: profile.displayName,
+      img: profile.picture,
+      email: profile.emails,
+      phoneNumber: null,
+      missionStatement: '',
+      location: '',
+      website: '',
+      companyName: '',
+      companySize: 0,
+      completed: false,
+      funded: false,
+    };
+  });
+
+  return addStartup;
 }
 
 /* @expose */
@@ -245,179 +304,4 @@ export async function createOrGetUser() {
   });
 
   return addUser;
-}
-
-//OLD
-
-/* @expose */
-export async function setStartupsToBackend(profile) {
-  const { id } = getCurrentUser(true);
-  return update('startups', (users = []) => {
-    let allStartups = JSON.parse(JSON.stringify(users));
-    const user = {
-      id,
-      name: profile.displayName,
-      img: profile.picture,
-      email: profile.emails,
-      website: '',
-      companyName: '',
-      phoneNumber: null,
-      companySize: 0,
-      funded: false,
-      missionStatement: '',
-      location: '',
-      startup: true,
-      user: true,
-      completed: false,
-    };
-
-    allStartups.push(user);
-    allStartups = allStartups.filter(
-      (user, index, self) => index === self.findIndex(t => t.id === user.id),
-    );
-    return allStartups;
-  });
-}
-
-/* @expose */
-export async function setUsersToBackend(profile) {
-  const { id } = getCurrentUser(true);
-  return update('angelss', (users = []) => {
-    let allUsers = JSON.parse(JSON.stringify(users));
-    const user = {
-      id,
-      name: profile.displayName,
-      img: profile.picture,
-      email: profile.emails,
-      phoneNumber: null,
-      bio: '',
-      location: '',
-      admin: true,
-      angel: false,
-      startup: false,
-      user: true,
-    };
-    if (allUsers.length > 0) {
-      user.admin = false;
-    }
-    allUsers.push(user);
-    allUsers = allUsers.filter(
-      (user, index, self) => index === self.findIndex(t => t.id === user.id),
-    );
-    return allUsers;
-  });
-}
-
-/* @expose */
-export async function getUsers() {
-  const users = await get('angelss');
-
-  return users;
-}
-
-/* @expose */
-export async function getStartups() {
-  try {
-    const startups = await get('startups');
-
-    return startups;
-  } catch (err) {
-    return console.error(err);
-  }
-}
-
-/* @expose */
-export async function updateStatus(userId, admin, angel) {
-  const { id } = getCurrentUser(true);
-
-  return update('angelss', (users = []) => {
-    let allUsers = JSON.parse(JSON.stringify(users));
-    allUsers.map(user => {
-      if (user.id === id) {
-        if (user.admin === true) {
-          allUsers.map(user => {
-            if (user.id === userId) {
-              user.admin = admin;
-              user.angel = angel;
-            }
-          });
-        } else {
-          throw new Error(`Don't do that!`);
-        }
-      }
-    });
-    return allUsers;
-  });
-}
-
-/* @expose */
-export async function getUser() {
-  const { id } = getCurrentUser(true);
-  const users = await get('angelss');
-
-  return users.filter(user => user.id === id);
-}
-
-/* @expose */
-export async function getStartup() {
-  try {
-    const { id } = getCurrentUser(true);
-    const startups = await get('startups');
-
-    return startups.filter(user => user.id === id);
-  } catch (err) {
-    return console.error(err);
-  }
-}
-
-/* @expose */
-export async function updateProfile(profile) {
-  const { id } = getCurrentUser(true);
-  const { name, location, bio, phoneNumber } = profile;
-
-  return update('angelss', (users = []) => {
-    let allUsers = JSON.parse(JSON.stringify(users));
-    allUsers.map(user => {
-      if (user.id === id) {
-        user.name = name;
-        user.location = location;
-        user.phoneNumber = phoneNumber;
-        user.bio = bio;
-      }
-    });
-
-    return allUsers;
-  });
-}
-
-/* @expose */
-export async function updateStartupProfile(profile) {
-  const { id } = getCurrentUser(true);
-  const {
-    location,
-    missionStatement,
-    phoneNumber,
-    companyName,
-    companySize,
-    funded,
-    website,
-  } = profile;
-
-  return update('startups', (users = []) => {
-    let allStartups = JSON.parse(JSON.stringify(users));
-    allStartups.map(user => {
-      if (user.id === id) {
-        user.companyName = companyName;
-        user.location = location;
-        user.phoneNumber = phoneNumber;
-        user.missionStatement = missionStatement;
-        user.companySize = companySize;
-        user.funded = funded;
-        user.website = website;
-        user.completed = true;
-      }
-    });
-
-    return allStartups;
-  });
 }
