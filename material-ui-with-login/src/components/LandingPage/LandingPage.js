@@ -1,5 +1,5 @@
 import '@reshuffle/code-transform/macro';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
@@ -8,6 +8,7 @@ import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
 import { useAuth } from '@reshuffle/react-auth';
 import { Redirect } from 'react-router-dom';
+import { getRole } from '../../../backend/backend';
 
 const useStyles = makeStyles({
   title: {
@@ -102,6 +103,27 @@ const LandingPage = () => {
   const classes = useStyles();
   const matches = useMediaQuery('(min-width:800px)');
   const { getLoginURL, authenticated } = useAuth();
+  const [roles, setRoles] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (authenticated) {
+        const roles = await getRole();
+
+        setRoles(roles);
+      }
+    };
+    fetchData();
+    // eslint-disable-next-line
+  }, []);
+
+  if (authenticated) {
+    if (roles.STARTUP) {
+      return <Redirect to='/startups' />;
+    } else {
+      return <Redirect to='/angels' />;
+    }
+  }
 
   return (
     <>
