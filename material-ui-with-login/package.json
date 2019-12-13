@@ -28,7 +28,8 @@
     "react-helmet": "^5.2.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.3.0",
-    "spectre.css": "^0.5.8"
+    "spectre.css": "^0.5.8",
+    "uuid": "^3.3.3"
   },
   "scripts": {
     "start": "cross-env EXTEND_ESLINT=true react-scripts start",
