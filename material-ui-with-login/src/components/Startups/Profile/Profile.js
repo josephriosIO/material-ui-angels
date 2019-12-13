@@ -2,7 +2,10 @@ import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import { getStartup, updateStartupProfile } from '../../../../backend/backend';
+import {
+  createOrGetStartup,
+  updateStartupProfile,
+} from '../../../../backend/backend';
 import Error from '../../Errors/Error';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
@@ -121,18 +124,18 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const user = await getStartup();
+      const user = await createOrGetStartup();
 
-      setProfile(...user);
+      setProfile(user);
 
       setForm({
-        companyName: user[0].companyName,
-        missionStatement: user[0].missionStatement,
-        website: user[0].website,
-        location: user[0].location,
-        phoneNumber: user[0].phoneNumber,
-        funded: user[0].funded,
-        companySize: user[0].companySize,
+        companyName: user.companyName,
+        missionStatement: user.missionStatement,
+        website: user.website,
+        location: user.location,
+        phoneNumber: user.phoneNumber,
+        funded: user.funded,
+        companySize: user.companySize,
       });
     };
     fetchData();
