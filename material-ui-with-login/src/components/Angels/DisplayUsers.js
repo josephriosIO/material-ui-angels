@@ -1,10 +1,9 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState } from 'react';
-import { updateStatus } from '../../../backend/backend';
+import { updateStatus, makeUserAngel } from '../../../backend/backend';
 import Typography from '@material-ui/core/Typography';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -36,6 +35,7 @@ const DisplayUsers = props => {
 
   const handleChangeAngel = e => {
     setState({ ...state, angel: !angel });
+    makeUserAngel('yooo');
     updateStatus(user.id, admin, !angel);
     callErrors(!angel);
   };
