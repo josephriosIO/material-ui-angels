@@ -6,7 +6,6 @@ import AdminPage from './AdminPage';
 import Profile from './Profile/Profile';
 import NavBar from './Nav/NavBar';
 import SeeStartups from './SeeStartups';
-
 import Protected from '../PrivateRoute/PrivateRoute';
 
 const Routes = props => {
@@ -14,6 +13,7 @@ const Routes = props => {
     <>
       <NavBar />
       <Route exact path={props.match.path} component={Dashboard} />
+
       <Protected
         exact
         path={`${props.match.path}/admin`}
