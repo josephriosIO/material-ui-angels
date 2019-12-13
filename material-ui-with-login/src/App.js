@@ -4,7 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import Routes from './components/Angels/Routes';
 import LandingPage from './components/LandingPage/LandingPage';
 import StartupRoutes from './components/Startups/Routes';
-import Protected from './components/PrivateRoute/PrivateRoute';
+
 const App = () => {
   return (
     <>

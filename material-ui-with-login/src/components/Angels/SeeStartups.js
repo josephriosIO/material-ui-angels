@@ -1,12 +1,11 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
-import { getStartups } from '../../../backend/backend';
+import { getAllStartups } from '../../../backend/backend';
 import SearchBar from './SearchBar';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -68,11 +67,9 @@ export default function SeeStartups() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await getStartups();
+      const result = await getAllStartups();
 
-      if (result) {
-        setUsers(result);
-      }
+      setUsers(result);
     };
     fetchData();
     // eslint-disable-next-line

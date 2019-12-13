@@ -24,7 +24,6 @@ const useStyles = makeStyles(theme => ({
 const DisplayUsers = props => {
   const classes = useStyles();
   const { user, callErrors } = props;
-  const [roles, setRoles] = useState([]);
   const [state, setState] = useState({
     admin: false,
     angel: false,
@@ -38,15 +37,12 @@ const DisplayUsers = props => {
         admin: usersRoles.ADMIN,
         angel: usersRoles.ANGEL,
       });
-
-      setRoles(usersRoles);
     };
     fetchData();
+    // eslint-disable-next-line
   }, []);
 
   const { admin, angel } = state;
-
-  console.log(roles);
 
   const handleChangeAdmin = e => {
     setState({ ...state, admin: !admin });

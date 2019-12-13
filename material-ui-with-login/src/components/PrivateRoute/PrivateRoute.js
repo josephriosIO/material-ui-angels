@@ -4,7 +4,7 @@ import { useAuth } from '@reshuffle/react-auth';
 import { Route, Redirect } from 'react-router-dom';
 
 const Protected = ({ component: Component, ...rest }) => {
-  const { authenticated, getLoginURL } = useAuth();
+  const { authenticated } = useAuth();
   return (
     <Route
       {...rest}

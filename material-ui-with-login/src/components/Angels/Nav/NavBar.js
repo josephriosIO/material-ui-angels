@@ -54,7 +54,7 @@ const Navbar = () => {
   const [user, setUser] = useState([]);
   const [roles, setRoles] = useState({});
   const [addedUser, setAddedUser] = useState(true);
-  const { authenticated, profile, getLoginURL, getLogoutURL } = useAuth();
+  const { authenticated, getLoginURL, getLogoutURL } = useAuth();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = event => {
@@ -134,13 +134,11 @@ const Navbar = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>
-                  Welcome {profile.displayName}!
-                </MenuItem>
+                <MenuItem onClick={handleClose}>Welcome {user.name}!</MenuItem>
                 <Link
                   style={{ textDecoration: 'none', color: 'black' }}
                   className={classes.link}
-                  to={`/angels/profile/${profile.id}`}
+                  to={`/angels/profile/${user.id}`}
                 >
                   Profile
                 </Link>
@@ -166,8 +164,8 @@ const Navbar = () => {
                 style={{ cursor: 'pointer' }}
                 aria-describedby={id}
                 onClick={handleClick}
-                src={profile.picture}
-                alt={profile.name}
+                src={user.img}
+                alt={user.name}
               />
             </>
           ) : (
