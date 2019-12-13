@@ -49,14 +49,14 @@ export default function Page() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await getAllAngels();
       const roles = await getRole();
 
-      setRoles(roles);
-
-      if (result) {
+      if (roles.ANGEL || roles.ADMIN) {
+        const result = await getAllAngels();
         setUsers(result);
       }
+
+      setRoles(roles);
     };
     fetchData();
     // eslint-disable-next-line

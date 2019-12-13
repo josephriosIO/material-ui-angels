@@ -1,7 +1,7 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
-import { getAllStartups } from '../../../backend/backend';
+import { getAllStartups, getRole } from '../../../backend/backend';
 import SearchBar from './SearchBar';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -62,14 +62,20 @@ export default function SeeStartups() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(1);
   const [filter, setFilter] = useState([]);
+  const [roles, setRoles] = useState([]);
   const classes = useStyles();
   const { loading } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await getAllStartups();
+      const usersRoles = await getRole();
 
-      setUsers(result);
+      if (usersRoles.ADMIN || usersRoles.ANGEL) {
+        const result = await getAllStartups();
+        setUsers(result);
+      }
+
+      setRoles(usersRoles);
     };
     fetchData();
     // eslint-disable-next-line
@@ -105,7 +111,19 @@ export default function SeeStartups() {
     setFilter(filteredUsers);
   };
 
-  console.log(users);
+  if (!roles.ADMIN && !roles.ANGEL) {
+    return (
+      <div className='empty'>
+        <div className='empty-icon'>
+          <i className='icon icon-people'></i>
+        </div>
+        <p className='empty-title h5'>Thank you for your request!</p>
+        <p className='empty-subtitle'>
+          To see upcoming startups please have an admin confirm you as an angel.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <React.Fragment>
@@ -113,12 +131,14 @@ export default function SeeStartups() {
       {/* Hero unit */}
       <Container maxWidth='lg' component='main' className={classes.heroContent}>
         {users.length < 1 ? (
-          <div class='empty'>
-            <div class='empty-icon'>
-              <i class='icon icon-people'></i>
+          <div className='empty'>
+            <div className='empty-icon'>
+              <i className='icon icon-people'></i>
             </div>
-            <p class='empty-title h5'>No Startups :(</p>
-            <p class='empty-subtitle'>Have some startups join the platform!</p>
+            <p className='empty-title h5'>No Startups :(</p>
+            <p className='empty-subtitle'>
+              Have some startups join the platform!
+            </p>
           </div>
         ) : (
           <Grid>
