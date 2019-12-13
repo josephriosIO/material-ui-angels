@@ -6,7 +6,7 @@ import { Redirect } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 const Dashboard = () => {
-  const { authenticated, getLoginURL } = useAuth();
+  const { authenticated } = useAuth();
 
   if (authenticated !== undefined) {
     if (authenticated) {
