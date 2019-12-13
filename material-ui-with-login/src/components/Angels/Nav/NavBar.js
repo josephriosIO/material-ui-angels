@@ -4,7 +4,11 @@ import { useAuth } from '@reshuffle/react-auth';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import { setUsersToBackend, getUsers } from '../../../../backend/backend';
+import {
+  setUsersToBackend,
+  getUsers,
+  createOrGetUser,
+} from '../../../../backend/backend';
 import Toolbar from '@material-ui/core/Toolbar';
 import Avatar from '@material-ui/core/Avatar';
 import Menu from '@material-ui/core/Menu';
@@ -79,6 +83,8 @@ const Navbar = () => {
   };
 
   if (authenticated && addedUser) {
+    createOrGetUser().then(user => console.log(user));
+
     setUsersToBackend(profile).then(user => setUsers(user));
     setAddedUser(false);
   }
@@ -161,9 +167,9 @@ const Navbar = () => {
                       ) : null,
                     )
                   : null}
-                <p className={classes.link} href={getLogoutURL()}>
+                <a className={classes.link} href={getLogoutURL()}>
                   Logout
-                </p>
+                </a>
               </Menu>
 
               <Avatar
