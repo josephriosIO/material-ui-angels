@@ -1,7 +1,7 @@
 import { get, update, find, Q } from '@reshuffle/db';
 import { getCurrentUser } from '@reshuffle/server-function';
 const uuidv4 = require('uuid/v4');
-require('dotenv').config();
+
 
 const { ADMIN_USER_EMAIL } = process.env;
 

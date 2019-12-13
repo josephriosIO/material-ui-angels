@@ -80,7 +80,7 @@ const Navbar = () => {
   };
 
   if (authenticated && addedUser) {
-    createOrGetUser();
+    createOrGetUser().then(user => console.log(user));
 
     setAddedUser(false);
   }
