@@ -1,5 +1,6 @@
 import { get, update, find, Q } from '@reshuffle/db';
 import { getCurrentUser } from '@reshuffle/server-function';
+const uuidv4 = require('uuid/v4');
 require('dotenv').config();
 
 const { ADMIN_USER_EMAIL } = process.env;
@@ -7,6 +8,7 @@ const { ADMIN_USER_EMAIL } = process.env;
 const usersPrefix = 'users__';
 const startupsPrefix = 'startups__';
 const rolesPrefix = 'roles__';
+const invitesPrefix = 'invites__';
 
 const Roles = {
   ADMIN: 'ADMIN',
@@ -266,6 +268,45 @@ export async function createOrGetStartup() {
   });
 
   return addStartup;
+}
+
+/* @expose */
+export async function createOrGetInvite() {
+  const profile = getCurrentUser(true);
+  const inviteCode = uuidv4();
+
+  const addInvite = await update(`${invitesPrefix}${inviteCode}`, invite => {
+    if (invite) {
+      return invite;
+    }
+    return {
+      id: profile.id,
+      value: inviteCode,
+      consumed: false,
+    };
+  });
+
+  return addInvite;
+}
+
+/* @expose */
+export async function consumeInvite(inviteCode) {
+  const profile = getCurrentUser(true);
+
+  return update(`${invitesPrefix}${inviteCode}`, inviteCodeToConsume => {
+    if (!inviteCodeToConsume) {
+      throw new Error('Invite is not valid.');
+    }
+    if (inviteCodeToConsume.consumed) {
+      throw new Error('Code has been consumed.');
+    }
+    addRoleToUser(profile.id, Roles.ANGEL);
+    const copy = { ...inviteCodeToConsume };
+
+    copy.consumed = true;
+
+    return copy;
+  });
 }
 
 /* @expose */
