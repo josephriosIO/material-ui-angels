@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import '@reshuffle/code-transform/macro';
+import React, { useState, useEffect } from 'react';
 import DisplayUsers from './DisplayUsers';
 import Error from '../Errors/Error';
 import SearchBar from './SearchBar';
@@ -6,6 +7,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import TablePagination from '@material-ui/core/TablePagination';
+import { getAllUsersThatAreNotAStartup } from '../../../backend/backend';
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -61,8 +63,19 @@ const AdminPage = props => {
   const [errorMsg, setErrorMsg] = useState('');
   const [errorStatus, setErrorStatus] = useState('');
   const [filter, setFilter] = useState([]);
-  const { users } = props.location.state;
+  const [users, setUsers] = useState([]);
   const classes = useStyles();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await getAllUsersThatAreNotAStartup();
+
+      if (result) {
+        setUsers(result);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleChangePage = (e, newPage) => {
     setPage(newPage);
