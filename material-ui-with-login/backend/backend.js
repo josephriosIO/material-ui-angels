@@ -194,15 +194,12 @@ export async function getAllUsersThatAreNotAStartup() {
 /* @expose */
 export async function getRole() {
   const { id } = getCurrentUser(true);
-  console.log(id);
   const usersRoles = await update(
     `${rolesPrefix}${id}`,
     (roles = makeDefaultRole()) => {
       return roles;
     },
   );
-
-  console.log(usersRoles);
 
   return usersRoles;
 }

@@ -106,18 +106,16 @@ const LandingPage = () => {
   const [roles, setRoles] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (authenticated) {
-        const roles = await getRole();
-
-        setRoles(roles);
-      }
-    };
+    const fetchData = async () => {};
     fetchData();
     // eslint-disable-next-line
   }, []);
 
   if (authenticated) {
+    getRole().then(roles => setRoles(roles));
+  }
+
+  if (authenticated && roles.length > 0) {
     if (roles.STARTUP) {
       return <Redirect to='/startups' />;
     } else {
