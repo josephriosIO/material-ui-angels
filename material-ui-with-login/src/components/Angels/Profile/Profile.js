@@ -1,13 +1,11 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
-import Typography from '@material-ui/core/Typography';
-import { getUser, updateProfile } from '../../../../backend/backend';
+import { updateUser, createOrGetUser } from '../../../../backend/backend';
 import Error from '../../Errors/Error';
 import ProfileForm from './ProfileForm';
 
 const Profile = () => {
   const [errorMsg, setErrorMsg] = useState('');
-  const [editable, setEditable] = useState(true);
   const [errorStatus, setErrorStatus] = useState('');
   const [profile, setProfile] = useState({});
   const [form, setForm] = useState({
@@ -19,15 +17,15 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const user = await getUser();
+      const user = await createOrGetUser();
 
-      setProfile(...user);
+      setProfile(user);
 
       setForm({
-        name: user[0].name,
-        bio: user[0].bio,
-        location: user[0].location,
-        phoneNumber: user[0].phoneNumber,
+        name: user.name,
+        bio: user.bio,
+        location: user.location,
+        phoneNumber: user.phoneNumber,
       });
     };
     fetchData();
@@ -35,7 +33,7 @@ const Profile = () => {
 
   const handleSubmits = async event => {
     event.preventDefault();
-    await updateProfile(form);
+    await updateUser(form);
     setErrorMsg('Saved.');
     setErrorStatus('success');
     setTimeout(() => {
