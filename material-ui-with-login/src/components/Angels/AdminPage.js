@@ -7,7 +7,10 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import TablePagination from '@material-ui/core/TablePagination';
-import { getAllUsersThatAreNotAStartup } from '../../../backend/backend';
+import {
+  getAllUsersThatAreNotAStartup,
+  createOrGetInvite,
+} from '../../../backend/backend';
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -64,11 +67,19 @@ const AdminPage = props => {
   const [errorStatus, setErrorStatus] = useState('');
   const [filter, setFilter] = useState([]);
   const [users, setUsers] = useState([]);
+  const [invite, setInvite] = useState({});
   const classes = useStyles();
+
+  const url = window.location.href;
+  const urlArr = url.split('/');
+  const domain = urlArr[0] + '//' + urlArr[2];
 
   useEffect(() => {
     const fetchData = async () => {
       const result = await getAllUsersThatAreNotAStartup();
+      const createdInvite = await createOrGetInvite();
+
+      setInvite(createdInvite);
 
       if (result) {
         setUsers(result);
@@ -114,6 +125,9 @@ const AdminPage = props => {
     }
   };
 
+  console.log(invite);
+  console.log(domain);
+
   return (
     <>
       <Error errorMsg={errorMsg} color={errorStatus} />
@@ -128,7 +142,7 @@ const AdminPage = props => {
           <div className={classes.column}>
             <div>
               <h2>Invite link</h2>
-              <input value='gnknaeklsrmht' />
+              <input value={`${domain}/invite/${invite.value}`} />
               <button>copy</button>
             </div>
           </div>
