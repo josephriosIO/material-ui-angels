@@ -1,14 +1,7 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
-import {
-  setUsersToBackend,
-  getUsers,
-  getAllAngels,
-  createOrGetUser,
-  getRole,
-} from '../../../backend/backend';
-import { Link } from 'react-router-dom';
+import { getAllAngels, getRole } from '../../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
@@ -94,7 +87,6 @@ export default function Page() {
               title={'Admin View'}
               subtitle={'Accept some angels.'}
               roles={roles}
-              users={users}
             />
           )}
         </Container>
@@ -110,7 +102,6 @@ export default function Page() {
           'An Admin will accept you shortly if you meet the requirements.'
         }
         roles={roles}
-        users={users}
       />
     );
   }
