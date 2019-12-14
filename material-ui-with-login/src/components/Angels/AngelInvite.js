@@ -13,8 +13,13 @@ const AngelInvite = () => {
         try {
           const url = window.location.href;
           const urlArr = url.split('/');
-          const invite = urlArr[4];
+          let invite = urlArr[4];
+          //PRODUCTION ONLY
+          invite = invite.substring(0, invite.length - 1);
+          console.log(invite);
+
           const invited = await consumeInvite(invite);
+
           if (invited) {
             return setConsumed(true);
           }
@@ -29,9 +34,7 @@ const AngelInvite = () => {
   if (consumed) {
     return <Redirect to='/angels' />;
   }
-  if (failed) {
-    return <Redirect to='/' />;
-  }
+
   if (!authenticated || !consumed) {
     return (
       <div className='empty'>
