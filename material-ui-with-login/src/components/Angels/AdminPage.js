@@ -6,7 +6,12 @@ import SearchBar from './SearchBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
 import {
   getAllUsersThatAreNotAStartup,
   createOrGetInvite,
@@ -15,13 +20,12 @@ import {
 const useStyles = makeStyles(theme => ({
   header: {
     borderBottom: '1px solid #e7e9eb',
-    padding: '56px 0',
+    padding: '30px 0',
     marginBottom: '28px',
     display: 'flex',
-    justifyContent: 'space-between',
-    alignItem: 'center',
+    justifyContent: 'space-around',
+    alignItems: 'center',
     [theme.breakpoints.down(600 + theme.spacing(2) * 2)]: {
-      alignItems: 'center',
       flexFlow: 'column',
     },
   },
@@ -30,6 +34,17 @@ const useStyles = makeStyles(theme => ({
   },
   tableWrapper: {
     overflowX: 'auto',
+    height: '80%',
+  },
+  headerInvite: {
+    display: 'flex',
+    alignItems: 'center',
+    flexFlow: 'column',
+    marginTop: '25px',
+    [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
+      marginTop: '10px',
+      flexFlow: 'row',
+    },
   },
   layout: {
     width: 'auto',
@@ -43,10 +58,27 @@ const useStyles = makeStyles(theme => ({
       paddingRight: '14px',
     },
   },
+  flexInvite: {
+    display: 'flex',
+    alignItems: 'center',
+    flexFlow: 'column',
+    [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
+      flexFlow: 'row',
+    },
+  },
   body: {
     display: 'flex',
+    flexFlow: 'column',
     [theme.breakpoints.down(600 + theme.spacing(2) * 2)]: {
       flexFlow: 'column',
+    },
+  },
+  textArea: {
+    width: '170px',
+    height: '50px',
+    [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
+      width: '320px',
+      height: '30px',
     },
   },
   column: {
@@ -78,8 +110,7 @@ const AdminPage = props => {
   function copyToClipboard(e) {
     textAreaRef.current.select();
     document.execCommand('copy');
-    // This is just personal preference.
-    // I prefer to not show the the whole text area selected.
+
     e.target.focus();
     setCopySuccess('Copied!');
   }
@@ -141,30 +172,29 @@ const AdminPage = props => {
       <CssBaseline />
       <div className={classes.layout}>
         <div className={classes.header}>
-          <Typography variant='h6' gutterBottom>
-            Admin
-          </Typography>
-        </div>
-        <div className={classes.body}>
-          <div className={classes.column}>
-            <div>
-              <h2>Invite link</h2>
+          <Typography variant='h6'>Admin Panel</Typography>
+          <div className={classes.headerInvite}>
+            <Typography variant='subtitle2'>Invite Link</Typography>
+            <div className={classes.flexInvite}>
               <textarea
+                className={classes.textArea}
+                style={{ resize: 'none' }}
                 ref={textAreaRef}
                 value={`${domain}/invite/${invite.value}`}
               />
 
-              <div>
-                <button onClick={copyToClipboard}>
-                  {' '}
-                  {copySuccess ? copySuccess : 'Copy'}
-                </button>
-              </div>
+              <Button onClick={copyToClipboard}>
+                {copySuccess ? copySuccess : 'Copy'}
+              </Button>
             </div>
           </div>
+        </div>
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <SearchBar search={search} title={'Name'} />
+        </div>
 
-          <div className={classes.column}>
-            <SearchBar search={search} title={'name'} />
+        <div className={classes.body}>
+          <div>
             <div className={classes.tableWrapper}>
               {filter.length > 0
                 ? filter
