@@ -15,9 +15,15 @@ import {
 const useStyles = makeStyles(theme => ({
   infoHolder: {
     display: 'flex',
+    flexFlow: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottom: '1px solid black',
+  },
+  userInfo: {
+    display: 'flex',
     flexFlow: 'column',
     alignItems: 'center',
-    justifyContent: 'center',
   },
 }));
 
@@ -61,22 +67,30 @@ const DisplayUsers = props => {
     <Grid container spacing={3}>
       <Grid item xs={12}>
         <div className={classes.infoHolder}>
-          <Typography
-            component='h3'
-            variant='h4'
-            color='textSecondary'
-            gutterBottom
-          >
+          <Typography component='subtitle2' variant='subtitle2'>
             <div
               style={{
                 display: 'flex',
+                flexFlow: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
             >
               <Avatar src={user.img} alt={user.name} />
               <p style={{ marginBottom: '15px' }}>{user.name}</p>
             </div>
           </Typography>
-          <div>
+
+          <div className={classes.userInfo}>
+            <label>Email:</label>
+            <p>{user.email[0].value}</p>
+          </div>
+          <div className={classes.userInfo}>
+            <label>Location:</label>
+            <p>{`${user.location === '' ? 'N/A' : user.location}`}</p>
+          </div>
+
+          <div style={{ display: 'flex', flexFlow: 'column' }}>
             <FormControlLabel
               control={
                 <Checkbox
