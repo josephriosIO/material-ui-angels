@@ -59,7 +59,6 @@ const DisplayUsers = props => {
   const handleChangeAngel = e => {
     setState({ ...state, angel: !angel });
     makeUserAngel(user.id);
-
     callErrors(!angel);
   };
 

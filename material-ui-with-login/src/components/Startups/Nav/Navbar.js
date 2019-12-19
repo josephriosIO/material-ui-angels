@@ -11,6 +11,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { NavLink } from 'react-router-dom';
+import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -84,16 +85,38 @@ const Navbar = () => {
               style={{ textDecoration: 'none', color: 'black' }}
               to={`/startups/dashboard`}
             >
-              Angels Group for Startups
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'flex-start',
+                  alignItems: 'center',
+                }}
+              >
+                <span>MeetStartups</span>
+                <span>
+                  <AllInclusiveIcon />
+                </span>
+              </div>
             </NavLink>
           ) : (
-            <NavLink
-              style={{ textDecoration: 'none', color: 'black' }}
-              to={`/startups}`}
-            >
-              Angels Group for Startups
-            </NavLink>
-          )}
+              <NavLink
+                style={{ textDecoration: 'none', color: 'black' }}
+                to={`/startups}`}
+              >
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                  }}
+                >
+                  <span>MeetStartups</span>
+                  <span>
+                    <AllInclusiveIcon />
+                  </span>
+                </div>
+              </NavLink>
+            )}
         </Typography>
         <nav></nav>
         {authenticated ? (
@@ -127,15 +150,15 @@ const Navbar = () => {
             />
           </>
         ) : (
-          <Button
-            color='primary'
-            variant='outlined'
-            className={classes.link}
-            href={getLoginURL()}
-          >
-            Login
+            <Button
+              color='primary'
+              variant='outlined'
+              className={classes.link}
+              href={getLoginURL()}
+            >
+              Login
           </Button>
-        )}
+          )}
       </Toolbar>
     </AppBar>
   );

@@ -64,7 +64,6 @@ const Profile = () => {
 
   return (
     <React.Fragment>
-
       <Snackbar
         anchorOrigin={{
           vertical: 'bottom',

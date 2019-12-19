@@ -62,7 +62,7 @@ const CardView = props => {
               ? row.missionStatement.length > maxlimit
                 ? row.missionStatement.substring(0, maxlimit - 3) + '...'
                 : row.missionStatement
-              : 'Not Entered'}{' '}
+              : 'Not Entered'}
           </Typography>
         </CardContent>
       </CardActionArea>
@@ -86,7 +86,7 @@ const CardView = props => {
               Location: {row.location ? row.location : 'Not Entered'}{' '}
             </Typography>
             <Typography className={classes.items}>
-              # of Employees:{' '}
+              # of Employees:
               {row.companySize ? row.companySize : 'Not Entered'}{' '}
             </Typography>
           </div>

@@ -67,13 +67,18 @@ const useStyles = makeStyles(theme => ({
     maxHeight: 440,
     overflow: 'auto',
   },
+  cellTable: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 }));
 
 const DashboardTable = props => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const classes = useStyles();
   const { users } = props;
+  const classes = useStyles();
 
   const handleChangePage = (e, newPage) => {
     setPage(newPage);
@@ -122,13 +127,7 @@ const DashboardTable = props => {
 
                       return (
                         <TableCell key={column.id} align={column.align}>
-                          <div
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                            }}
-                          >
+                          <div className={classes.cellTable}>
                             {count < 2 ? (
                               <Avatar src={row.img} alt={row.name} />
                             ) : null}

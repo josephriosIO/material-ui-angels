@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
 import { consumeInvite } from '../../../backend/backend';
 import { Redirect } from 'react-router-dom';
-const AngelInvite = () => {
+const AngelInvite = (props) => {
   const { getLoginURL, authenticated } = useAuth();
   const [consumed, setConsumed] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -11,13 +11,8 @@ const AngelInvite = () => {
     async function doInviteThings() {
       if (!consumed && !failed) {
         try {
-          const url = window.location.href;
-          const urlArr = url.split('/');
-          let invite = urlArr[4];
-          //PRODUCTION ONLY
-          invite = invite.substring(0, invite.length - 1);
-          console.log(invite);
-
+          const urlPath = props.location.pathname;
+          const invite = urlPath.slice(8);
           const invited = await consumeInvite(invite);
 
           if (invited) {
@@ -31,6 +26,7 @@ const AngelInvite = () => {
     }
     doInviteThings();
   }, [authenticated]);
+
   if (consumed) {
     return <Redirect to='/angels' />;
   }

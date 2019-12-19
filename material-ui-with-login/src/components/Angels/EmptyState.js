@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const EmptyState = props => {
+const EmptyState = (props) => {
   const { title, subtitle, roles } = props;
   return (
     <div className='empty'>
