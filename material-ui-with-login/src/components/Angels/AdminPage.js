@@ -6,16 +6,16 @@ import SearchBar from './SearchBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
-import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+
 import {
   getAllUsersThatAreNotAStartup,
   createOrGetInvite,
 } from '../../../backend/backend';
+
+
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -106,6 +106,19 @@ const AdminPage = props => {
   const domain = urlArr[0] + '//' + urlArr[2];
   const [copySuccess, setCopySuccess] = useState('');
   const textAreaRef = useRef(null);
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   function copyToClipboard(e) {
     textAreaRef.current.select();
@@ -154,21 +167,32 @@ const AdminPage = props => {
     if (boolean) {
       setErrorMsg('Saved.');
       setErrorStatus('success');
-      setTimeout(() => {
-        setErrorMsg('');
-      }, 3000);
+      handleClick()
     } else {
       setErrorMsg('Removed.');
       setErrorStatus('success');
-      setTimeout(() => {
-        setErrorMsg('');
-      }, 3000);
+      handleClick()
     }
   };
 
   return (
     <>
-      <Error errorMsg={errorMsg} color={errorStatus} />
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={open}
+        autoHideDuration={5000}
+        onClose={handleClose}
+      >
+        <Error
+          onClose={handleClose}
+          variant={errorStatus}
+          message={errorMsg}
+        />
+      </Snackbar>
+
       <CssBaseline />
       <div className={classes.layout}>
         <div className={classes.header}>
@@ -198,23 +222,23 @@ const AdminPage = props => {
             <div className={classes.tableWrapper}>
               {filter.length > 0
                 ? filter
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map(user => (
-                      <DisplayUsers
-                        key={user.id}
-                        callErrors={callErrors}
-                        user={user}
-                      />
-                    ))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map(user => (
+                    <DisplayUsers
+                      key={user.id}
+                      callErrors={callErrors}
+                      user={user}
+                    />
+                  ))
                 : users
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map(user => (
-                      <DisplayUsers
-                        key={user.id}
-                        callErrors={callErrors}
-                        user={user}
-                      />
-                    ))}
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map(user => (
+                    <DisplayUsers
+                      key={user.id}
+                      callErrors={callErrors}
+                      user={user}
+                    />
+                  ))}
             </div>
             <TablePagination
               rowsPerPageOptions={[1, 5, 10]}

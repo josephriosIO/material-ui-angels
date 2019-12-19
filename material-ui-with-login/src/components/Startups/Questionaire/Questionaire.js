@@ -11,6 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
 
 const employeesValues = [
   '0 - 10',
@@ -68,6 +69,7 @@ const useStyles = makeStyles(theme => ({
 const Questionaire = () => {
   const classes = useStyles();
   const [errorMsg, setErrorMsg] = useState('');
+  const [open, setOpen] = React.useState(false);
   const [errorStatus, setErrorStatus] = useState('');
   const [formProfile, setProfile] = useState({});
   const [submitted, setSubmitted] = useState(false);
@@ -99,15 +101,25 @@ const Questionaire = () => {
     fetchData();
   }, []);
 
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+
   const handleSubmits = async event => {
     event.preventDefault();
     await updateStartupProfile(form);
     setErrorMsg('Saved.');
     setErrorStatus('success');
-
-    setTimeout(() => {
-      setErrorMsg('');
-    }, 3000);
+    handleClick()
     setSubmitted(true);
   };
 
@@ -126,7 +138,21 @@ const Questionaire = () => {
   return (
     <div>
       {submitted ? <Redirect to={`/startups/dashboard`} /> : null}
-      <Error errorMsg={errorMsg} color={errorStatus} />
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={open}
+        autoHideDuration={5000}
+        onClose={handleClose}
+      >
+        <Error
+          onClose={handleClose}
+          variant={errorStatus}
+          message={errorMsg}
+        />
+      </Snackbar>
       <div className={classes.header}>
         <h2 style={{ fontSize: '1rem' }}>Create a Startup Profile</h2>
       </div>

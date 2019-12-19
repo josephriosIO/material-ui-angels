@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { updateUser, createOrGetUser } from '../../../../backend/backend';
 import Error from '../../Errors/Error';
 import ProfileForm from './ProfileForm';
+import Snackbar from '@material-ui/core/Snackbar';
+
 
 const Profile = () => {
   const [errorMsg, setErrorMsg] = useState('');
@@ -14,6 +16,8 @@ const Profile = () => {
     bio: '',
     phoneNumber: '',
   });
+  const [open, setOpen] = React.useState(false);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,14 +35,25 @@ const Profile = () => {
     fetchData();
   }, []);
 
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+
   const handleSubmits = async event => {
     event.preventDefault();
     await updateUser(form);
-    setErrorMsg('Saved.');
+    setErrorMsg('Updated Profile.');
     setErrorStatus('success');
-    setTimeout(() => {
-      setErrorMsg('');
-    }, 3000);
+    handleClick()
   };
 
   const onChange = e => setForm({ ...form, [e.target.name]: e.target.value });
@@ -49,7 +64,22 @@ const Profile = () => {
 
   return (
     <React.Fragment>
-      <Error errorMsg={errorMsg} color={errorStatus} />
+
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={open}
+        autoHideDuration={5000}
+        onClose={handleClose}
+      >
+        <Error
+          onClose={handleClose}
+          variant={errorStatus}
+          message={errorMsg}
+        />
+      </Snackbar>
       <ProfileForm form={form} onChange={onChange} onSubmit={handleSubmits} />
     </React.Fragment>
   );

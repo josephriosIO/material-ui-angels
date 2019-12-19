@@ -9,6 +9,7 @@ import {
 import Error from '../../Errors/Error';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
+import Snackbar from '@material-ui/core/Snackbar';
 
 const employeesValues = [
   '0 - 10',
@@ -121,6 +122,9 @@ const Profile = () => {
     companySize: 0,
     funded: false,
   });
+  const [open, setOpen] = React.useState(false);
+
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -141,24 +145,31 @@ const Profile = () => {
     fetchData();
   }, []);
 
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   const handleSubmits = async event => {
     try {
       event.preventDefault();
       await updateStartupProfile(form);
       setErrorMsg('Saved.');
       setErrorStatus('success');
-
-      setTimeout(() => {
-        setErrorMsg('');
-      }, 3000);
+      handleClick()
       setSubmitted(true);
     } catch (err) {
       setErrorMsg('Please be logged into the right account.');
       setErrorStatus('danger');
       console.error(submitted);
-      setTimeout(() => {
-        setErrorMsg('');
-      }, 3000);
+      handleClick()
       setSubmitted(true);
     }
   };
@@ -171,7 +182,21 @@ const Profile = () => {
 
   return (
     <div className={classes.container}>
-      <Error errorMsg={errorMsg} color={errorStatus} />
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={open}
+        autoHideDuration={5000}
+        onClose={handleClose}
+      >
+        <Error
+          onClose={handleClose}
+          variant={errorStatus}
+          message={errorMsg}
+        />
+      </Snackbar>
       <form onSubmit={handleSubmits}>
         <div className={classes.layout}>
           <div className={classes.header}>
