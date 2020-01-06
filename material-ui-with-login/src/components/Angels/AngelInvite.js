@@ -25,6 +25,7 @@ const AngelInvite = (props) => {
       }
     }
     doInviteThings();
+    // eslint-disable-next-line
   }, [authenticated]);
 
   if (consumed) {
