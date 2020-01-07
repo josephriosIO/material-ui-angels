@@ -127,13 +127,13 @@ const LandingPage = () => {
     <>
       <div className={classes.header}>
         <div className={classes.logo}>
-          <p>MeetAngels</p>
+          <p>J-Ventures</p>
           <span>
             <AllInclusiveIcon />
           </span>
         </div>
 
-        <h1 className={classes.title}>Where startups meet angels</h1>
+        <h1 className={classes.title}>Mensch empowered VC</h1>
       </div>
       <div className={`${matches ? classes.body : classes.bodyMobile}`}>
         <div className={`${matches ? null : classes.mobileBodyItems}`}>
@@ -142,7 +142,7 @@ const LandingPage = () => {
               matches ? classes.bodyHeaders : classes.bodyHeadersMobile
             }`}
           >
-            <h2>MeetStartups</h2>
+            <h2>Startups</h2>
             <span>
               <GroupIcon />
             </span>
@@ -164,19 +164,19 @@ const LandingPage = () => {
               matches ? classes.bodyHeaders : classes.bodyHeadersMobile
             }`}
           >
-            <h2>MeetAngels</h2>
+            <h2>J-Ventures members</h2>
             <span>
               <TrendingUpIcon />
             </span>
           </div>
 
           <p>
-            By one of the next angel investors that fund the next big company.
+            A member of our Capitalist Kibbutz.
           </p>
           <ColorButton
             href={getLoginURL(`${window.location.origin.toString()}/angels`)}
           >
-            Become An Angel
+            Member Login
           </ColorButton>
         </div>
       </div>

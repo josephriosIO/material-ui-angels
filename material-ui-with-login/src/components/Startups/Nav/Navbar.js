@@ -92,7 +92,7 @@ const Navbar = () => {
                   alignItems: 'center',
                 }}
               >
-                <span>MeetStartups</span>
+                <span>Startups</span>
                 <span>
                   <AllInclusiveIcon />
                 </span>
@@ -110,7 +110,7 @@ const Navbar = () => {
                     alignItems: 'center',
                   }}
                 >
-                  <span>MeetStartups</span>
+                  <span>Startups</span>
                   <span>
                     <AllInclusiveIcon />
                   </span>

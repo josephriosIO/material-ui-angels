@@ -102,7 +102,7 @@ const Navbar = () => {
                 alignItems: 'center',
               }}
             >
-              <span>MeetAngels</span>
+              <span>J-Ventures</span>
               <span>
                 <AllInclusiveIcon />
               </span>
