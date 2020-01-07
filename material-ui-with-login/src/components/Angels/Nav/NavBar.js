@@ -43,9 +43,8 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(0.5, 0.5),
     textDecoration: 'none',
     fontSize: '.9rem',
-    color: 'black',
+    color: 'black !important',
     cursor: 'pointer',
-    borderBottom: '1px solid black',
   },
 }));
 
@@ -120,7 +119,7 @@ const Navbar = () => {
           {authenticated ? (
             <>
               <Link
-                style={{ color: 'black', marginRight: '20px' }}
+                style={{ color: 'black', marginRight: '20px', textDecoration: 'none' }}
                 to={`/angels/startups`}
               >
                 <p className={classes.link}> Startups</p>

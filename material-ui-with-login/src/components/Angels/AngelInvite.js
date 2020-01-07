@@ -25,6 +25,7 @@ const AngelInvite = (props) => {
       }
     }
     doInviteThings();
+    // eslint-disable-next-line
   }, [authenticated]);
 
   if (consumed) {
@@ -33,13 +34,20 @@ const AngelInvite = (props) => {
 
   if (!authenticated || !consumed) {
     return (
-      <div className='empty'>
-        <div className='empty-icon'>
-          <i className='icon icon-people'></i>
-        </div>
-        <p className='empty-title h5'>You been approved to be an angel!</p>
-        <p className='empty-subtitle'>Please login to get angel status.</p>
-        <a href={getLoginURL()}>Login</a>
+        <div className='empty' style={{ display: 'flex', 
+                                        alignItems: 'center', 
+                                        justifyContent: 'center', 
+                                        flexDirection: 'column', 
+                                        height: '100vh' }}
+         >
+          <div>
+            <div className='empty-icon'>
+              <i className='icon icon-people'></i>
+            </div>
+            <p className='empty-title h5'>You been approved to be an angel by an admin!</p>
+            <p className='empty-subtitle'>Please login to get angel status instantly.</p>
+            <a href={getLoginURL()}>Login</a>
+          </div>
       </div>
     );
   }

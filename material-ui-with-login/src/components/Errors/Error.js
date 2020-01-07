@@ -43,6 +43,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+// snackbar error handling system
 const Error = props => {
   const classes = useStyles();
   const { className, message, onClose, variant, ...other } = props;
