@@ -9,6 +9,7 @@ const usersPrefix = 'users__';
 const startupsPrefix = 'startups__';
 const rolesPrefix = 'roles__';
 const invitesPrefix = 'invites__';
+const meetingPrefix = 'meeting__';
 
 const Roles = {
   ADMIN: 'ADMIN',
@@ -243,6 +244,104 @@ export async function updateStartupProfile(fields) {
 }
 
 /* @expose */
+export async function archiveStartup(id) {
+  await validateRole([Roles.ADMIN]);
+  return update(`${startupsPrefix}${id}`, startupToUpdate => {
+    if (!startupToUpdate) {
+      throw new Error('User does not exist');
+    }
+    const copy = { ...startupToUpdate };
+    copy.archived = true;
+
+    return copy;
+  });
+}
+
+/* @expose */
+export async function getUnseenStartups() {
+  const profile = await createOrGetUser();
+  await validateRole([Roles.ANGEL, Roles.ADMIN]);
+  
+  const rolesQuery = await find(
+    Q.filter(Q.all(Q.key.startsWith(rolesPrefix), Q.value.STARTUP.eq(true))),
+  );
+
+  const userIds = rolesQuery.map(({ key, value }) => {
+    return key.slice(rolesPrefix.length, key.length);
+  });
+
+  if (userIds.length < 1) {
+    return [];
+  }
+
+  const startupsQuery = await find(
+    Q.filter(
+      Q.any(
+        ...userIds.map(id => {
+          return Q.key.startsWith(`${startupsPrefix}${id}`);
+        }),
+      ),
+    ),
+  );
+
+  if (profile.lastSeenStartup === null) {
+    return startupsQuery.map(({ value }) => value);
+  }
+  
+  const unseen = startupsQuery.filter(({ value }) => {
+    if (value.registered > profile.lastSeenStartup) {
+      return value;
+    }
+  });
+  
+  return unseen;
+}
+
+/* @expose */
+export async function createMeeting(meetingInfo) {
+  await validateRole([Roles.ADMIN]);
+  const { startups, date, } = meetingInfo;
+  console.log(startups, date);
+  const createdMeeting = await update(`${meetingPrefix}${date}`, meeting => {
+   
+    return {
+      date: date,
+      startups: startups,
+    };
+  });
+  
+  return createdMeeting;
+}
+
+/* @expose */
+export async function getMeetings() {
+  await validateRole([Roles.ANGEL, Roles.ADMIN]);
+  const rolesQuery = await find(
+    Q.filter(Q.all(Q.key.startsWith(meetingPrefix))),
+  );
+  console.log(validateRole);
+  const userIds = rolesQuery.map(({ key, value }) => {
+    return key.slice(meetingPrefix.length, key.length);
+  });
+  console.log(userIds);
+
+  if (userIds.length < 1) {
+    return [];
+  }
+
+  const usersQuery = await find(
+    Q.filter(
+      Q.any(
+        ...userIds.map(id => {
+          return Q.key.startsWith(`${meetingPrefix}${id}`);
+        }),
+      ),
+    ),
+  );
+  return usersQuery.map(({ value }) => value);
+}
+
+/* @expose */
 export async function createOrGetStartup() {
   const profile = getCurrentUser(true);
 
@@ -264,6 +363,8 @@ export async function createOrGetStartup() {
       companySize: 0,
       completed: false,
       funded: false,
+      archived: false,
+      registered: Date.now(),
     };
   });
 
@@ -283,6 +384,7 @@ export async function createOrGetInvite() {
       id: profile.id,
       value: inviteCode,
       consumed: false,
+      consumedBy: '',
     };
   });
 
@@ -304,6 +406,7 @@ export async function consumeInvite(inviteCode) {
     const copy = { ...inviteCodeToConsume };
 
     copy.consumed = true;
+    copy.consumedBy = profile.id;
 
     return copy;
   });
@@ -312,7 +415,7 @@ export async function consumeInvite(inviteCode) {
 /* @expose */
 export async function createOrGetUser() {
   const profile = getCurrentUser(true);
-
+  
   const addUser = await update(`${usersPrefix}${profile.id}`, user => {
     if (profile.emails[0].value === ADMIN_USER_EMAIL) {
       addRoleToUser(profile.id, Roles.ADMIN);
@@ -329,6 +432,7 @@ export async function createOrGetUser() {
       phoneNumber: null,
       bio: '',
       location: '',
+      lastSeenStartup: null,
     };
   });
 

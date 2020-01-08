@@ -106,7 +106,8 @@ const AdminPage = props => {
   const domain = urlArr[0] + '//' + urlArr[2];
   const [copySuccess, setCopySuccess] = useState('');
   const textAreaRef = useRef(null);
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [startDate, setStartDate] = useState(new Date())
 
   const handleClick = () => {
     setOpen(true);
@@ -213,7 +214,7 @@ const AdminPage = props => {
             </div>
           </div>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
           <SearchBar search={search} title={'Name'} />
         </div>
 

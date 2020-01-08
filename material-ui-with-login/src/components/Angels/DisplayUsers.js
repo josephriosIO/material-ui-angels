@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   userInfo: {
     display: 'flex',
     flexFlow: 'column',
-    alignItems: 'center',
+    alignItems: 'flex-start',
   },
 }));
 

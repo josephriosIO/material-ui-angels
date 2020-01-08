@@ -9,7 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -45,6 +45,10 @@ const useStyles = makeStyles(theme => ({
     fontSize: '.9rem',
     color: 'black !important',
     cursor: 'pointer',
+    
+    '&:hover': {
+      textDecoration: 'none',
+    },
   },
 }));
 
@@ -54,7 +58,7 @@ const Navbar = () => {
   const [roles, setRoles] = useState({});
   const [addedUser, setAddedUser] = useState(true);
   const { authenticated, getLoginURL, getLogoutURL } = useAuth();
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = event => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -118,12 +122,37 @@ const Navbar = () => {
         >
           {authenticated ? (
             <>
-              <Link
+              {roles.ADMIN ? (
+                  <div style={{ marginRight: '20px', 'marginTop': '1px' }}>
+                    <NavLink
+                      activeStyle={{ fontWeight: 'bold' }}
+                      style={{ marginRight: '20px', textDecoration: 'none', color: 'black' }}
+                      className={classes.link}
+                      to={{
+                        pathname: `/angels/admin`,
+                      }}
+                    >
+                      Admin
+                    </NavLink>
+                    <NavLink
+                      activeStyle={{ fontWeight: 'bold' }}
+                      style={{ textDecoration: 'none', color: 'black' }}
+                      className={classes.link}
+                      to={{
+                        pathname: `/angels/createmeeting`,
+                      }}
+                    >
+                      Create Meeting
+                    </NavLink>
+                  </div>
+                ) : null}
+              <NavLink
+                activeStyle={{ fontWeight: 'bold' }}
                 style={{ color: 'black', marginRight: '20px', textDecoration: 'none' }}
                 to={`/angels/startups`}
               >
                 <p className={classes.link}> Startups</p>
-              </Link>
+              </NavLink>
               <Menu
                 id='simple-menu'
                 anchorEl={anchorEl}
@@ -139,19 +168,6 @@ const Navbar = () => {
                 >
                   Profile
                 </Link>
-                {roles.ADMIN ? (
-                  <div style={{ marginRight: '10px' }}>
-                    <Link
-                      style={{ textDecoration: 'none', color: 'black' }}
-                      className={classes.link}
-                      to={{
-                        pathname: `/angels/admin`,
-                      }}
-                    >
-                      Admin
-                    </Link>
-                  </div>
-                ) : null}
                 <a className={classes.link} href={getLogoutURL()}>
                   Logout
                 </a>

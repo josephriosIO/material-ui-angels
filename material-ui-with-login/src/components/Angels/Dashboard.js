@@ -1,7 +1,7 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
-import { getAllAngels, getRole } from '../../../backend/backend';
+import { getAllAngels, getRole, getMeetings } from '../../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
@@ -50,10 +50,16 @@ export default function Page() {
   useEffect(() => {
     const fetchData = async () => {
       const roles = await getRole();
+ 
 
       if (roles.ANGEL || roles.ADMIN) {
         const result = await getAllAngels();
         setUsers(result);
+      }
+      
+      if (roles.ADMIN) {
+        const test = await getMeetings();
+        console.log(test);
       }
 
       setRoles(roles);

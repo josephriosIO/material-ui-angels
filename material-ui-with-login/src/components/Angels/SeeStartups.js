@@ -7,11 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import CardView from './Cards/CardView';
+import StartupDataTable from './StartupDataTable';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -81,15 +77,6 @@ export default function SeeStartups() {
     // eslint-disable-next-line
   }, []);
 
-  const handleChangePage = (e, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = event => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
   // wait for the user data to load.
   if (loading) {
     return (
@@ -128,7 +115,6 @@ export default function SeeStartups() {
   return (
     <React.Fragment>
       <CssBaseline />
-      {/* Hero unit */}
       <Container maxWidth='lg' component='main' className={classes.heroContent}>
         {users.length < 1 ? (
           <div className='empty'>
@@ -147,62 +133,13 @@ export default function SeeStartups() {
                 <h2>Startups</h2>
                 <SearchBar search={search} title={'Company Name'} />
               </div>
-
-              <div className={classes.tableWrapper}>
-                <Table stickyHeader aria-label='sticky table'>
-                  <TableBody>
-                    {filter.length > 0
-                      ? filter
-                          .slice(
-                            page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage,
-                          )
-                          .map(row =>
-                            row ? (
-                              <TableRow
-                                className={classes.tableRow}
-                                role='checkbox'
-                                tabIndex={-1}
-                                key={row.id}
-                              >
-                                <CardView row={row} />
-                              </TableRow>
-                            ) : null,
-                          )
-                      : users
-                          .slice(
-                            page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage,
-                          )
-                          .map(row =>
-                            row ? (
-                              <TableRow
-                                className={classes.tableRow}
-                                role='checkbox'
-                                tabIndex={-1}
-                                key={row.id}
-                              >
-                                <CardView row={row} />
-                              </TableRow>
-                            ) : null,
-                          )}
-                  </TableBody>
-                </Table>
-              </div>
-              <TablePagination
-                rowsPerPageOptions={[1, 5, 10]}
-                component='div'
-                count={users.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-              />
-            </div>
-          </Grid>
+             <div>
+                <StartupDataTable users={filter.length > 1 ? filter : users} />
+             </div>
+           </div>
+        </Grid>
         )}
       </Container>
-      {/* End hero unit */}
     </React.Fragment>
   );
 }

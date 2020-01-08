@@ -8,28 +8,27 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import Avatar from '@material-ui/core/Avatar';
 
 const columns = [
-  { id: 'name', align: 'left', label: 'Name', minWidth: 170 },
+  { id: 'companyName', align: 'left', label: 'Company Name', minWidth: 170 },
   { id: 'location', align: 'left', label: 'Location', minWidth: 100 },
   {
-    id: 'email',
-    label: 'Email',
+    id: 'website',
+    label: 'Website',
     minWidth: 170,
     align: 'left',
     format: value => value.toLocaleString(),
   },
   {
-    id: 'phoneNumber',
-    label: 'Phone Number',
+    id: 'companySize',
+    label: '# of Employees',
     minWidth: 170,
     align: 'left',
     format: value => value.toLocaleString(),
   },
   {
-    id: 'bio',
-    label: 'Bio',
+    id: 'missionStatement',
+    label: 'Mission Statement',
     minWidth: 170,
     align: 'left',
     format: value => value.toLocaleString(),
@@ -74,7 +73,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const DashboardTable = props => {
+const StartupDataTable = props => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const { users } = props;
@@ -91,8 +90,6 @@ const DashboardTable = props => {
 
   return (
     <Grid>
-      <Paper className={classes.root}>
-        <h2>Angels</h2>
         <div className={classes.tableWrapper}>
           <Table stickyHeader aria-label='sticky table'>
             <TableHead>
@@ -113,13 +110,8 @@ const DashboardTable = props => {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map(row => (
                   <TableRow hover role='checkbox' tabIndex={-1} key={row.id}>
-                    {columns.map((column, count = 0) => {
-                      count += 1;
+                    {columns.map((column) => {
                       let value = row[column.id];
-
-                      if (Array.isArray(value)) {
-                        value = value[0].value;
-                      }
 
                       if (value === '' || value === null) {
                         value = 'N/A';
@@ -128,9 +120,6 @@ const DashboardTable = props => {
                       return (
                         <TableCell key={column.id} align={column.align}>
                           <div className={classes.cellTable}>
-                            {count < 2 ? (
-                              <Avatar src={row.img} alt={row.name} />
-                            ) : null}
                             {value}
                           </div>
                         </TableCell>
@@ -150,9 +139,8 @@ const DashboardTable = props => {
           onChangePage={handleChangePage}
           onChangeRowsPerPage={handleChangeRowsPerPage}
         />
-      </Paper>
     </Grid>
   );
 };
 
-export default DashboardTable;
+export default StartupDataTable;

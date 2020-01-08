@@ -4,7 +4,13 @@ import { Link } from 'react-router-dom';
 const EmptyState = (props) => {
   const { title, subtitle, roles } = props;
   return (
-    <div className='empty'>
+    <div className='empty'
+         style={{ display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  flexDirection: 'column', 
+                  height: '100vh' }}
+    >
       <div className='empty-icon'>
         <i className='icon icon-people'></i>
       </div>

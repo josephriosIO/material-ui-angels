@@ -6,6 +6,7 @@ import Profile from './Profile/Profile';
 import NavBar from './Nav/NavBar';
 import SeeStartups from './SeeStartups';
 import Protected from '../PrivateRoute/PrivateRoute';
+import MeetingCreator from './MeetingCreator';
 
 const Routes = (props) => {
   return (
@@ -28,6 +29,11 @@ const Routes = (props) => {
         path={`${props.match.path}/startups`}
         component={SeeStartups}
       />
+        <Protected
+        exact
+        path={`${props.match.path}/createmeeting`}
+        component={MeetingCreator}
+      />    
     </>
   );
 };
