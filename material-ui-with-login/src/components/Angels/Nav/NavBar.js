@@ -105,9 +105,9 @@ const Navbar = () => {
                 alignItems: 'center',
               }}
             >
-              <span>J-Ventures</span>
+              <span>J-Ventures </span>
               <span>
-                <AllInclusiveIcon />
+                <AllInclusiveIcon style={{ marginLeft: '3px', fontSize: '1rem' }}/>
               </span>
             </div>
           </Link>
@@ -122,8 +122,19 @@ const Navbar = () => {
         >
           {authenticated ? (
             <>
+            <div style={{ 'marginTop': '1px' }}>
+              <NavLink 
+                       style={{ marginRight: '20px', textDecoration: 'none', color: 'black' }}
+                       className={classes.link}
+                       to={{
+                         pathname: `/angels`,
+                       }}
+                      >
+                  Community
+              </NavLink>
+            </div>
               {roles.ADMIN ? (
-                  <div style={{ marginRight: '20px', 'marginTop': '1px' }}>
+                  <div style={{ 'marginTop': '1px' }}>
                     <NavLink
                       activeStyle={{ fontWeight: 'bold' }}
                       style={{ marginRight: '20px', textDecoration: 'none', color: 'black' }}
@@ -134,16 +145,6 @@ const Navbar = () => {
                     >
                       Admin
                     </NavLink>
-                    <NavLink
-                      activeStyle={{ fontWeight: 'bold' }}
-                      style={{ textDecoration: 'none', color: 'black' }}
-                      className={classes.link}
-                      to={{
-                        pathname: `/angels/createmeeting`,
-                      }}
-                    >
-                      Create Meeting
-                    </NavLink>
                   </div>
                 ) : null}
               <NavLink
@@ -151,7 +152,7 @@ const Navbar = () => {
                 style={{ color: 'black', marginRight: '20px', textDecoration: 'none' }}
                 to={`/angels/startups`}
               >
-                <p className={classes.link}> Startups</p>
+                <p className={classes.link}> Meetings</p>
               </NavLink>
               <Menu
                 id='simple-menu'

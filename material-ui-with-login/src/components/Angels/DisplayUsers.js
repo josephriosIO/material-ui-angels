@@ -66,7 +66,7 @@ const DisplayUsers = props => {
     <Grid container spacing={3}>
       <Grid item xs={12}>
         <div className={classes.infoHolder}>
-          <Typography component='subtitle2' variant='subtitle2'>
+          <Typography>
             <div
               style={{
                 display: 'flex',

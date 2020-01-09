@@ -112,7 +112,7 @@ const Navbar = () => {
                 >
                   <span>Startups</span>
                   <span>
-                    <AllInclusiveIcon />
+                    <AllInclusiveIcon style={{ marginLeft: '3px', fontSize: '1rem' }}/>
                   </span>
                 </div>
               </NavLink>

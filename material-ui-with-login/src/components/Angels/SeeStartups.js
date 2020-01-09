@@ -1,13 +1,12 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
-import { getAllStartups, getRole } from '../../../backend/backend';
-import SearchBar from './SearchBar';
+import { getRole, getMeetings } from '../../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
-import StartupDataTable from './StartupDataTable';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -36,6 +35,30 @@ const useStyles = makeStyles(theme => ({
     padding: '10px',
     margin: '10px',
   },
+  row: {
+    padding: '16px 16px 0',
+    border: '1px solid rgba(0,0,0,.12)',
+    margin: '20px 0',
+  },
+  title: {
+    textTransform: 'uppercase',
+    fontSize: '13px',
+    fontWeight: 600,
+    lineHeight: 1.6,
+    letterSpacing: '-.02em',
+    wordSpacing: '.1em',
+  },
+  date: {
+    stroke: 'transparent',
+    fill: 'rgba(0,0,0,.87)',
+    color: 'rgba(0,0,0,.87)',
+    fontSize: '13px',
+    fontWeight: 600,
+    lineHeight: 1.6,
+    letterSpacing: '-.02em',
+    wordSpacing: '.1em',
+    textTransform: 'uppercase',
+  },
   tableWrapper: {
     maxHeight: '100%',
     overflow: 'auto',
@@ -55,9 +78,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function SeeStartups() {
   const [users, setUsers] = useState([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(1);
-  const [filter, setFilter] = useState([]);
   const [roles, setRoles] = useState([]);
   const classes = useStyles();
   const { loading } = useAuth();
@@ -67,8 +87,11 @@ export default function SeeStartups() {
       const usersRoles = await getRole();
 
       if (usersRoles.ADMIN || usersRoles.ANGEL) {
-        const result = await getAllStartups();
-        setUsers(result);
+        const result = await getMeetings();
+        console.log(result);
+        const sortedDates = result.sort((a, b) => b.date - a.date);
+
+        setUsers(sortedDates);
       }
 
       setRoles(usersRoles);
@@ -85,18 +108,6 @@ export default function SeeStartups() {
       </div>
     );
   }
-
-  const search = e => {
-    const filteredUsers = users.filter(user => {
-      if (user.companyName.toLowerCase().includes(e.target.value)) {
-        return user;
-      }
-
-      return null;
-    });
-
-    setFilter(filteredUsers);
-  };
 
   if (!roles.ADMIN && !roles.ANGEL) {
     return (
@@ -130,14 +141,44 @@ export default function SeeStartups() {
           <Grid>
             <div className={classes.root}>
               <div className={classes.flex}>
-                <h2>Startups</h2>
-                <SearchBar search={search} title={'Company Name'} />
+                <h2>Meetings</h2>
+                <Link
+                  style={{
+                    textDecoration: 'none',
+                    color: 'black',
+                    borderBottom: '1px solid #000',
+                  }}
+                  to={{
+                    pathname: `/angels/createmeeting`,
+                  }}
+                >
+                  Create Meeting
+                </Link>
               </div>
-             <div>
-                <StartupDataTable users={filter.length > 1 ? filter : users} />
-             </div>
-           </div>
-        </Grid>
+              <div>
+                {users.map(startupsData => {
+                  const d = new Date(startupsData.date);
+                  return (
+                    <div key={d}>
+                      <div className={classes.row}>
+                        <span className={classes.date}>{d.toDateString()}</span>
+                        <div className={classes.title}>
+                          {startupsData.title}
+                        </div>
+                        <div style={{ display: 'flex', flexFlow: 'row' }}>
+                          {startupsData.startups.map((startup, idx) => (
+                            <div key={idx}>
+                              <p>{startup.companyName}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </Grid>
         )}
       </Container>
     </React.Fragment>

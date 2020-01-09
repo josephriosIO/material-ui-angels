@@ -15,8 +15,6 @@ import {
   createOrGetInvite,
 } from '../../../backend/backend';
 
-
-
 const useStyles = makeStyles(theme => ({
   header: {
     borderBottom: '1px solid #e7e9eb',
@@ -107,7 +105,6 @@ const AdminPage = props => {
   const [copySuccess, setCopySuccess] = useState('');
   const textAreaRef = useRef(null);
   const [open, setOpen] = useState(false);
-  const [startDate, setStartDate] = useState(new Date())
 
   const handleClick = () => {
     setOpen(true);
@@ -168,11 +165,11 @@ const AdminPage = props => {
     if (boolean) {
       setErrorMsg('Saved.');
       setErrorStatus('success');
-      handleClick()
+      handleClick();
     } else {
       setErrorMsg('Removed.');
       setErrorStatus('success');
-      handleClick()
+      handleClick();
     }
   };
 
@@ -187,11 +184,7 @@ const AdminPage = props => {
         autoHideDuration={5000}
         onClose={handleClose}
       >
-        <Error
-          onClose={handleClose}
-          variant={errorStatus}
-          message={errorMsg}
-        />
+        <Error onClose={handleClose} variant={errorStatus} message={errorMsg} />
       </Snackbar>
 
       <CssBaseline />
@@ -202,6 +195,7 @@ const AdminPage = props => {
             <Typography variant='subtitle2'>Invite Link</Typography>
             <div className={classes.flexInvite}>
               <textarea
+                readOnly
                 className={classes.textArea}
                 style={{ resize: 'none' }}
                 ref={textAreaRef}
@@ -223,23 +217,23 @@ const AdminPage = props => {
             <div className={classes.tableWrapper}>
               {filter.length > 0
                 ? filter
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map(user => (
-                    <DisplayUsers
-                      key={user.id}
-                      callErrors={callErrors}
-                      user={user}
-                    />
-                  ))
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map(user => (
+                      <DisplayUsers
+                        key={user.id}
+                        callErrors={callErrors}
+                        user={user}
+                      />
+                    ))
                 : users
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map(user => (
-                    <DisplayUsers
-                      key={user.id}
-                      callErrors={callErrors}
-                      user={user}
-                    />
-                  ))}
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map(user => (
+                      <DisplayUsers
+                        key={user.id}
+                        callErrors={callErrors}
+                        user={user}
+                      />
+                    ))}
             </div>
             <TablePagination
               rowsPerPageOptions={[1, 5, 10]}

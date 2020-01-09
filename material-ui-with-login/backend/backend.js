@@ -300,11 +300,11 @@ export async function getUnseenStartups() {
 /* @expose */
 export async function createMeeting(meetingInfo) {
   await validateRole([Roles.ADMIN]);
-  const { startups, date, } = meetingInfo;
-  console.log(startups, date);
+  const { startups, date, title, } = meetingInfo;
   const createdMeeting = await update(`${meetingPrefix}${date}`, meeting => {
    
     return {
+      title: title,
       date: date,
       startups: startups,
     };
