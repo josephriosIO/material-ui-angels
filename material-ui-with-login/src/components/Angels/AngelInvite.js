@@ -84,8 +84,8 @@ const AngelInvite = (props) => {
             <div className='empty-icon'>
               <i className='icon icon-people'></i>
             </div>
-            <p className='empty-title h5'>You been approved to be an angel by an admin!</p>
-            <p className='empty-subtitle'>Please login to get angel status instantly.</p>
+            <p className='empty-title h5'>You been invited to the J-Venture community!</p>
+            <p className='empty-subtitle'>Please login to get your memebership invitation accepted.</p>
             <a href={getLoginURL()}>Login</a>
           </div>
       </div>
