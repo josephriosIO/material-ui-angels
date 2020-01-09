@@ -21,9 +21,6 @@ const useStyles = makeStyles(theme => ({
       listStyle: 'none',
     },
   },
-  heroContent: {
-    padding: theme.spacing(8, 0, 6),
-  },
   cardHeader: {
     backgroundColor: theme.palette.grey[200],
   },
@@ -126,7 +123,7 @@ export default function SeeStartups() {
   return (
     <React.Fragment>
       <CssBaseline />
-      <Container maxWidth='lg' component='main' className={classes.heroContent}>
+      <Container maxWidth='lg' component='main'>
         {users.length < 1 ? (
           <div className='empty'>
             <div className='empty-icon'>
