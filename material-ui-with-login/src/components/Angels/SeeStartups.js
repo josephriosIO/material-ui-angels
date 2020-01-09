@@ -132,9 +132,9 @@ export default function SeeStartups() {
             <div className='empty-icon'>
               <i className='icon icon-people'></i>
             </div>
-            <p className='empty-title h5'>No Startups :(</p>
+            <p className='empty-title h5'>No Meetings</p>
             <p className='empty-subtitle'>
-              Have some startups join the platform!
+              Ask your admin to create more meetings!
             </p>
           </div>
         ) : (
