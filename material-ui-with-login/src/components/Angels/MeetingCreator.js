@@ -32,15 +32,19 @@ const useStyles = makeStyles(theme => ({
   },
   header: {
     borderBottom: '1px solid #e7e9eb',
-    padding: '56px 0',
+    padding: '30px 0',
     marginBottom: '28px',
     display: 'flex',
     justifyContent: 'space-around',
-    alignItem: 'center',
+    alignItems: 'center',
     [theme.breakpoints.down(600 + theme.spacing(2) * 2)]: {
       alignItems: 'center',
       flexFlow: 'column',
     },
+  },
+  headerTitle: {
+    textAlign: 'center',
+    paddingTop: '10px',
   },
   saveBtn: {
     backgroundColor: '#3f81c7',
@@ -237,38 +241,38 @@ const MeetingCreator = () => {
           />
         </Snackbar>
       </span>
-      <div className={classes.header}>
-        <Typography variant='h6' gutterBottom>
+      <div>
+        <Typography className={classes.headerTitle} variant='h6'>
           Meeting Creator
         </Typography>
-        <div>
-          <Typography variant='h6' gutterBottom>
-            Pick Date for meeting
-          </Typography>
-          <DatePicker
-            minDate={new Date()}
-            selected={startDate}
-            onChange={handleChange}
-          />
+        <div className={classes.header}>
+          <div>
+            <Typography variant='h6'>Pick Date for meeting</Typography>
+            <DatePicker
+              minDate={new Date()}
+              selected={startDate}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <TextField
+              error={error}
+              label='Meeting Title'
+              helperText={error && 'Please have a meeting title'}
+              onChange={e => onChange(e)}
+              value={form.title}
+              id='title'
+              name='title'
+            />
+          </div>
+          <button
+            onClick={saveMeeting}
+            variant='contained'
+            className={classes.saveBtn}
+          >
+            Save
+          </button>
         </div>
-        <div>
-          <TextField
-            error={error}
-            label='Meeting Title'
-            helperText={error && 'Please have a meeting title'}
-            onChange={e => onChange(e)}
-            value={form.title}
-            id='title'
-            name='title'
-          />
-        </div>
-        <button
-          onClick={saveMeeting}
-          variant='contained'
-          className={classes.saveBtn}
-        >
-          Save
-        </button>
       </div>
       <div>
         <div>

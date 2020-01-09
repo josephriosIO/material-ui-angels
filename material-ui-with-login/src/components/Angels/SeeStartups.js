@@ -133,12 +133,8 @@ export default function SeeStartups() {
             <p className='empty-subtitle'>
               Ask your admin to create more meetings!
             </p>
-          </div>
-        ) : (
-          <Grid>
-            <div className={classes.root}>
-              <div className={classes.flex}>
-                <h2>Meetings</h2>
+            <p className='empty-subtitle'>
+              {roles.ADMIN ? (
                 <Link
                   style={{
                     textDecoration: 'none',
@@ -151,6 +147,28 @@ export default function SeeStartups() {
                 >
                   Create Meeting
                 </Link>
+              ) : null}
+            </p>
+          </div>
+        ) : (
+          <Grid>
+            <div className={classes.root}>
+              <div className={classes.flex}>
+                <h2>Meetings</h2>
+                {roles.ADMIN ? (
+                  <Link
+                    style={{
+                      textDecoration: 'none',
+                      color: 'black',
+                      borderBottom: '1px solid #000',
+                    }}
+                    to={{
+                      pathname: `/angels/createmeeting`,
+                    }}
+                  >
+                    Create Meeting
+                  </Link>
+                ) : null}
               </div>
               <div>
                 {users.map(startupsData => {
