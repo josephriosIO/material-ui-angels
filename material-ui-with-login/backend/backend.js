@@ -2,7 +2,6 @@ import { get, update, find, Q } from '@reshuffle/db';
 import { getCurrentUser } from '@reshuffle/server-function';
 const uuidv4 = require('uuid/v4');
 
-
 const { ADMIN_USER_EMAIL } = process.env;
 
 const usersPrefix = 'users__';
@@ -163,11 +162,9 @@ export async function getAllAngels() {
 /* @expose */
 export async function getAllUsersThatAreNotAStartup() {
   await validateRole([Roles.ANGEL, Roles.ADMIN]);
-  const rolesQuery = await find(
-    Q.filter(Q.all(Q.key.startsWith(rolesPrefix), Q.value.STARTUP.eq(false))),
-  );
+  const rolesQuery = await find(Q.filter(Q.all(Q.key.startsWith(usersPrefix))));
   const userIds = rolesQuery.map(({ key, value }) => {
-    return key.slice(rolesPrefix.length, key.length);
+    return key.slice(usersPrefix.length, key.length);
   });
 
   if (userIds.length < 1) {
@@ -212,6 +209,7 @@ export async function updateUser(fields) {
     copy.location = location;
     copy.phoneNumber = phoneNumber;
     copy.bio = bio;
+    copy.editedProfile = true;
 
     return copy;
   });
@@ -261,7 +259,7 @@ export async function archiveStartup(id) {
 export async function getUnseenStartups() {
   const profile = await createOrGetUser();
   await validateRole([Roles.ANGEL, Roles.ADMIN]);
-  
+
   const rolesQuery = await find(
     Q.filter(Q.all(Q.key.startsWith(rolesPrefix), Q.value.STARTUP.eq(true))),
   );
@@ -287,29 +285,28 @@ export async function getUnseenStartups() {
   if (profile.lastSeenStartup === null) {
     return startupsQuery.map(({ value }) => value);
   }
-  
+
   const unseen = startupsQuery.filter(({ value }) => {
     if (value.registered > profile.lastSeenStartup) {
       return value;
     }
   });
-  
+
   return unseen;
 }
 
 /* @expose */
 export async function createMeeting(meetingInfo) {
   await validateRole([Roles.ADMIN]);
-  const { startups, date, title, } = meetingInfo;
+  const { startups, date, title } = meetingInfo;
   const createdMeeting = await update(`${meetingPrefix}${date}`, meeting => {
-   
     return {
       title: title,
       date: date,
       startups: startups,
     };
   });
-  
+
   return createdMeeting;
 }
 
@@ -415,7 +412,7 @@ export async function consumeInvite(inviteCode) {
 /* @expose */
 export async function createOrGetUser() {
   const profile = getCurrentUser(true);
-  
+
   const addUser = await update(`${usersPrefix}${profile.id}`, user => {
     if (profile.emails[0].value === ADMIN_USER_EMAIL) {
       addRoleToUser(profile.id, Roles.ADMIN);
@@ -433,6 +430,7 @@ export async function createOrGetUser() {
       bio: '',
       location: '',
       lastSeenStartup: null,
+      editedProfile: false,
     };
   });
 

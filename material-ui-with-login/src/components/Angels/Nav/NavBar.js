@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
     fontSize: '.9rem',
     color: 'black !important',
     cursor: 'pointer',
-    
+
     '&:hover': {
       textDecoration: 'none',
     },
@@ -107,7 +107,9 @@ const Navbar = () => {
             >
               <span>J-Ventures </span>
               <span>
-                <AllInclusiveIcon style={{ marginLeft: '3px', fontSize: '1rem' }}/>
+                <AllInclusiveIcon
+                  style={{ marginLeft: '3px', fontSize: '1rem' }}
+                />
               </span>
             </div>
           </Link>
@@ -122,34 +124,46 @@ const Navbar = () => {
         >
           {authenticated ? (
             <>
-            <div style={{ 'marginTop': '1px' }}>
-              <NavLink 
-                       style={{ marginRight: '20px', textDecoration: 'none', color: 'black' }}
-                       className={classes.link}
-                       to={{
-                         pathname: `/angels`,
-                       }}
-                      >
+              <div style={{ marginTop: '1px' }}>
+                <NavLink
+                  style={{
+                    marginRight: '20px',
+                    textDecoration: 'none',
+                    color: 'black',
+                  }}
+                  className={classes.link}
+                  to={{
+                    pathname: `/angels`,
+                  }}
+                >
                   Community
-              </NavLink>
-            </div>
+                </NavLink>
+              </div>
               {roles.ADMIN ? (
-                  <div style={{ 'marginTop': '1px' }}>
-                    <NavLink
-                      activeStyle={{ fontWeight: 'bold' }}
-                      style={{ marginRight: '20px', textDecoration: 'none', color: 'black' }}
-                      className={classes.link}
-                      to={{
-                        pathname: `/angels/admin`,
-                      }}
-                    >
-                      Admin
-                    </NavLink>
-                  </div>
-                ) : null}
+                <div style={{ marginTop: '1px' }}>
+                  <NavLink
+                    activeStyle={{ fontWeight: 'bold' }}
+                    style={{
+                      marginRight: '20px',
+                      textDecoration: 'none',
+                      color: 'black',
+                    }}
+                    className={classes.link}
+                    to={{
+                      pathname: `/angels/admin`,
+                    }}
+                  >
+                    Admin
+                  </NavLink>
+                </div>
+              ) : null}
               <NavLink
                 activeStyle={{ fontWeight: 'bold' }}
-                style={{ color: 'black', marginRight: '20px', textDecoration: 'none' }}
+                style={{
+                  color: 'black',
+                  marginRight: '20px',
+                  textDecoration: 'none',
+                }}
                 to={`/angels/startups`}
               >
                 <p className={classes.link}> Meetings</p>
@@ -162,16 +176,18 @@ const Navbar = () => {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>Welcome {user.name}!</MenuItem>
-                <Link
-                  style={{ textDecoration: 'none', color: 'black' }}
-                  className={classes.link}
-                  to={`/angels/profile/${user.id}`}
-                >
-                  Profile
-                </Link>
-                <a className={classes.link} href={getLogoutURL()}>
-                  Logout
-                </a>
+                <div style={{ display: 'flex', flexFlow: 'column' }}>
+                  <Link
+                    style={{ textDecoration: 'none', color: 'black' }}
+                    className={classes.link}
+                    to={`/angels/profile/${user.id}`}
+                  >
+                    Profile
+                  </Link>
+                  <a className={classes.link} href={getLogoutURL()}>
+                    Logout
+                  </a>
+                </div>
               </Menu>
 
               <Avatar

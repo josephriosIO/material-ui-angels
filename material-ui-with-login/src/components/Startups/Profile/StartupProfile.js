@@ -55,11 +55,6 @@ const StartupProfile = props => {
       <div className={classes.center}>
         <Card className={classes.card}>
           <CardActionArea>
-            <CardMedia
-              className={classes.media}
-              image='https://www.smallcellforum.org/site/wp-content/uploads/2018/01/SCF-Downtown-Silicon-Valley.jpg'
-              title='skyline'
-            />
             <CardContent>
               <Typography gutterBottom variant='h5' component='h2'>
                 {item.companyName ? item.companyName : 'Not Entered'}

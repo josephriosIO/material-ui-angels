@@ -1,11 +1,16 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
-import { getAllAngels, getRole } from '../../../backend/backend';
+import {
+  getAllAngels,
+  getRole,
+  createOrGetUser,
+} from '../../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import EmptyState from './EmptyState';
+import { Redirect } from 'react-router-dom';
 import DashboardTable from './DashboardTable';
 
 const useStyles = makeStyles(theme => ({
@@ -43,6 +48,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Page() {
   const [users, setUsers] = useState([]);
+  const [userData, setUserData] = useState(undefined);
   const classes = useStyles();
   const { loading } = useAuth();
   const [roles, setRoles] = useState({});
@@ -50,6 +56,7 @@ export default function Page() {
   useEffect(() => {
     const fetchData = async () => {
       const roles = await getRole();
+      const signedInUser = await createOrGetUser();
 
       if (roles.ANGEL || roles.ADMIN) {
         const result = await getAllAngels();
@@ -57,6 +64,7 @@ export default function Page() {
       }
 
       setRoles(roles);
+      setUserData(signedInUser);
     };
     fetchData();
     // eslint-disable-next-line
@@ -94,7 +102,11 @@ export default function Page() {
     );
   }
 
-  if (!roles.ANGEL && !roles.ADMIN) {
+  if (userData !== undefined && !userData.editedProfile) {
+    return <Redirect to={`/angels/profile/${userData.id}`} />;
+  }
+
+  if (!roles.ANGEL && !roles.ADMIN && userData?.id) {
     return (
       <EmptyState
         title={'Thank you for your request!'}

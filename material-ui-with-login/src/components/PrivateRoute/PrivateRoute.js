@@ -5,6 +5,7 @@ import { Route, Redirect } from 'react-router-dom';
 
 const Protected = ({ component: Component, ...rest }) => {
   const { authenticated } = useAuth();
+
   return (
     <Route
       {...rest}
