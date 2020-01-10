@@ -191,16 +191,18 @@ const AllStartupsView = () => {
 
   const archive = async (startup, archieved) => {
     await archiveStartup(startup.id);
-    var index = users.indexOf(startup);
+    const index = users.indexOf(startup);
     if (index > -1) {
       users.splice(index, 1);
     }
     if (!archieved) {
       setUsers([...users]);
+      setArchivedStartups([...archivedStartups, startup]);
       setErrorMsg('Startup archived.');
       setErrorStatus('success');
       handleClick();
     } else {
+      setUsers([...users, startup]);
       setErrorMsg('Startup unarchived.');
       setErrorStatus('success');
       handleClick();
