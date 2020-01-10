@@ -97,7 +97,6 @@ const AllStartupsViewTable = props => {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log(user);
       setState({
         archieved: user.archived,
         vetted: user.vetted,
