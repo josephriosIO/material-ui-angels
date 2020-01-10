@@ -317,7 +317,12 @@ export async function archiveStartup(id) {
       throw new Error('User does not exist');
     }
     const copy = { ...startupToUpdate };
-    copy.archived = true;
+
+    if (startupToUpdate.archived) {
+      copy.archived = false;
+    } else {
+      copy.archived = true;
+    }
 
     return copy;
   });
