@@ -2,9 +2,10 @@ import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import {
-  getAllStartups,
+  getAllVettedStartups,
   getRole,
   createMeeting,
+  archiveStartup,
 } from '../../../backend/backend';
 import SearchBar from './SearchBar';
 import StartupDataTable from './StartupDataTable';
@@ -14,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Error from '../Errors/Error';
 import Snackbar from '@material-ui/core/Snackbar';
+import { Link } from 'react-router-dom';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -116,7 +118,7 @@ const MeetingCreator = () => {
       const usersRoles = await getRole();
 
       if (usersRoles.ADMIN || usersRoles.ANGEL) {
-        const result = await getAllStartups();
+        const result = await getAllVettedStartups();
         setUsers(result);
       }
 
@@ -145,7 +147,6 @@ const MeetingCreator = () => {
   const startupsInMeeting = startup => {
     const ids = createdMeeting.map(startups => startups.id);
     if (ids.includes(startup.id)) {
-      console.log('same id');
       return;
     }
     setCreatedMeeting([...createdMeeting, startup]);
@@ -190,8 +191,10 @@ const MeetingCreator = () => {
         <div className='empty-icon'>
           <i className='icon icon-people'></i>
         </div>
-        <p className='empty-title h5'>No Startups :(</p>
-        <p className='empty-subtitle'>Have some startups join the platform!</p>
+        <p className='empty-title h5'>No Startups that has been vetted :(</p>
+        <p className='empty-subtitle'>
+          Go vet some startups <Link to='/angels/startups'>here</Link>
+        </p>
       </div>
     );
   }
@@ -217,10 +220,11 @@ const MeetingCreator = () => {
     setErrorMsg('Saved Meeting.');
     setErrorStatus('success');
     handleClick();
+    createdMeeting.map(async startup => {
+      await archiveStartup(startup.id);
+    });
     return await createMeeting(data);
   };
-
-  console.log(form.title);
 
   return (
     <div>

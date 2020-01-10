@@ -155,6 +155,20 @@ const Navbar = () => {
                   >
                     Admin
                   </NavLink>
+                  <NavLink
+                    activeStyle={{ fontWeight: 'bold' }}
+                    style={{
+                      marginRight: '20px',
+                      textDecoration: 'none',
+                      color: 'black',
+                    }}
+                    className={classes.link}
+                    to={{
+                      pathname: `/angels/startups`,
+                    }}
+                  >
+                    Startups
+                  </NavLink>
                 </div>
               ) : null}
               <NavLink
@@ -164,7 +178,7 @@ const Navbar = () => {
                   marginRight: '20px',
                   textDecoration: 'none',
                 }}
-                to={`/angels/startups`}
+                to={`/angels/meetings`}
               >
                 <p className={classes.link}> Meetings</p>
               </NavLink>

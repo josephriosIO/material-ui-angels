@@ -167,7 +167,7 @@ const StartupDataTable = props => {
         </Table>
       </div>
       <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
+        rowsPerPageOptions={[1, 5, 25]}
         component='div'
         count={users.length}
         rowsPerPage={rowsPerPage}

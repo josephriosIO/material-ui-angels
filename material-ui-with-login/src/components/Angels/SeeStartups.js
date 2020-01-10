@@ -6,7 +6,29 @@ import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import MeetingPanels from './MeetingPanel';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 import { Link } from 'react-router-dom';
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <Typography
+      component='div'
+      role='tabpanel'
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box p={3}>{children}</Box>}
+    </Typography>
+  );
+}
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -73,29 +95,56 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
+
 export default function SeeStartups() {
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
+  const [oldMeetings, setOldMeetings] = useState([]);
+  const [current, setCurrent] = useState([]);
   const classes = useStyles();
   const { loading } = useAuth();
+  const [value, setValue] = React.useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       const usersRoles = await getRole();
 
-      if (usersRoles.ADMIN || usersRoles.ANGEL) {
-        const result = await getMeetings();
-        console.log(result);
-        const sortedDates = result.sort((a, b) => b.date - a.date);
+      const result = await getMeetings();
 
-        setUsers(sortedDates);
-      }
+      const sortedDates = result.sort((a, b) => b.date - a.date);
+      const newMeetings = sortedDates.filter(d => {
+        return new Date(d.date).getDate() >= new Date().getDate();
+      });
+      const oldDates = sortedDates.filter(d => {
+        return new Date(d.date).getTime() <= new Date().getTime();
+      });
+      const currentMeeting = sortedDates.filter(d => {
+        return (
+          new Date(d.date).getDate() === new Date().getDate() &&
+          new Date(d.date).getMonth() === new Date().getMonth() &&
+          new Date(d.date).getFullYear() === new Date().getFullYear()
+        );
+      });
+
+      setOldMeetings(oldDates);
+      setUsers(newMeetings);
+      setCurrent(currentMeeting);
 
       setRoles(usersRoles);
     };
     fetchData();
     // eslint-disable-next-line
   }, []);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   // wait for the user data to load.
   if (loading) {
@@ -155,6 +204,15 @@ export default function SeeStartups() {
             <div className={classes.root}>
               <div className={classes.flex}>
                 <h2>Meetings</h2>
+                <Tabs
+                  value={value}
+                  onChange={handleChange}
+                  aria-label='simple tabs example'
+                >
+                  <Tab label='Upcoming Meetings' {...a11yProps(0)} />
+
+                  <Tab label='Previous Meetings' {...a11yProps(1)} />
+                </Tabs>
                 {roles.ADMIN ? (
                   <Link
                     style={{
@@ -170,28 +228,31 @@ export default function SeeStartups() {
                   </Link>
                 ) : null}
               </div>
-              <div>
-                {users.map(startupsData => {
-                  const d = new Date(startupsData.date);
-                  return (
-                    <div key={d}>
-                      <div className={classes.row}>
-                        <span className={classes.date}>{d.toDateString()}</span>
-                        <div className={classes.title}>
-                          {startupsData.title}
-                        </div>
-                        <div style={{ display: 'flex', flexFlow: 'row' }}>
-                          {startupsData.startups.map((startup, idx) => (
-                            <div key={idx}>
-                              <p>{startup.companyName}</p>
-                            </div>
-                          ))}
-                        </div>
+              <TabPanel value={value} index={0}>
+                <div>
+                  {users.map(startupsData => (
+                    <MeetingPanels users={startupsData} />
+                  ))}
+                </div>
+              </TabPanel>
+              <TabPanel value={value} index={1}>
+                <div>
+                  {oldMeetings.length < 1 ? (
+                    <div className='empty'>
+                      <div className='empty-icon'>
+                        <i className='icon icon-people'></i>
                       </div>
+                      <p className='empty-title h5'>
+                        Theres is no previous meetings.
+                      </p>
                     </div>
-                  );
-                })}
-              </div>
+                  ) : (
+                    oldMeetings.map(startupsData => (
+                      <MeetingPanels users={startupsData} />
+                    ))
+                  )}
+                </div>
+              </TabPanel>
             </div>
           </Grid>
         )}
