@@ -202,6 +202,11 @@ const AllStartupsView = () => {
       setErrorStatus('success');
       handleClick();
     } else {
+      const index = archivedStartups.indexOf(startup);
+      if (index > -1) {
+        archivedStartups.splice(index, 1);
+      }
+      setArchivedStartups([...archivedStartups]);
       setUsers([...users, startup]);
       setErrorMsg('Startup unarchived.');
       setErrorStatus('success');
@@ -328,55 +333,64 @@ const AllStartupsView = () => {
         )}
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <div>
-          <div className={classes.root}>
-            <div className={classes.flex}>
-              <h2>Archived Startups</h2>
+        {archivedStartups.length < 1 ? (
+          <div className='empty'>
+            <div className='empty-icon'>
+              <i className='icon icon-people'></i>
             </div>
-            <Grid>
-              <div className={classes.tableWrapper}>
-                <Table stickyHeader aria-label='sticky table'>
-                  <TableHead>
-                    <TableRow>
-                      {columns.map(column => (
-                        <TableCell
-                          key={column.id}
-                          align={column.align}
-                          style={{ minWidth: column.minWidth }}
-                        >
-                          {column.label}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {archivedStartups
-                      .slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage,
-                      )
-                      .map(row => (
-                        <AllStartupsViewTable
-                          user={row}
-                          archived={archive}
-                          vett={vettedStartup}
-                        />
-                      ))}
-                  </TableBody>
-                </Table>
-              </div>
-              <TablePagination
-                rowsPerPageOptions={[1, 5, 25]}
-                component='div'
-                count={users.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-              />
-            </Grid>
+            <p className='empty-title h5'>No startups has been Archived.</p>
           </div>
-        </div>
+        ) : (
+          <div>
+            <div className={classes.root}>
+              <div className={classes.flex}>
+                <h2>Archived Startups</h2>
+              </div>
+              <Grid>
+                <div className={classes.tableWrapper}>
+                  <Table stickyHeader aria-label='sticky table'>
+                    <TableHead>
+                      <TableRow>
+                        {columns.map(column => (
+                          <TableCell
+                            key={column.id}
+                            align={column.align}
+                            style={{ minWidth: column.minWidth }}
+                          >
+                            {column.label}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {archivedStartups
+                        .slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage,
+                        )
+                        .map(row => (
+                          <AllStartupsViewTable
+                            user={row}
+                            archived={archive}
+                            vett={vettedStartup}
+                          />
+                        ))}
+                    </TableBody>
+                  </Table>
+                </div>
+                <TablePagination
+                  rowsPerPageOptions={[1, 5, 25]}
+                  component='div'
+                  count={users.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onChangePage={handleChangePage}
+                  onChangeRowsPerPage={handleChangeRowsPerPage}
+                />
+              </Grid>
+            </div>
+          </div>
+        )}
       </TabPanel>
     </div>
   );

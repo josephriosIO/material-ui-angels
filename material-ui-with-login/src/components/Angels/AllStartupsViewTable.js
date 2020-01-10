@@ -104,7 +104,7 @@ const AllStartupsViewTable = props => {
     };
     fetchData();
     // eslint-disable-next-line
-  }, []);
+  }, [user]);
 
   const vetStartup = () => {
     setState({ ...state, vetted: !vetted });
