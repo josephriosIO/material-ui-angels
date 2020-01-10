@@ -9,6 +9,7 @@ const startupsPrefix = 'startups__';
 const rolesPrefix = 'roles__';
 const invitesPrefix = 'invites__';
 const meetingPrefix = 'meeting__';
+const votingPrefix = 'voting__';
 
 const Roles = {
   ADMIN: 'ADMIN',
@@ -390,16 +391,47 @@ export async function getUnseenStartups() {
 /* @expose */
 export async function createMeeting(meetingInfo) {
   await validateRole([Roles.ADMIN]);
+  const meetingId = uuidv4();
   const { startups, date, title } = meetingInfo;
-  const createdMeeting = await update(`${meetingPrefix}${date}`, meeting => {
-    return {
-      title: title,
-      date: date,
-      startups: startups,
-    };
-  });
+  const createdMeeting = await update(
+    `${meetingPrefix}${meetingId}`,
+    meeting => {
+      return {
+        id: meetingId,
+        title: title,
+        date: date,
+        startups: startups,
+      };
+    },
+  );
 
   return createdMeeting;
+}
+
+/* @expose */
+export async function getMeeting(meetingId) {
+  await validateRole([Roles.ANGEL, Roles.ADMIN]);
+  const rolesQuery = await find(
+    Q.filter(Q.all(Q.key.startsWith(meetingPrefix))),
+  );
+  const userIds = rolesQuery.map(({ key, value }) => {
+    return key.slice(meetingPrefix.length, key.length);
+  });
+
+  if (userIds.length < 1) {
+    return [];
+  }
+
+  const usersQuery = await find(
+    Q.filter(
+      Q.any(
+        ...userIds.map(id => {
+          return Q.key.startsWith(`${meetingPrefix}${id}`);
+        }),
+      ),
+    ),
+  );
+  return usersQuery.filter(({ value }) => value.id === meetingId);
 }
 
 /* @expose */
@@ -426,6 +458,45 @@ export async function getMeetings() {
     ),
   );
   return usersQuery.map(({ value }) => value);
+}
+
+/* @expose */
+export async function checkIfUserVoted(meetingID) {
+  const profile = getCurrentUser(true);
+
+  return await update(`${votingPrefix}${meetingID}${profile.id}`, vote => {
+    if (vote) {
+      return true;
+    }
+    return false;
+  });
+}
+
+/* @expose */
+export async function voteOnStartup(meetingID, votes) {
+  const profile = getCurrentUser(true);
+  const meeting = await getMeeting(meetingID);
+
+  const ableToVote = await canVote(meeting.date);
+
+  if (!ableToVote) {
+    throw new Error('Not time to vote');
+  }
+
+  const addVote = await update(
+    `${votingPrefix}${meetingID}${profile.id}`,
+    vote => {
+      if (vote) {
+        throw new Error('Already voted.');
+      }
+      return {
+        id: profile.id,
+        votes,
+      };
+    },
+  );
+
+  return addVote;
 }
 
 /* @expose */

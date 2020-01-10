@@ -284,7 +284,7 @@ const MeetingCreator = () => {
             <>
               <h2>Selected startups</h2>
               {createdMeeting.map(startup => (
-                <div style={{ display: 'flex' }}>
+                <div key={startup.id} style={{ display: 'flex' }}>
                   <h6>{startup.companyName}</h6>
                   <span onClick={() => removeStartupFromMeeting(startup)}>
                     X

@@ -2,6 +2,8 @@ import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import { canVote } from '../../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
+import { Link } from 'react-router-dom';
+import VotingSystem from './VotingSystem';
 
 const useStyles = makeStyles(theme => ({
   row: {
@@ -32,6 +34,7 @@ const useStyles = makeStyles(theme => ({
 
 const MeetingPanel = ({ users }) => {
   const [vote, setVote] = useState(false);
+  const [isVoting, setIsVoting] = useState(false);
   const classes = useStyles();
   const d = new Date(users.date);
 
@@ -44,29 +47,38 @@ const MeetingPanel = ({ users }) => {
     fetchData();
   }, [vote]);
 
+  const voting = () => {
+    setIsVoting(!isVoting);
+  };
+
   return (
     <div>
-      <div key={d}>
-        <div className={classes.row}>
-          <span className={classes.date}>{d.toDateString()}</span>
-          <div className={classes.title}>{users.title}</div>
-          {vote && <span>vote now!</span>}
-          <div
-            style={{
-              display: 'flex',
-              flexFlow: 'row',
-              alignItems: 'flex-start',
-              justifyContent: 'space-around',
-            }}
-          >
-            {users.startups.map((startup, idx) => (
-              <div key={idx}>
-                <p style={{ marginRight: '5px' }}>{startup.companyName}</p>
-              </div>
-            ))}
+      {isVoting ? (
+        <VotingSystem users={users} />
+      ) : (
+        <div key={d}>
+          <div className={classes.row}>
+            <span className={classes.date}>{d.toDateString()}</span>
+            <div className={classes.title}>{users.title}</div>
+            {vote && <button onClick={voting}>Vote here</button>}
+
+            <div
+              style={{
+                display: 'flex',
+                flexFlow: 'row',
+                alignItems: 'flex-start',
+                justifyContent: 'space-around',
+              }}
+            >
+              {users.startups.map((startup, idx) => (
+                <div key={idx}>
+                  <p style={{ marginRight: '5px' }}>{startup.companyName}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
