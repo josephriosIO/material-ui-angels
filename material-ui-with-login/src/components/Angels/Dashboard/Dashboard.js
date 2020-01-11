@@ -15,7 +15,7 @@ import DashboardTable from './DashboardTable';
 
 const useStyles = makeStyles(theme => ({
   heroContent: {
-    padding: theme.spacing(8, 0, 6),
+    padding: '64px 50px',
   },
 }));
 

@@ -86,20 +86,7 @@ const useStyles = makeStyles(theme => ({
       listStyle: 'none',
     },
   },
-  heroContent: {
-    padding: theme.spacing(8, 0, 6),
-  },
-  cardHeader: {
-    backgroundColor: theme.palette.grey[200],
-  },
-  root: {
-    overflowX: 'auto',
-    marginRight: 'auto',
-    marginLeft: 'auto',
-    marginTop: '50px',
-    padding: '10px',
-    margin: '10px',
-  },
+
   tableWrapper: {
     maxHeight: 440,
     overflow: 'auto',
@@ -110,27 +97,11 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
   },
-  addBtn: {
-    width: '100px',
-    height: '55px',
-    fontSize: '16px',
-    textTransform: 'uppercase',
-    color: '#000',
-    background: '#eee !',
-    border: '1px solid #000',
-    cursor: 'pointer',
-
-    '&:disabled': {
-      background: '#d3d3d3 !important',
-      cursor: 'default',
-      border: '0',
-    },
+  indicator: {
+    backgroundColor: '#000',
   },
-  flex: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexWrap: 'wrap',
+  padding: {
+    padding: '30px',
   },
 }));
 
@@ -147,17 +118,22 @@ const AllStartupsView = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const usersRoles = await getRole();
+      try {
+        const usersRoles = await getRole();
 
-      if (usersRoles.ADMIN) {
-        const result = await getAllStartups();
-        const users = await getAllArchivedStartups();
+        if (usersRoles.ADMIN) {
+          const result = await getAllStartups();
+          const users = await getAllArchivedStartups();
 
-        setUsers(result);
-        setArchivedStartups(users);
+          setUsers(result);
+          setArchivedStartups(users);
+        }
+      } catch (err) {
+        console.log(err);
       }
     };
     fetchData();
+
     // eslint-disable-next-line
   }, [users]);
 
@@ -240,7 +216,7 @@ const AllStartupsView = () => {
   }
 
   return (
-    <div>
+    <div className={classes.padding}>
       <span>
         <Snackbar
           anchorOrigin={{
@@ -258,14 +234,16 @@ const AllStartupsView = () => {
           />
         </Snackbar>
       </span>
-      <div>
+      <div style={{ padding: '20px' }}>
         <Tabs
           value={value}
           onChange={handleChange}
-          aria-label='simple tabs example'
+          classes={{
+            indicator: classes.indicator,
+          }}
         >
+          >
           <Tab label='Startups' {...a11yProps(0)} />
-
           <Tab label='Archived Startups' {...a11yProps(1)} />
         </Tabs>
       </div>
@@ -281,9 +259,6 @@ const AllStartupsView = () => {
           </div>
         ) : (
           <div className={classes.root}>
-            <div className={classes.flex}>
-              <h2>Startups</h2>
-            </div>
             <Grid>
               <div className={classes.tableWrapper}>
                 <Table stickyHeader aria-label='sticky table'>
@@ -308,6 +283,7 @@ const AllStartupsView = () => {
                       )
                       .map(row => (
                         <AllStartupsViewTable
+                          key={row.id}
                           user={row}
                           archived={archive}
                           vett={vettedStartup}
@@ -340,9 +316,6 @@ const AllStartupsView = () => {
         ) : (
           <div>
             <div className={classes.root}>
-              <div className={classes.flex}>
-                <h2>Archived Startups</h2>
-              </div>
               <Grid>
                 <div className={classes.tableWrapper}>
                   <Table stickyHeader aria-label='sticky table'>
@@ -367,6 +340,7 @@ const AllStartupsView = () => {
                         )
                         .map(row => (
                           <AllStartupsViewTable
+                            key={row.id}
                             user={row}
                             archived={archive}
                             vett={vettedStartup}

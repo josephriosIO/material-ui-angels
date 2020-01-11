@@ -178,7 +178,7 @@ export default function SeeStartups() {
               <TabPanel value={value} index={0}>
                 <div>
                   {users.map(startupsData => (
-                    <MeetingPanels users={startupsData} />
+                    <MeetingPanels key={startupsData.id} users={startupsData} />
                   ))}
                 </div>
               </TabPanel>
@@ -195,7 +195,10 @@ export default function SeeStartups() {
                     </div>
                   ) : (
                     oldMeetings.map(startupsData => (
-                      <MeetingPanels users={startupsData} />
+                      <MeetingPanels
+                        key={startupsData.id}
+                        users={startupsData}
+                      />
                     ))
                   )}
                 </div>
