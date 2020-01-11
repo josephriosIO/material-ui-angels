@@ -31,21 +31,6 @@ function TabPanel(props) {
 }
 
 const useStyles = makeStyles(theme => ({
-  '@global': {
-    body: {
-      backgroundColor: theme.palette.common.white,
-    },
-    ul: {
-      margin: 0,
-      padding: 0,
-    },
-    li: {
-      listStyle: 'none',
-    },
-  },
-  cardHeader: {
-    backgroundColor: theme.palette.grey[200],
-  },
   root: {
     overflowX: 'auto',
     marginRight: 'auto',
@@ -54,44 +39,16 @@ const useStyles = makeStyles(theme => ({
     padding: '10px',
     margin: '10px',
   },
-  row: {
-    padding: '16px 16px 0',
-    border: '1px solid rgba(0,0,0,.12)',
-    margin: '20px 0',
-  },
-  title: {
-    textTransform: 'uppercase',
-    fontSize: '13px',
-    fontWeight: 600,
-    lineHeight: 1.6,
-    letterSpacing: '-.02em',
-    wordSpacing: '.1em',
-  },
-  date: {
-    stroke: 'transparent',
-    fill: 'rgba(0,0,0,.87)',
-    color: 'rgba(0,0,0,.87)',
-    fontSize: '13px',
-    fontWeight: 600,
-    lineHeight: 1.6,
-    letterSpacing: '-.02em',
-    wordSpacing: '.1em',
-    textTransform: 'uppercase',
-  },
-  tableWrapper: {
-    maxHeight: '100%',
-    overflow: 'auto',
-  },
-  tableRow: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   flex: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     flexWrap: 'wrap',
+  },
+  link: {
+    textDecoration: 'none !important',
+    color: '#000 !important',
+    borderBottom: '1px solid #000',
   },
 }));
 
@@ -183,11 +140,7 @@ export default function SeeStartups() {
             <p className='empty-subtitle'>
               {roles.ADMIN ? (
                 <Link
-                  style={{
-                    textDecoration: 'none',
-                    color: 'black',
-                    borderBottom: '1px solid #000',
-                  }}
+                  className={classes.link}
                   to={{
                     pathname: `/angels/createmeeting`,
                   }}
@@ -213,11 +166,7 @@ export default function SeeStartups() {
                 </Tabs>
                 {roles.ADMIN ? (
                   <Link
-                    style={{
-                      textDecoration: 'none',
-                      color: 'black',
-                      borderBottom: '1px solid #000',
-                    }}
+                    className={classes.link}
                     to={{
                       pathname: `/angels/createmeeting`,
                     }}

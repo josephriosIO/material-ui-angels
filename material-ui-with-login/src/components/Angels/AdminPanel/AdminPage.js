@@ -27,9 +27,6 @@ const useStyles = makeStyles(theme => ({
       flexFlow: 'column',
     },
   },
-  heroContent: {
-    padding: theme.spacing(8, 0, 6),
-  },
   tableWrapper: {
     overflowX: 'auto',
     height: '80%',
@@ -77,15 +74,6 @@ const useStyles = makeStyles(theme => ({
     [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
       width: '320px',
       height: '30px',
-    },
-  },
-  column: {
-    margin: '0 20px',
-    width: '50%',
-    display: 'flex',
-    flexFlow: 'column',
-    [theme.breakpoints.down(600 + theme.spacing(2) * 2)]: {
-      width: '100%',
     },
   },
 }));

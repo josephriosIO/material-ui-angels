@@ -37,24 +37,6 @@ const columns = [
 ];
 
 const useStyles = makeStyles(theme => ({
-  '@global': {
-    body: {
-      backgroundColor: theme.palette.common.white,
-    },
-    ul: {
-      margin: 0,
-      padding: 0,
-    },
-    li: {
-      listStyle: 'none',
-    },
-  },
-  heroContent: {
-    padding: theme.spacing(8, 0, 6),
-  },
-  cardHeader: {
-    backgroundColor: theme.palette.grey[200],
-  },
   root: {
     overflowX: 'auto',
     marginRight: 'auto',

@@ -25,6 +25,19 @@ const useStyles = makeStyles(theme => ({
     flexFlow: 'column',
     alignItems: 'flex-start',
   },
+  avatarContainer: {
+    display: 'flex',
+    flexFlow: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  usernameStyle: {
+    marginBottom: '15px',
+  },
+  flex: {
+    display: 'flex',
+    flexFlow: 'column',
+  },
 }));
 
 const DisplayUsers = props => {
@@ -67,16 +80,9 @@ const DisplayUsers = props => {
       <Grid item xs={12}>
         <div className={classes.infoHolder}>
           <Typography>
-            <div
-              style={{
-                display: 'flex',
-                flexFlow: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
+            <div className={classes.avatarContainer}>
               <Avatar src={user.img} alt={user.name} />
-              <p style={{ marginBottom: '15px' }}>{user.name}</p>
+              <p className={classes.usernameStyle}>{user.name}</p>
             </div>
           </Typography>
 
@@ -89,7 +95,7 @@ const DisplayUsers = props => {
             <p>{`${user.location === '' ? 'N/A' : user.location}`}</p>
           </div>
 
-          <div style={{ display: 'flex', flexFlow: 'column' }}>
+          <div className={classes.flex}>
             <FormControlLabel
               control={
                 <Checkbox

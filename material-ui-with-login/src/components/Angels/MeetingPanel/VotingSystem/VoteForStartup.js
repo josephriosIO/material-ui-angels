@@ -1,5 +1,15 @@
 import '@reshuffle/code-transform/macro';
 import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  container: {
+    display: 'flex',
+    flexFlow: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-around',
+  },
+}));
 
 const VoteForStartup = ({
   startup,
@@ -8,15 +18,9 @@ const VoteForStartup = ({
   groupDisabled,
   setGroupVotesToState,
 }) => {
+  const classes = useStyles();
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexFlow: 'row',
-        alignItems: 'flex-start',
-        justifyContent: 'space-around',
-      }}
-    >
+    <div className={classes.container}>
       <p>{startup.companyName}</p>
 
       <button

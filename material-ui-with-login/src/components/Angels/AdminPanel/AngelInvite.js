@@ -5,6 +5,17 @@ import { consumeInvite } from '../../../../backend/backend';
 import { Redirect } from 'react-router-dom';
 import Snackbar from '@material-ui/core/Snackbar';
 import Error from '../../Errors/Error';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  fullEmptyScreen: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    height: '100vh',
+  },
+}));
 
 const AngelInvite = props => {
   const { getLoginURL, authenticated } = useAuth();
@@ -14,6 +25,7 @@ const AngelInvite = props => {
   const [errorStatus, setErrorStatus] = useState('');
   const [open, setOpen] = useState(false);
   const [count, setCount] = useState(0);
+  const classes = useStyles();
 
   const handleClick = () => {
     setOpen(true);
@@ -75,16 +87,7 @@ const AngelInvite = props => {
             message={errorMsg}
           />
         </Snackbar>
-        <div
-          className='empty'
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            height: '100vh',
-          }}
-        >
+        <div className={`empty ${classes.fullEmptyScreen}`}>
           <div>
             <div className='empty-icon'>
               <i className='icon icon-people'></i>

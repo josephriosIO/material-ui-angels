@@ -14,35 +14,8 @@ import { Redirect } from 'react-router-dom';
 import DashboardTable from './DashboardTable';
 
 const useStyles = makeStyles(theme => ({
-  '@global': {
-    body: {
-      backgroundColor: theme.palette.common.white,
-    },
-    ul: {
-      margin: 0,
-      padding: 0,
-    },
-    li: {
-      listStyle: 'none',
-    },
-  },
   heroContent: {
     padding: theme.spacing(8, 0, 6),
-  },
-  cardHeader: {
-    backgroundColor: theme.palette.grey[200],
-  },
-  root: {
-    overflowX: 'auto',
-    marginRight: 'auto',
-    marginLeft: 'auto',
-    marginTop: '50px',
-    padding: '10px',
-    margin: '10px',
-  },
-  tableWrapper: {
-    maxHeight: 440,
-    overflow: 'auto',
   },
 }));
 

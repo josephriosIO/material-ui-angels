@@ -96,6 +96,9 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     flexWrap: 'wrap',
   },
+  onlyFlex: {
+    display: 'flex',
+  },
 }));
 
 const MeetingCreator = () => {
@@ -284,7 +287,7 @@ const MeetingCreator = () => {
             <>
               <h2>Selected startups</h2>
               {createdMeeting.map(startup => (
-                <div key={startup.id} style={{ display: 'flex' }}>
+                <div key={startup.id} className={classes.onlyFlex}>
                   <h6>{startup.companyName}</h6>
                   <span onClick={() => removeStartupFromMeeting(startup)}>
                     X
