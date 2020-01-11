@@ -117,9 +117,16 @@ export default function SeeStartups() {
       const result = await getMeetings();
 
       const sortedDates = result.sort((a, b) => b.date - a.date);
+
       const newMeetings = sortedDates.filter(d => {
-        return new Date(d.date).getDate() >= new Date().getDate();
+        let meetingDate = new Date(d.date);
+        let currentDate = new Date();
+        meetingDate.setHours(0, 0, 0, 0);
+        currentDate.setHours(0, 0, 0, 0);
+
+        return meetingDate >= currentDate;
       });
+
       const oldDates = sortedDates.filter(d => {
         return new Date(d.date).getTime() <= new Date().getTime();
       });
