@@ -187,11 +187,9 @@ export default function SeeStartups() {
                   {oldMeetings.length < 1 ? (
                     <div className='empty'>
                       <div className='empty-icon'>
-                        <i className='icon icon-people'></i>
+                        <i class='fas fa-users'></i>
                       </div>
-                      <p className='empty-title h5'>
-                        Theres is no previous meetings.
-                      </p>
+                      <p className='empty-title h5'>No previous meetings.</p>
                     </div>
                   ) : (
                     oldMeetings.map(startupsData => (
