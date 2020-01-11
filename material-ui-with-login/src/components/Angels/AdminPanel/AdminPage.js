@@ -110,7 +110,8 @@ const AdminPage = props => {
     textAreaRef.current.select();
     document.execCommand('copy');
 
-    e.target.focus();
+    e.target.blur();
+
     setCopySuccess('Copied!');
   }
 

@@ -76,7 +76,7 @@ const DisplayUsers = props => {
   };
 
   return (
-    <Grid container spacing={3}>
+    <Grid container>
       <Grid item xs={12}>
         <div className={classes.infoHolder}>
           <Typography>

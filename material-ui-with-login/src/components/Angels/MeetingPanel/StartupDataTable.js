@@ -111,7 +111,7 @@ const StartupDataTable = props => {
             {users
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map(row => (
-                <TableRow hover role='checkbox' tabIndex={-1} key={row.id}>
+                <TableRow tabIndex={-1} key={row.id}>
                   {columns.map(column => {
                     let value = row[column.id];
 
