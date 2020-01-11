@@ -1,5 +1,5 @@
 import '@reshuffle/code-transform/macro';
-import React, { useState } from 'react';
+import React from 'react';
 
 const VoteForStartup = ({
   startup,

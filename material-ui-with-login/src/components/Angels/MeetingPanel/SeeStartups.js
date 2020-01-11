@@ -1,7 +1,7 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
-import { getRole, getMeetings } from '../../../backend/backend';
+import { getRole, getMeetings } from '../../../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
@@ -106,7 +106,6 @@ export default function SeeStartups() {
   const [users, setUsers] = useState([]);
   const [roles, setRoles] = useState([]);
   const [oldMeetings, setOldMeetings] = useState([]);
-  const [current, setCurrent] = useState([]);
   const classes = useStyles();
   const { loading } = useAuth();
   const [value, setValue] = React.useState(0);
@@ -124,17 +123,9 @@ export default function SeeStartups() {
       const oldDates = sortedDates.filter(d => {
         return new Date(d.date).getTime() <= new Date().getTime();
       });
-      const currentMeeting = sortedDates.filter(d => {
-        return (
-          new Date(d.date).getDate() === new Date().getDate() &&
-          new Date(d.date).getMonth() === new Date().getMonth() &&
-          new Date(d.date).getFullYear() === new Date().getFullYear()
-        );
-      });
 
       setOldMeetings(oldDates);
       setUsers(newMeetings);
-      setCurrent(currentMeeting);
 
       setRoles(usersRoles);
     };

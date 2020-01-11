@@ -1,14 +1,14 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import Dashboard from './Dashboard';
-import AdminPage from './AdminPage';
+import Dashboard from './Dashboard/Dashboard';
+import AdminPage from './AdminPanel/AdminPage';
 import Profile from './Profile/Profile';
 import NavBar from './Nav/NavBar';
-import SeeStartups from './SeeStartups';
+import SeeStartups from './MeetingPanel/SeeStartups';
 import Protected from '../PrivateRoute/PrivateRoute';
-import MeetingCreator from './MeetingCreator';
-import AllStartupsView from './AllStartupsView';
-import VotingSystem from './VotingSystem';
+import MeetingCreator from './MeetingPanel/MeetingCreator';
+import AllStartupsView from './StartupsView/AllStartupsView';
+import VotingSystem from './MeetingPanel/VotingSystem/VotingSystem';
 
 const Routes = props => {
   return (

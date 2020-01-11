@@ -7,7 +7,6 @@ import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
@@ -55,6 +54,7 @@ const StartupProfile = props => {
       <div className={classes.center}>
         <Card className={classes.card}>
           <CardActionArea>
+            ``
             <CardContent>
               <Typography gutterBottom variant='h5' component='h2'>
                 {item.companyName ? item.companyName : 'Not Entered'}

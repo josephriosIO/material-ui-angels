@@ -6,14 +6,14 @@ import {
   getRole,
   createMeeting,
   archiveStartup,
-} from '../../../backend/backend';
-import SearchBar from './SearchBar';
+} from '../../../../backend/backend';
+import SearchBar from '../HelperComponents/SearchBar';
 import StartupDataTable from './StartupDataTable';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import Error from '../Errors/Error';
+import Error from '../../Errors/Error';
 import Snackbar from '@material-ui/core/Snackbar';
 import { Link } from 'react-router-dom';
 

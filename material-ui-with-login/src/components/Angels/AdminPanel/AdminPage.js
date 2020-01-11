@@ -1,8 +1,8 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect, useRef } from 'react';
 import DisplayUsers from './DisplayUsers';
-import Error from '../Errors/Error';
-import SearchBar from './SearchBar';
+import Error from '../../Errors/Error';
+import SearchBar from '../HelperComponents/SearchBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -13,7 +13,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import {
   getAllUsersThatAreNotAStartup,
   createOrGetInvite,
-} from '../../../backend/backend';
+} from '../../../../backend/backend';
 
 const useStyles = makeStyles(theme => ({
   header: {

@@ -104,16 +104,16 @@ const AllStartupsViewTable = props => {
     };
     fetchData();
     // eslint-disable-next-line
-  }, [user]);
+  }, []);
 
   const vetStartup = () => {
     setState({ ...state, vetted: !vetted });
-    return props.vett(user, vetted);
+    props.vett(user, vetted);
   };
 
   const archivedStartup = () => {
     setState({ ...state, archieved: !archieved });
-    return props.archived(user, archieved);
+    props.archived(user, archieved);
   };
 
   return (

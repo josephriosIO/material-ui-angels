@@ -1,9 +1,8 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
-import { canVote } from '../../../backend/backend';
+import { canVote } from '../../../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
-import VotingSystem from './VotingSystem';
+import VotingSystem from './VotingSystem/VotingSystem';
 
 const useStyles = makeStyles(theme => ({
   row: {
@@ -30,6 +29,15 @@ const useStyles = makeStyles(theme => ({
     wordSpacing: '.1em',
     textTransform: 'uppercase',
   },
+  startupView: {
+    display: 'flex',
+    flexFlow: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-around',
+  },
+  startupLevel: {
+    marginRight: '5px',
+  },
 }));
 
 const MeetingPanel = ({ users }) => {
@@ -40,12 +48,12 @@ const MeetingPanel = ({ users }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const test = await canVote(users.date);
+      const result = await canVote(users.date);
 
-      setVote(test);
+      setVote(result);
     };
     fetchData();
-  }, [vote]);
+  }, [users]);
 
   const voting = () => {
     setIsVoting(!isVoting);
@@ -62,17 +70,10 @@ const MeetingPanel = ({ users }) => {
             <div className={classes.title}>{users.title}</div>
             {vote && <button onClick={voting}>Vote here</button>}
 
-            <div
-              style={{
-                display: 'flex',
-                flexFlow: 'row',
-                alignItems: 'flex-start',
-                justifyContent: 'space-around',
-              }}
-            >
+            <div className={classes.startupView}>
               {users.startups.map((startup, idx) => (
                 <div key={idx}>
-                  <p style={{ marginRight: '5px' }}>{startup.companyName}</p>
+                  <p className={classes.startupLevel}>{startup.companyName}</p>
                 </div>
               ))}
             </div>

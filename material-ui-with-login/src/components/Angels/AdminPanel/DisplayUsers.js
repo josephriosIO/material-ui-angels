@@ -10,7 +10,7 @@ import {
   getRolesOfUsers,
   makeUserAdmin,
   makeUserAngel,
-} from '../../../backend/backend';
+} from '../../../../backend/backend';
 
 const useStyles = makeStyles(theme => ({
   infoHolder: {

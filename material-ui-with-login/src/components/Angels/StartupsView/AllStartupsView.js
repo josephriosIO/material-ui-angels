@@ -6,9 +6,9 @@ import {
   archiveStartup,
   vetStartup,
   getAllArchivedStartups,
-} from '../../../backend/backend';
+} from '../../../../backend/backend';
 import AllStartupsViewTable from './AllStartupsViewTable';
-import Error from '../Errors/Error';
+import Error from '../../Errors/Error';
 import { makeStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
 import Grid from '@material-ui/core/Grid';
@@ -137,7 +137,6 @@ const useStyles = makeStyles(theme => ({
 const AllStartupsView = () => {
   const [users, setUsers] = useState([]);
   const [archivedStartups, setArchivedStartups] = useState([]);
-  const [roles, setRoles] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
   const [errorStatus, setErrorStatus] = useState('');
   const [open, setOpen] = useState(false);
@@ -157,12 +156,10 @@ const AllStartupsView = () => {
         setUsers(result);
         setArchivedStartups(users);
       }
-
-      setRoles(usersRoles);
     };
     fetchData();
     // eslint-disable-next-line
-  }, []);
+  }, [users]);
 
   const handleClick = () => {
     setOpen(true);

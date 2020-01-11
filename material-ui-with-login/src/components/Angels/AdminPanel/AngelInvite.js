@@ -1,12 +1,12 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
-import { consumeInvite } from '../../../backend/backend';
+import { consumeInvite } from '../../../../backend/backend';
 import { Redirect } from 'react-router-dom';
 import Snackbar from '@material-ui/core/Snackbar';
-import Error from '../Errors/Error';
+import Error from '../../Errors/Error';
 
-const AngelInvite = (props) => {
+const AngelInvite = props => {
   const { getLoginURL, authenticated } = useAuth();
   const [consumed, setConsumed] = useState(false);
   const [failed, setFailed] = useState(false);
@@ -14,7 +14,7 @@ const AngelInvite = (props) => {
   const [errorStatus, setErrorStatus] = useState('');
   const [open, setOpen] = useState(false);
   const [count, setCount] = useState(0);
-  
+
   const handleClick = () => {
     setOpen(true);
   };
@@ -34,16 +34,18 @@ const AngelInvite = (props) => {
           const urlPath = props.location.pathname;
           const invite = urlPath.slice(8);
           const invited = await consumeInvite(invite);
-  
+
           if (invited) {
             return setConsumed(true);
           }
         } catch (err) {
           console.error(err);
           setFailed(true);
-          setErrorMsg('invite has been used or is invalid. Please ask admin for new invite link.');
+          setErrorMsg(
+            'invite has been used or is invalid. Please ask admin for new invite link.',
+          );
           setErrorStatus('error');
-          handleClick()
+          handleClick();
           setCount(count + 1);
         }
       }
@@ -51,11 +53,10 @@ const AngelInvite = (props) => {
     doInviteThings();
   }
 
-  
   if (consumed) {
     return <Redirect to='/angels' />;
   }
-  
+
   if (!consumed) {
     return (
       <>
@@ -68,32 +69,39 @@ const AngelInvite = (props) => {
           autoHideDuration={5000}
           onClose={handleClose}
         >
-          <Error onClose={handleClose}
-                 variant={errorStatus}
-                 message={errorMsg}
+          <Error
+            onClose={handleClose}
+            variant={errorStatus}
+            message={errorMsg}
           />
         </Snackbar>
-        <div className='empty' 
-             style={{ display: 'flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'center', 
-                      flexDirection: 'column', 
-                      height: '100vh' }}
-         >
+        <div
+          className='empty'
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            height: '100vh',
+          }}
+        >
           <div>
             <div className='empty-icon'>
               <i className='icon icon-people'></i>
             </div>
-            <p className='empty-title h5'>You been invited to the J-Venture community!</p>
-            <p className='empty-subtitle'>Please login to get your memebership invitation accepted.</p>
+            <p className='empty-title h5'>
+              You been invited to the J-Venture community!
+            </p>
+            <p className='empty-subtitle'>
+              Please login to get your memebership invitation accepted.
+            </p>
             <a href={getLoginURL()}>Login</a>
           </div>
-      </div>
+        </div>
       </>
     );
   }
-  
-  
+
   return <Redirect to='/angels' />;
 };
 export default AngelInvite;

@@ -1,6 +1,10 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
-import { getMeeting, getRole, voteOnStartup } from '../../../backend/backend';
+import {
+  getMeeting,
+  voteOnStartup,
+  checkIfUserVoted,
+} from '../../../../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
 import VoteForStartup from './VoteForStartup';
 
@@ -33,9 +37,9 @@ const useStyles = makeStyles(theme => ({
 
 const VotingSystem = ({ users }) => {
   const [startups, setStartups] = useState([]);
-  const [roles, setRoles] = useState([]);
   const [userDisabled, setUserDisabled] = useState(false);
   const [groupdisabled, setGroupDisabled] = useState(false);
+  const [hasUserVoted, setHasUserVoted] = useState(false);
   const [userVote, setUserVote] = useState({
     userVote: 0,
     startup: {},
@@ -50,28 +54,23 @@ const VotingSystem = ({ users }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const usersRoles = await getRole();
-
+      const hasVoted = await checkIfUserVoted(id);
       const result = await getMeeting(id);
 
-      console.log(result);
+      setHasUserVoted(hasVoted);
 
       setStartups(result);
-
-      setRoles(usersRoles);
     };
     fetchData();
     // eslint-disable-next-line
   }, []);
 
   const setUserVotesToState = (vote, startup) => {
-    console.log(vote, startup);
     setUserVote({ userVote: vote, startup: startup });
     setUserDisabled(!userDisabled);
   };
 
   const setGroupVotesToState = (vote, startup) => {
-    console.log(vote, startup);
     setGroupVote({ groupVote: vote, startup: startup });
     setGroupDisabled(!groupdisabled);
   };
@@ -86,15 +85,28 @@ const VotingSystem = ({ users }) => {
     setGroupDisabled(!groupdisabled);
   };
 
-  const confirmVotes = async votes => {
+  const confirmVotes = async () => {
+    const votes = {
+      userVote,
+      groupVote,
+    };
     try {
       await voteOnStartup(id, votes);
+      setHasUserVoted(true);
     } catch (err) {
       console.log(err);
       console.log('already voted or not time to vote yet');
     }
   };
-  console.log(userVote);
+
+  if (hasUserVoted) {
+    return (
+      <div>
+        <p>Thanks for voting!</p>
+      </div>
+    );
+  }
+
   return (
     <>
       {startups.map(({ value }) => {
@@ -127,7 +139,7 @@ const VotingSystem = ({ users }) => {
                 />
               ))}
             </div>
-            <button>Submit Votes</button>
+            <button onClick={confirmVotes}>Submit Votes</button>
           </div>
         );
       })}

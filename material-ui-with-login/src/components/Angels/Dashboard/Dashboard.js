@@ -5,11 +5,11 @@ import {
   getAllAngels,
   getRole,
   createOrGetUser,
-} from '../../../backend/backend';
+} from '../../../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
-import EmptyState from './EmptyState';
+import EmptyState from '../EmptyStates/EmptyState';
 import { Redirect } from 'react-router-dom';
 import DashboardTable from './DashboardTable';
 
@@ -70,7 +70,6 @@ export default function Page() {
     // eslint-disable-next-line
   }, []);
 
-  // wait for the user data to load.
   if (loading) {
     return (
       <div>

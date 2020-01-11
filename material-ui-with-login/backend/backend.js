@@ -464,12 +464,12 @@ export async function getMeetings() {
 export async function checkIfUserVoted(meetingID) {
   const profile = getCurrentUser(true);
 
-  return await update(`${votingPrefix}${meetingID}${profile.id}`, vote => {
-    if (vote) {
-      return true;
-    }
-    return false;
-  });
+  const voted = await get(`${votingPrefix}${meetingID}${profile.id}`);
+
+  if (voted) {
+    return true;
+  }
+  return false;
 }
 
 /* @expose */
@@ -477,7 +477,7 @@ export async function voteOnStartup(meetingID, votes) {
   const profile = getCurrentUser(true);
   const meeting = await getMeeting(meetingID);
 
-  const ableToVote = await canVote(meeting.date);
+  const ableToVote = await canVote(meeting[0].value.date);
 
   if (!ableToVote) {
     throw new Error('Not time to vote');
