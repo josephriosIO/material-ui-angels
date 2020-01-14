@@ -39,6 +39,23 @@ const useStyles = makeStyles(theme => ({
   startupLevel: {
     marginRight: '5px',
   },
+  topContent: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  voteBtn: {
+    color: '#000',
+    cursor: 'pointer',
+    borderBottom: '1px solid #000',
+    backgroundColor: 'none',
+    borderColor: '#eee',
+    borderWidth: 0,
+  },
+  itemHolder: {
+    display: 'flex',
+    flexFlow: 'column',
+  },
 }));
 
 const MeetingPanel = ({ users, roles }) => {
@@ -67,19 +84,29 @@ const MeetingPanel = ({ users, roles }) => {
       ) : (
         <div key={d}>
           <div className={classes.row}>
-            <span className={classes.date}>{d.toDateString()}</span>
-            <div className={classes.title}>{users.title}</div>
-            {vote && <button onClick={voting}>Vote here</button>}
-            {roles.ADMIN ? (
-              <Link
-                to={{
-                  pathname: `/angels/meeting/${users.id}`,
-                  meeting: { id: users.id },
-                }}
-              >
-                ADMIN
-              </Link>
-            ) : null}
+            <div className={classes.topContent}>
+              <div>
+                <span className={classes.date}>{d.toDateString()}</span>
+                <div className={classes.title}>{users.title}</div>
+              </div>
+              <div className={classes.itemHolder}>
+                {roles.ADMIN && vote ? (
+                  <Link
+                    to={{
+                      pathname: `/angels/meeting/${users.id}`,
+                      meeting: { id: users.id },
+                    }}
+                  >
+                    Check Votes
+                  </Link>
+                ) : null}
+                {vote && (
+                  <button className={classes.voteBtn} onClick={voting}>
+                    Vote here
+                  </button>
+                )}
+              </div>
+            </div>
 
             <div className={classes.startupView}>
               {users.startups.map((startup, idx) => (

@@ -74,7 +74,9 @@ export default function SeeStartups() {
       if (usersRoles.ADMIN || usersRoles.ANGEL) {
         const result = await getMeetings();
 
-        const sortedDates = result.sort((a, b) => b.date - a.date);
+        const sortedDates = result.sort(
+          (a, b) => new Date(b.date) - new Date(a.date),
+        );
 
         const newMeetings = sortedDates.filter(d => {
           let meetingDate = new Date(d.date);
@@ -90,7 +92,7 @@ export default function SeeStartups() {
         });
 
         setOldMeetings(oldDates);
-        setUsers(newMeetings);
+        setUsers(newMeetings.reverse());
       }
 
       setRoles(usersRoles);
