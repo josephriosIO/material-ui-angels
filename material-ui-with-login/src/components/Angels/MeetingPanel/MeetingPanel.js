@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { canVote } from '../../../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
 import VotingSystem from './VotingSystem/VotingSystem';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   row: {
@@ -40,7 +41,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const MeetingPanel = ({ users }) => {
+const MeetingPanel = ({ users, roles }) => {
   const [vote, setVote] = useState(false);
   const [isVoting, setIsVoting] = useState(false);
   const classes = useStyles();
@@ -69,6 +70,16 @@ const MeetingPanel = ({ users }) => {
             <span className={classes.date}>{d.toDateString()}</span>
             <div className={classes.title}>{users.title}</div>
             {vote && <button onClick={voting}>Vote here</button>}
+            {roles.ADMIN ? (
+              <Link
+                to={{
+                  pathname: `/angels/meeting/${users.id}`,
+                  meeting: { id: users.id },
+                }}
+              >
+                ADMIN
+              </Link>
+            ) : null}
 
             <div className={classes.startupView}>
               {users.startups.map((startup, idx) => (

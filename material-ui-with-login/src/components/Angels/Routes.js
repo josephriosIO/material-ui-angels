@@ -9,6 +9,7 @@ import Protected from '../PrivateRoute/PrivateRoute';
 import MeetingCreator from './MeetingPanel/MeetingCreator';
 import AllStartupsView from './StartupsView/AllStartupsView';
 import VotingSystem from './MeetingPanel/VotingSystem/VotingSystem';
+import AdminMeetingPanel from './MeetingPanel/AdminMeetingPanel';
 
 const Routes = props => {
   return (
@@ -30,6 +31,11 @@ const Routes = props => {
         exact
         path={`${props.match.path}/meetings`}
         component={SeeStartups}
+      />
+      <Protected
+        exact
+        path={`${props.match.path}/meeting/:id`}
+        component={AdminMeetingPanel}
       />
       <Protected
         exact

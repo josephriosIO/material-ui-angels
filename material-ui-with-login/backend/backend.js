@@ -27,6 +27,32 @@ const makeDefaultRole = () => {
   }, {});
 };
 
+async function getAngels() {
+  const rolesQuery = await find(
+    Q.filter(Q.all(Q.key.startsWith(rolesPrefix), Q.value.ANGEL.eq(true))),
+  );
+
+  const userIds = rolesQuery.map(({ key, value }) => {
+    return key.slice(rolesPrefix.length, key.length);
+  });
+
+  if (userIds.length < 1) {
+    return [];
+  }
+
+  const usersQuery = await find(
+    Q.filter(
+      Q.any(
+        ...userIds.map(id => {
+          return Q.key.startsWith(`${usersPrefix}${id}`);
+        }),
+      ),
+    ),
+  );
+
+  return usersQuery.map(({ value }) => value);
+}
+
 async function validateRole(roles) {
   const user = getCurrentUser(true);
   const userRoles =
@@ -195,29 +221,10 @@ export async function getAllStartups() {
 /* @expose */
 export async function getAllAngels() {
   await validateRole([Roles.ANGEL, Roles.ADMIN]);
-  const rolesQuery = await find(
-    Q.filter(Q.all(Q.key.startsWith(rolesPrefix), Q.value.ANGEL.eq(true))),
-  );
 
-  const userIds = rolesQuery.map(({ key, value }) => {
-    return key.slice(rolesPrefix.length, key.length);
-  });
+  const angels = await getAngels();
 
-  if (userIds.length < 1) {
-    return [];
-  }
-
-  const usersQuery = await find(
-    Q.filter(
-      Q.any(
-        ...userIds.map(id => {
-          return Q.key.startsWith(`${usersPrefix}${id}`);
-        }),
-      ),
-    ),
-  );
-
-  return usersQuery.map(({ value }) => value);
+  return angels;
 }
 
 /* @expose */
@@ -470,6 +477,53 @@ export async function checkIfUserVoted(meetingID) {
     return true;
   }
   return false;
+}
+
+/* @expose */
+export async function getVotesByMeeting(meetingID) {
+  await validateRole([Roles.ADMIN]);
+
+  const meetingQuery = await find(
+    Q.filter(Q.all(Q.key.startsWith(`${votingPrefix}${meetingID}`))),
+  );
+
+  if (meetingQuery.length < 1) {
+    throw new Error('no votes for this meeting.');
+  }
+
+  const meeting = meetingQuery.map(({ value }) => value);
+
+  return meeting;
+}
+
+/* @expose */
+export async function getStartupsAndPointsByMeetingId(meetingID) {
+  const votes = await getVotesByMeeting(meetingID);
+
+  const voteTotals = votes.reduce((aggr, curr) => {
+    const copy = { ...aggr };
+    const v = curr.votes;
+
+    const gVote = v.groupVote.startup.id;
+
+    if (copy[gVote]) {
+      copy[gVote] += 1;
+    } else {
+      copy[gVote] = 1;
+    }
+    return copy;
+  }, {});
+
+  return voteTotals;
+}
+
+/* @expose */
+export async function getAngelById(angelID) {
+  await validateRole([Roles.ADMIN]);
+
+  const angels = await getAngels();
+
+  return angels.filter(angel => angel.id === angelID);
 }
 
 /* @expose */

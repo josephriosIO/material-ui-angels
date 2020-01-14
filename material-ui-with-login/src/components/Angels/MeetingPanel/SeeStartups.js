@@ -65,31 +65,33 @@ export default function SeeStartups() {
   const [oldMeetings, setOldMeetings] = useState([]);
   const classes = useStyles();
   const { loading } = useAuth();
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       const usersRoles = await getRole();
 
-      const result = await getMeetings();
+      if (usersRoles.ADMIN || usersRoles.ANGEL) {
+        const result = await getMeetings();
 
-      const sortedDates = result.sort((a, b) => b.date - a.date);
+        const sortedDates = result.sort((a, b) => b.date - a.date);
 
-      const newMeetings = sortedDates.filter(d => {
-        let meetingDate = new Date(d.date);
-        let currentDate = new Date();
-        meetingDate.setHours(0, 0, 0, 0);
-        currentDate.setHours(0, 0, 0, 0);
+        const newMeetings = sortedDates.filter(d => {
+          let meetingDate = new Date(d.date);
+          let currentDate = new Date();
+          meetingDate.setHours(0, 0, 0, 0);
+          currentDate.setHours(0, 0, 0, 0);
 
-        return meetingDate >= currentDate;
-      });
+          return meetingDate >= currentDate;
+        });
 
-      const oldDates = sortedDates.filter(d => {
-        return new Date(d.date).getTime() <= new Date().getTime();
-      });
+        const oldDates = sortedDates.filter(d => {
+          return new Date(d.date).getTime() <= new Date().getTime();
+        });
 
-      setOldMeetings(oldDates);
-      setUsers(newMeetings);
+        setOldMeetings(oldDates);
+        setUsers(newMeetings);
+      }
 
       setRoles(usersRoles);
     };
@@ -118,7 +120,7 @@ export default function SeeStartups() {
         </div>
         <p className='empty-title h5'>Thank you for your request!</p>
         <p className='empty-subtitle'>
-          To see upcoming startups please have an admin confirm you as an angel.
+          To see upcoming meetings please have an admin confirm you as an angel.
         </p>
       </div>
     );
@@ -178,7 +180,11 @@ export default function SeeStartups() {
               <TabPanel value={value} index={0}>
                 <div>
                   {users.map(startupsData => (
-                    <MeetingPanels key={startupsData.id} users={startupsData} />
+                    <MeetingPanels
+                      key={startupsData.id}
+                      users={startupsData}
+                      roles={roles}
+                    />
                   ))}
                 </div>
               </TabPanel>
@@ -194,6 +200,7 @@ export default function SeeStartups() {
                   ) : (
                     oldMeetings.map(startupsData => (
                       <MeetingPanels
+                        roles={roles}
                         key={startupsData.id}
                         users={startupsData}
                       />
