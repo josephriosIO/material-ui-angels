@@ -51,7 +51,7 @@ const useStyles = makeStyles(theme => ({
   },
   cellTable: {
     display: 'flex',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     justifyContent: 'flex-start',
   },
 }));

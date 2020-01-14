@@ -4,6 +4,7 @@ import {
   getVotesByMeeting,
   getMeeting,
   getStartupsAndPointsByMeetingId,
+  createBug,
 } from '../../../../backend/backend';
 import { Redirect } from 'react-router-dom';
 import AngelUserDisplay from './AngelUserDisplay';
@@ -20,6 +21,10 @@ const AdminMeetingPanel = props => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const bugs = await createBug();
+
+        console.log(bugs);
+
         const result = await getVotesByMeeting(props?.location?.meeting?.id);
         const meeting = await getMeeting(props?.location?.meeting?.id);
         const testing = await getStartupsAndPointsByMeetingId(
@@ -35,6 +40,7 @@ const AdminMeetingPanel = props => {
         setPoints(testing);
         setStartups(...startups);
       } catch (err) {
+        console.error(err);
         setReload(true);
       }
     };

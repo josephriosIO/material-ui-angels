@@ -481,6 +481,7 @@ export async function checkIfUserVoted(meetingID) {
 
 /* @expose */
 export async function getVotesByMeeting(meetingID) {
+  console.log('before second validation');
   await validateRole([Roles.ADMIN]);
 
   const meetingQuery = await find(
@@ -524,6 +525,18 @@ export async function getAngelById(angelID) {
   const angels = await getAngels();
 
   return angels.filter(angel => angel.id === angelID);
+}
+
+/* @expose */
+export async function createBug() {
+  console.log('before first validation');
+  await validateRole([Roles.ADMIN]);
+
+  console.log('validated first time');
+
+  const meeting = await getVotesByMeeting();
+
+  console.log(meeting);
 }
 
 /* @expose */

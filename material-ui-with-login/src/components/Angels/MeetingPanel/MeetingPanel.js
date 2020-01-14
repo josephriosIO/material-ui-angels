@@ -70,14 +70,14 @@ const MeetingPanel = ({ users, roles }) => {
             <span className={classes.date}>{d.toDateString()}</span>
             <div className={classes.title}>{users.title}</div>
             {vote && <button onClick={voting}>Vote here</button>}
-            {roles.ADMIN ? (
+            {roles.ADMIN && vote ? (
               <Link
                 to={{
                   pathname: `/angels/meeting/${users.id}`,
                   meeting: { id: users.id },
                 }}
               >
-                ADMIN
+                Check Votes
               </Link>
             ) : null}
 
