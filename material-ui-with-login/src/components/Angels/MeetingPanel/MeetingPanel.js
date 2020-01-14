@@ -21,8 +21,7 @@ const useStyles = makeStyles(theme => ({
   },
   date: {
     stroke: 'transparent',
-    fill: 'rgba(0,0,0,.87)',
-    color: 'rgba(0,0,0,.87)',
+    color: 'grey',
     fontSize: '13px',
     fontWeight: 600,
     lineHeight: 1.6,
@@ -33,11 +32,14 @@ const useStyles = makeStyles(theme => ({
   startupView: {
     display: 'flex',
     flexFlow: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'space-around',
+    alignItems: 'center',
   },
   startupLevel: {
     marginRight: '5px',
+    color: '#000',
+    '&:visited': {
+      color: '#000',
+    },
   },
   topContent: {
     display: 'flex',
@@ -47,14 +49,32 @@ const useStyles = makeStyles(theme => ({
   voteBtn: {
     color: '#000',
     cursor: 'pointer',
-    borderBottom: '1px solid #000',
     backgroundColor: 'none',
     borderColor: '#eee',
     borderWidth: 0,
   },
   itemHolder: {
     display: 'flex',
-    flexFlow: 'column',
+    flexFlow: 'row',
+    alignItems: 'center',
+  },
+  startups: {
+    display: 'flex',
+    flexFlow: 'row',
+    marginLeft: '180px',
+    marginBottom: '20px',
+  },
+  titleForStartups: {
+    fontWeight: 'bold',
+    marginLeft: '40px',
+    marginTop: '25px',
+  },
+  checkVotesLink: {
+    color: '#000',
+    marginRight: '10px',
+    '&:visited': {
+      color: '#000',
+    },
   },
 }));
 
@@ -85,35 +105,51 @@ const MeetingPanel = ({ users, roles }) => {
         <div key={d}>
           <div className={classes.row}>
             <div className={classes.topContent}>
-              <div>
-                <span className={classes.date}>{d.toDateString()}</span>
-                <div className={classes.title}>{users.title}</div>
+              <div style={{ display: 'flex' }}>
+                <div>
+                  <span className={classes.date}>{d.toDateString()}</span>
+                  <div className={classes.title}>{users.title}</div>
+                </div>
+                <span className={classes.titleForStartups}>
+                  Startups In Meeting:
+                </span>
               </div>
-              <div className={classes.itemHolder}>
-                {roles.ADMIN && vote ? (
-                  <Link
-                    to={{
-                      pathname: `/angels/meeting/${users.id}`,
-                      meeting: { id: users.id },
-                    }}
-                  >
-                    Check Votes
-                  </Link>
-                ) : null}
-                {vote && (
-                  <button className={classes.voteBtn} onClick={voting}>
-                    Vote here
-                  </button>
-                )}
+              <div>
+                {vote ? <span>Commands</span> : null}
+                <div className={classes.itemHolder}>
+                  {roles.ADMIN && vote ? (
+                    <Link
+                      to={{
+                        pathname: `/angels/meeting/${users.id}`,
+                        meeting: { id: users.id },
+                      }}
+                      className={classes.checkVotesLink}
+                    >
+                      Check Votes
+                    </Link>
+                  ) : null}
+                  {vote && (
+                    <button className={classes.voteBtn} onClick={voting}>
+                      Vote here
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
-
-            <div className={classes.startupView}>
-              {users.startups.map((startup, idx) => (
-                <div key={idx}>
-                  <p className={classes.startupLevel}>{startup.companyName}</p>
-                </div>
-              ))}
+            <div className={classes.startups}>
+              <div className={classes.startupView}>
+                {users.startups.map((startup, idx) => (
+                  <div key={idx}>
+                    <a
+                      target='_blank'
+                      href={startup.website}
+                      className={classes.startupLevel}
+                    >
+                      {startup.companyName},
+                    </a>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

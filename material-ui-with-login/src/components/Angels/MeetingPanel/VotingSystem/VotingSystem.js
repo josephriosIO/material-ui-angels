@@ -95,7 +95,6 @@ const VotingSystem = ({ users }) => {
       setHasUserVoted(true);
     } catch (err) {
       console.log(err);
-      console.log('already voted or not time to vote yet');
     }
   };
 

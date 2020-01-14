@@ -50,6 +50,9 @@ const useStyles = makeStyles(theme => ({
     color: '#000 !important',
     borderBottom: '1px solid #000',
   },
+  indicator: {
+    backgroundColor: '#000',
+  },
 }));
 
 function a11yProps(index) {
@@ -162,7 +165,9 @@ export default function SeeStartups() {
                 <Tabs
                   value={value}
                   onChange={handleChange}
-                  aria-label='simple tabs example'
+                  classes={{
+                    indicator: classes.indicator,
+                  }}
                 >
                   <Tab label='Upcoming Meetings' {...a11yProps(0)} />
 

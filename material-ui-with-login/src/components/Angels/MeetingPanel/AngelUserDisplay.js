@@ -1,20 +1,20 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import { getAngelById } from '../../../../backend/backend';
-import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles(theme => ({
   avatarContainer: {
     display: 'flex',
-    flexFlow: 'row',
+    flexFlow: 'colum',
     alignItems: 'center',
     justifyContent: 'center',
   },
 }));
 
-const AngelUserDisplay = ({ user }) => {
+const AngelUserDisplay = ({ user, startup }) => {
   const [userInfo, setUserInfo] = useState({});
   const classes = useStyles();
 
@@ -28,34 +28,26 @@ const AngelUserDisplay = ({ user }) => {
     };
     fetchData();
   }, []);
+
   return (
-    <div>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Typography>
-          <div className={classes.avatarContainer}>
-            <Avatar src={userInfo.img} alt={userInfo.name} />
-            <p>{userInfo.name}</p>
-          </div>
-        </Typography>
-        <p>
-          Personal Vote for:{' '}
-          <span style={{ fontWeight: 'bold' }}>
-            {user.votes.userVote.startup.companyName}
-          </span>
-        </p>
-        <p>
-          Group Vote for:{' '}
-          <span style={{ fontWeight: 'bold' }}>
-            {user.votes.groupVote.startup.companyName}
-          </span>
-        </p>
-      </div>
+    <div
+      style={{
+        display: 'flex',
+        flexFlow: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      {startup === user.votes.groupVote.startup.companyName ? (
+        <div style={{ marginBottom: '5px' }}>
+          {' '}
+          <Tooltip title={userInfo.name} placement='left-start'>
+            <IconButton aria-label={userInfo.name}>
+              <i className='fas fa-check-square'></i>
+            </IconButton>
+          </Tooltip>
+        </div>
+      ) : null}
     </div>
   );
 };
