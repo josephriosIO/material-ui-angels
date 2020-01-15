@@ -10,6 +10,51 @@ import AngelUserDisplay from './AngelUserDisplay';
 import AngelUsers from './AngelUsers';
 import { Doughnut } from 'react-chartjs-2';
 import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  container: {
+    border: '1px solid black',
+    padding: '20px',
+    margin: '20px',
+  },
+  topContent: {
+    display: 'flex',
+    flexFlow: 'column',
+    justifyContent: 'space-around',
+  },
+  title: {
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    textAlign: 'center',
+    marginBottom: '15px',
+  },
+  userContainer: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    marginBottom: '50px',
+  },
+  startupInfo: {
+    display: 'flex',
+    alignItems: 'center',
+    flexFlow: 'column',
+  },
+  companyName: {
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+  },
+  flexCenter: {
+    display: 'flex',
+    alignItems: 'center',
+    flexFlow: 'column',
+  },
+  bottomContainer: {
+    marginTop: '20px',
+  },
+  bold: {
+    fontWeight: 'bold',
+  },
+}));
 
 const AdminMeetingPanel = props => {
   const [allVotes, setAllVotes] = useState([]);
@@ -18,6 +63,7 @@ const AdminMeetingPanel = props => {
   const [notVotes, setNoVotes] = useState(false);
   const [startups, setStartups] = useState([]);
   const [points, setPoints] = useState([]);
+  const classes = useStyles();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,6 +88,10 @@ const AdminMeetingPanel = props => {
     };
     fetchData();
   }, [meeting]);
+
+  const options = {
+    maintainAspectRatio: true,
+  };
 
   if (notVotes) {
     setTimeout(function() {
@@ -70,53 +120,18 @@ const AdminMeetingPanel = props => {
   }
 
   return (
-    <div style={{ border: '1px solid black', padding: '20px', margin: '20px' }}>
+    <div className={classes.container}>
       <Paper>
-        <div
-          style={{
-            display: 'flex',
-            flexFlow: 'column',
-            justifyContent: 'space-around',
-          }}
-        >
-          <span
-            style={{
-              fontWeight: 'bold',
-              textTransform: 'uppercase',
-              textAlign: 'center',
-              marginBottom: '15px',
-            }}
-          >
-            Group votes
-          </span>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-around',
-              marginBottom: '50px',
-            }}
-          >
+        <div className={classes.topContent}>
+          <span className={classes.title}>Group votes</span>
+          <div className={classes.userContainer}>
             {startups.map(startup => (
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  flexFlow: 'column',
-                }}
-              >
+              <div className={classes.startupInfo}>
                 <>
-                  <span
-                    style={{ fontWeight: 'bold', textTransform: 'uppercase' }}
-                  >
+                  <span className={classes.companyName}>
                     {startup.companyName}
                   </span>
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      flexFlow: 'column',
-                    }}
-                  >
+                  <div className={classes.flexCenter}>
                     {allVotes.map(user => {
                       return (
                         <AngelUserDisplay
@@ -131,39 +146,12 @@ const AdminMeetingPanel = props => {
               </div>
             ))}
           </div>{' '}
-          <span
-            style={{
-              fontWeight: 'bold',
-              textTransform: 'uppercase',
-              textAlign: 'center',
-              marginBottom: '15px',
-            }}
-          >
-            Personal Votes
-          </span>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-around',
-              marginBottom: '50px',
-            }}
-          >
+          <span className={classes.title}>Personal Votes</span>
+          <div className={classes.userContainer}>
             {startups.map(startup => (
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  flexFlow: 'column',
-                }}
-              >
+              <div className={classes.startupInfo}>
                 <>
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      flexFlow: 'column',
-                    }}
-                  >
+                  <div className={classes.flexCenter}>
                     {allVotes.map(user => {
                       return (
                         <AngelUsers
@@ -181,15 +169,9 @@ const AdminMeetingPanel = props => {
         </div>
       </Paper>
 
-      <div style={{ marginTop: '20px' }}>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <span style={{ fontWeight: 'bold' }}>
+      <div className={classes.bottomContainer}>
+        <div className={classes.startupInfo}>
+          <span className={classes.bold}>
             Total Votes based on groups votes
           </span>
         </div>
@@ -222,6 +204,7 @@ const AdminMeetingPanel = props => {
               },
             ],
           }}
+          options={options}
         />
       </div>
     </div>

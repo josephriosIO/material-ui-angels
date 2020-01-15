@@ -50,6 +50,15 @@ const useStyles = makeStyles(theme => ({
       textDecoration: 'none',
     },
   },
+  navLinkStyle: {
+    marginRight: '20px',
+    textDecoration: 'none !important',
+    color: 'black',
+
+    '&:hover': {
+      fontWeight: 'bold',
+    },
+  },
 }));
 
 const Navbar = () => {
@@ -126,12 +135,7 @@ const Navbar = () => {
             <>
               <div style={{ marginTop: '1px' }}>
                 <NavLink
-                  style={{
-                    marginRight: '20px',
-                    textDecoration: 'none',
-                    color: 'black',
-                  }}
-                  className={classes.link}
+                  className={`${classes.link} ${classes.navLinkStyle}`}
                   to={{
                     pathname: `/angels`,
                   }}
@@ -143,12 +147,7 @@ const Navbar = () => {
                 <div style={{ marginTop: '1px' }}>
                   <NavLink
                     activeStyle={{ fontWeight: 'bold' }}
-                    style={{
-                      marginRight: '20px',
-                      textDecoration: 'none',
-                      color: 'black',
-                    }}
-                    className={classes.link}
+                    className={`${classes.link} ${classes.navLinkStyle}`}
                     to={{
                       pathname: `/angels/admin`,
                     }}
@@ -157,12 +156,7 @@ const Navbar = () => {
                   </NavLink>
                   <NavLink
                     activeStyle={{ fontWeight: 'bold' }}
-                    style={{
-                      marginRight: '20px',
-                      textDecoration: 'none',
-                      color: 'black',
-                    }}
-                    className={classes.link}
+                    className={`${classes.link} ${classes.navLinkStyle}`}
                     to={{
                       pathname: `/angels/startups`,
                     }}
@@ -173,11 +167,7 @@ const Navbar = () => {
               ) : null}
               <NavLink
                 activeStyle={{ fontWeight: 'bold' }}
-                style={{
-                  color: 'black',
-                  marginRight: '20px',
-                  textDecoration: 'none',
-                }}
+                className={classes.navLinkStyle}
                 to={`/angels/meetings`}
               >
                 <p className={classes.link}> Meetings</p>
