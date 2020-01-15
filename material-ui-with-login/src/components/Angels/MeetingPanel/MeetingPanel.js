@@ -117,6 +117,15 @@ const MeetingPanel = ({ users, roles }) => {
               <div>
                 {vote ? <span>Commands</span> : null}
                 <div className={classes.itemHolder}>
+                  {roles.ADMIN && !vote ? (
+                    <Link
+                      to={`/angels/editmeeting/${users.id}`}
+                      className={classes.checkVotesLink}
+                    >
+                      Edit
+                    </Link>
+                  ) : null}
+
                   {roles.ADMIN && vote ? (
                     <Link
                       to={{

@@ -318,6 +318,23 @@ export async function updateStartupProfile(fields) {
 }
 
 /* @expose */
+export async function updateMeeting(fields, id) {
+  await validateRole([Roles.ADMIN]);
+  const { title, startups, date } = fields;
+  return update(`${meetingPrefix}${id}`, meetingToUpdate => {
+    if (!meetingToUpdate) {
+      throw new Error('User does not exist');
+    }
+    const copy = { ...meetingToUpdate };
+    copy.title = title;
+    copy.date = date;
+    copy.startups = startups;
+
+    return copy;
+  });
+}
+
+/* @expose */
 export async function archiveStartup(id) {
   await validateRole([Roles.ADMIN]);
   return update(`${startupsPrefix}${id}`, startupToUpdate => {

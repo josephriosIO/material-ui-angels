@@ -87,7 +87,7 @@ const AdminMeetingPanel = props => {
       }
     };
     fetchData();
-  }, [meeting]);
+  }, [props]);
 
   const options = {
     maintainAspectRatio: true,

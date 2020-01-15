@@ -4,8 +4,9 @@ import DatePicker from 'react-datepicker';
 import {
   getAllVettedStartups,
   getRole,
-  createMeeting,
+  updateMeeting,
   archiveStartup,
+  getMeeting,
 } from '../../../../backend/backend';
 import SearchBar from '../HelperComponents/SearchBar';
 import StartupDataTable from './StartupDataTable';
@@ -15,7 +16,6 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Error from '../../Errors/Error';
 import Snackbar from '@material-ui/core/Snackbar';
-import { Link } from 'react-router-dom';
 import Chip from '@material-ui/core/Chip';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -102,28 +102,46 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const MeetingCreator = props => {
+const EditMeeting = props => {
   const [users, setUsers] = useState([]);
   const [filter, setFilter] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
   const [errorStatus, setErrorStatus] = useState('');
   const [roles, setRoles] = useState([]);
-  const [open, setOpen] = React.useState(false);
-  const [form, setForm] = useState({
+  const [open, setOpen] = useState(false);
+  const [meeting, setMeeting] = useState({
+    startDate: new Date(),
     title: '',
+    startups: [],
   });
-  const [createdMeeting, setCreatedMeeting] = useState([]);
-  const [startDate, setStartDate] = useState(new Date());
+
   const [error, setError] = useState(false);
   const classes = useStyles();
+  const { startups, title, startDate } = meeting;
 
   useEffect(() => {
     const fetchData = async () => {
+      const { id } = props.match.params;
       const usersRoles = await getRole();
+      const editableMeeting = await getMeeting(id);
+
+      const meeting = editableMeeting.map(({ value }) => value);
+
+      setMeeting({
+        ...meeting,
+        startDate: new Date(meeting[0].date),
+        title: meeting[0].title,
+        startups: meeting[0].startups,
+      });
 
       if (usersRoles.ADMIN || usersRoles.ANGEL) {
         const result = await getAllVettedStartups();
-        setUsers(result);
+
+        if (result.length < 1) {
+          setUsers(meeting[0].startups);
+        } else {
+          setUsers(result);
+        }
       }
 
       setRoles(usersRoles);
@@ -132,8 +150,8 @@ const MeetingCreator = props => {
     // eslint-disable-next-line
   }, []);
 
-  const handleChange = date => {
-    setStartDate(date);
+  const handleChange = dateSubmited => {
+    setMeeting({ ...meeting, startDate: dateSubmited });
   };
 
   const handleClick = () => {
@@ -149,19 +167,19 @@ const MeetingCreator = props => {
   };
 
   const startupsInMeeting = startup => {
-    const ids = createdMeeting.map(startups => startups.id);
+    const ids = startups.map(startups => startups.id);
     if (ids.includes(startup.id)) {
       return;
     }
-    setCreatedMeeting([...createdMeeting, startup]);
+    setMeeting({ ...meeting, startups: [...startups, startup] });
   };
 
   const removeStartupFromMeeting = startup => {
-    var index = createdMeeting.indexOf(startup);
+    var index = startups.indexOf(startup);
     if (index > -1) {
-      createdMeeting.splice(index, 1);
+      startups.splice(index, 1);
     }
-    setCreatedMeeting([...createdMeeting]);
+    setMeeting({ ...meeting, startups: [...startups] });
   };
 
   const search = e => {
@@ -176,7 +194,8 @@ const MeetingCreator = props => {
     setFilter(filteredUsers);
   };
 
-  const onChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+  const onChange = e =>
+    setMeeting({ ...meeting, [e.target.name]: e.target.value });
 
   if (!roles.ADMIN) {
     return (
@@ -189,45 +208,33 @@ const MeetingCreator = props => {
     );
   }
 
-  if (users.length < 1) {
-    return (
-      <div className='empty'>
-        <div className='empty-icon'>
-          <i className='icon icon-people'></i>
-        </div>
-        <p className='empty-title h5'>No Startups that has been vetted :(</p>
-        <p className='empty-subtitle'>
-          Go vet some startups <Link to='/angels/startups'>here</Link>
-        </p>
-      </div>
-    );
-  }
-
-  const saveMeeting = async () => {
-    if (createdMeeting.length < 1) {
+  const updateOldMeeting = async () => {
+    const { id } = props.match.params;
+    if (startups.length < 1) {
       setErrorMsg('Please add startups for meeting.');
       setErrorStatus('error');
       handleClick();
       return;
     }
 
-    if (form.title.length < 1) {
+    if (meeting.title.length < 1) {
       setError(!error);
       return;
     }
 
     const data = {
-      title: form.title,
-      startups: createdMeeting,
-      date: startDate,
+      title: meeting.title,
+      startups: meeting.startups,
+      date: meeting.startDate,
     };
     setErrorMsg('Saved Meeting.');
     setErrorStatus('success');
     handleClick();
-    createdMeeting.map(async startup => {
+    startups.map(async startup => {
       await archiveStartup(startup.id);
     });
-    await createMeeting(data);
+    await updateMeeting(data, id);
+
     setTimeout(function() {
       props.history.push('/angels/meetings');
     }, 3000);
@@ -271,13 +278,13 @@ const MeetingCreator = props => {
               label='Meeting Title'
               helperText={error && 'Please have a meeting title'}
               onChange={e => onChange(e)}
-              value={form.title}
+              value={title}
               id='title'
               name='title'
             />
           </div>
           <button
-            onClick={saveMeeting}
+            onClick={updateOldMeeting}
             variant='contained'
             className={classes.saveBtn}
           >
@@ -287,10 +294,10 @@ const MeetingCreator = props => {
       </div>
       <div>
         <div style={{ padding: '35px' }}>
-          {createdMeeting.length > 0 ? (
+          {startups.length > 0 ? (
             <>
               <h2>Selected Startups</h2>
-              {createdMeeting.map(startup => (
+              {startups.map(startup => (
                 <div key={startup.id} className={classes.onlyFlex}>
                   <Chip
                     label={startup.companyName}
@@ -310,7 +317,7 @@ const MeetingCreator = props => {
             </div>
             <div className={classes.tableWrapper}>
               <StartupDataTable
-                isAdded={createdMeeting}
+                isAdded={startups}
                 users={filter.length > 1 ? filter : users}
                 callback={startupsInMeeting}
               />
@@ -322,4 +329,4 @@ const MeetingCreator = props => {
   );
 };
 
-export default MeetingCreator;
+export default EditMeeting;

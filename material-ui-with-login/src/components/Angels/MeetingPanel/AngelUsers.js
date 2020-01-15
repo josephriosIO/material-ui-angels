@@ -30,7 +30,7 @@ const AngelUsers = ({ user, startup }) => {
       } catch (err) {}
     };
     fetchData();
-  }, []);
+  }, [user.id]);
   return (
     <div>
       <div className={classes.container}>
