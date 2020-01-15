@@ -30,7 +30,7 @@ const AngelUserDisplay = ({ user, startup }) => {
       } catch (err) {}
     };
     fetchData();
-  }, [user]);
+  }, []);
 
   return (
     <div className={classes.container}>
