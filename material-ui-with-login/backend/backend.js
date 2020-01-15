@@ -1,4 +1,4 @@
-import { get, update, find, Q } from '@reshuffle/db';
+import { get, update, find, Q, remove } from '@reshuffle/db';
 import { getCurrentUser } from '@reshuffle/server-function';
 const uuidv4 = require('uuid/v4');
 
@@ -335,6 +335,17 @@ export async function updateMeeting(fields, id) {
 }
 
 /* @expose */
+export async function deleteMeeting(id) {
+  await validateRole([Roles.ADMIN]);
+  return remove(`${meetingPrefix}${id}`, startupToRemove => {
+    if (!startupToRemove) {
+      throw new Error('Meeting does not exist');
+    }
+    return startupToRemove;
+  });
+}
+
+/* @expose */
 export async function archiveStartup(id) {
   await validateRole([Roles.ADMIN]);
   return update(`${startupsPrefix}${id}`, startupToUpdate => {
@@ -350,6 +361,17 @@ export async function archiveStartup(id) {
     }
 
     return copy;
+  });
+}
+
+/* @expose */
+export async function deleteStartup(id) {
+  await validateRole([Roles.ADMIN]);
+  return remove(`${startupsPrefix}${id}`, startupToRemove => {
+    if (!startupToRemove) {
+      throw new Error('Startup does not exist');
+    }
+    return startupToRemove;
   });
 }
 
@@ -639,6 +661,17 @@ export async function consumeInvite(inviteCode) {
     copy.consumedBy = profile.id;
 
     return copy;
+  });
+}
+
+/* @expose */
+export async function deleteUser(id) {
+  await validateRole([Roles.ADMIN]);
+  return remove(`${usersPrefix}${id}`, userToRemove => {
+    if (!userToRemove) {
+      throw new Error('Startup does not exist');
+    }
+    return userToRemove;
   });
 }
 

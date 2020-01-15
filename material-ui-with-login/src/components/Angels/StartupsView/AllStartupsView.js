@@ -6,6 +6,7 @@ import {
   archiveStartup,
   vetStartup,
   getAllArchivedStartups,
+  deleteStartup,
 } from '../../../../backend/backend';
 import AllStartupsViewTable from './AllStartupsViewTable';
 import Error from '../../Errors/Error';
@@ -189,6 +190,15 @@ const AllStartupsView = () => {
     return;
   };
 
+  const removeStartupById = async (startup, removed) => {
+    await deleteStartup(startup.id);
+    if (removed) {
+      setErrorMsg('Startup Deleted from list.');
+      setErrorStatus('success');
+      handleClick();
+    }
+  };
+
   const vettedStartup = async (startup, vetted) => {
     await vetStartup(startup.id);
     if (!vetted) {
@@ -285,6 +295,7 @@ const AllStartupsView = () => {
                         <AllStartupsViewTable
                           key={row.id}
                           user={row}
+                          removeStartupById={removeStartupById}
                           archived={archive}
                           vett={vettedStartup}
                         />
@@ -342,6 +353,7 @@ const AllStartupsView = () => {
                           <AllStartupsViewTable
                             key={row.id}
                             user={row}
+                            removeStartupById={removeStartupById}
                             archived={archive}
                             vett={vettedStartup}
                           />

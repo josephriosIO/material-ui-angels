@@ -99,6 +99,11 @@ const AllStartupsViewTable = props => {
     setOpen(false);
   };
 
+  const removeStartup = () => {
+    const deleted = true;
+    props.removeStartupById(user, deleted);
+  };
+
   return (
     <>
       <TableRow hover style={{ cursor: 'pointer' }} onClick={handleClickOpen}>
@@ -154,6 +159,9 @@ const AllStartupsViewTable = props => {
               label='Archived'
             />
           </td>
+          <div>
+            <button onClick={removeStartup}> Delete</button>
+          </div>
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose} color='primary'>

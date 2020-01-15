@@ -189,7 +189,7 @@ export default function SeeStartups() {
                   {users.length < 1 ? (
                     <div className='empty'>
                       <div className='empty-icon'>
-                        <i class='fas fa-users'></i>
+                        <i className='fas fa-users'></i>
                       </div>
                       <p className='empty-title h5'>No Upcoming meetings.</p>
                     </div>
@@ -209,7 +209,7 @@ export default function SeeStartups() {
                   {oldMeetings.length < 1 ? (
                     <div className='empty'>
                       <div className='empty-icon'>
-                        <i class='fas fa-users'></i>
+                        <i className='fas fa-users'></i>
                       </div>
                       <p className='empty-title h5'>No previous meetings.</p>
                     </div>

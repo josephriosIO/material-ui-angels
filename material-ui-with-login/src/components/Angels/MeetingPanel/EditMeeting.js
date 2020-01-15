@@ -7,6 +7,7 @@ import {
   updateMeeting,
   archiveStartup,
   getMeeting,
+  deleteMeeting,
 } from '../../../../backend/backend';
 import SearchBar from '../HelperComponents/SearchBar';
 import StartupDataTable from './StartupDataTable';
@@ -51,6 +52,24 @@ const useStyles = makeStyles(theme => ({
   },
   saveBtn: {
     backgroundColor: '#3f81c7',
+    borderRadius: '3px',
+    cursor: 'pointer',
+    display: 'inline-block',
+    fontSize: '14px',
+    lineHeight: '21px',
+    padding: '7px 26px',
+    outline: 'none',
+    textDecoration: 'none',
+    textAlign: 'center',
+    userSelect: 'none',
+    color: '#f0f0f0',
+    [theme.breakpoints.down(600 + theme.spacing(2) * 2)]: {
+      padding: '7px 18px',
+      width: '100px',
+    },
+  },
+  deleteBtn: {
+    backgroundColor: 'red',
     borderRadius: '3px',
     cursor: 'pointer',
     display: 'inline-block',
@@ -240,6 +259,18 @@ const EditMeeting = props => {
     }, 3000);
   };
 
+  const removeMeeting = async () => {
+    const { id } = props.match.params;
+    await deleteMeeting(id);
+    setErrorMsg('Deleted meeting.');
+    setErrorStatus('success');
+    handleClick();
+
+    setTimeout(function() {
+      props.history.push('/angels/meetings');
+    }, 3000);
+  };
+
   return (
     <div>
       <span>
@@ -261,7 +292,7 @@ const EditMeeting = props => {
       </span>
       <div>
         <Typography className={classes.headerTitle} variant='h6'>
-          Meeting Creator
+          Update Meeting
         </Typography>
         <div className={classes.header}>
           <div>
@@ -289,6 +320,13 @@ const EditMeeting = props => {
             className={classes.saveBtn}
           >
             Save
+          </button>
+          <button
+            onClick={removeMeeting}
+            variant='contained'
+            className={`${classes.deleteBtn}`}
+          >
+            delete
           </button>
         </div>
       </div>
