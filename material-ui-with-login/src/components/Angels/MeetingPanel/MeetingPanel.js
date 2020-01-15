@@ -141,6 +141,7 @@ const MeetingPanel = ({ users, roles }) => {
                 {users.startups.map((startup, idx) => (
                   <div key={idx}>
                     <a
+                      rel='noopener noreferrer'
                       target='_blank'
                       href={startup.website}
                       className={classes.startupLevel}

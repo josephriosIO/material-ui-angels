@@ -105,7 +105,9 @@ const AdminMeetingPanel = props => {
                 }}
               >
                 <>
-                  <span style={{ fontWeight: 'bold', textTransform: 'uppercase',  }}>
+                  <span
+                    style={{ fontWeight: 'bold', textTransform: 'uppercase' }}
+                  >
                     {startup.companyName}
                   </span>
                   <div
@@ -118,6 +120,7 @@ const AdminMeetingPanel = props => {
                     {allVotes.map(user => {
                       return (
                         <AngelUserDisplay
+                          key={user.id}
                           user={user}
                           startup={startup.companyName}
                         />
@@ -163,7 +166,11 @@ const AdminMeetingPanel = props => {
                   >
                     {allVotes.map(user => {
                       return (
-                        <AngelUsers user={user} startup={startup.companyName} />
+                        <AngelUsers
+                          key={user.id}
+                          user={user}
+                          startup={startup.companyName}
+                        />
                       );
                     })}
                   </div>

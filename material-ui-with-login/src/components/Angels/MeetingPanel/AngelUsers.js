@@ -6,11 +6,14 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
-  avatarContainer: {
+  container: {
     display: 'flex',
-    flexFlow: 'row',
+    flexFlow: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  user: {
+    marginBottom: '5px',
   },
 }));
 
@@ -30,16 +33,9 @@ const AngelUsers = ({ user, startup }) => {
   }, []);
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          flexFlow: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
+      <div className={classes.container}>
         {startup === user.votes.userVote.startup.companyName ? (
-          <div style={{ marginBottom: '5px' }}>
+          <div className={classes.user}>
             {' '}
             <Tooltip title={userInfo.name} placement='left-start'>
               <IconButton aria-label={userInfo.name}>

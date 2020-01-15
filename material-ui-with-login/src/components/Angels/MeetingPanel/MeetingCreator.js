@@ -16,6 +16,7 @@ import TextField from '@material-ui/core/TextField';
 import Error from '../../Errors/Error';
 import Snackbar from '@material-ui/core/Snackbar';
 import { Link } from 'react-router-dom';
+import Chip from '@material-ui/core/Chip';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -282,16 +283,17 @@ const MeetingCreator = () => {
         </div>
       </div>
       <div>
-        <div>
+        <div style={{ padding: '35px' }}>
           {createdMeeting.length > 0 ? (
             <>
-              <h2>Selected startups</h2>
+              <h2>Selected Startups</h2>
               {createdMeeting.map(startup => (
                 <div key={startup.id} className={classes.onlyFlex}>
-                  <h6>{startup.companyName}</h6>
-                  <span onClick={() => removeStartupFromMeeting(startup)}>
-                    X
-                  </span>
+                  <Chip
+                    label={startup.companyName}
+                    onClick={() => removeStartupFromMeeting(startup)}
+                    onDelete={() => removeStartupFromMeeting(startup)}
+                  />
                 </div>
               ))}
             </>

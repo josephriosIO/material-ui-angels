@@ -7,6 +7,7 @@ import {
 } from '../../../../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
 import VoteForStartup from './VoteForStartup';
+import Chip from '@material-ui/core/Chip';
 
 const useStyles = makeStyles(theme => ({
   row: {
@@ -94,7 +95,7 @@ const VotingSystem = ({ users }) => {
       await voteOnStartup(id, votes);
       setHasUserVoted(true);
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
@@ -119,20 +120,29 @@ const VotingSystem = ({ users }) => {
               <span className={classes.date}>{d.toDateString()}</span>
               <div className={classes.title}>{value.title}</div>
               {userVote?.startup?.companyName ? (
-                <div>
-                  Your personal vote: {userVote.startup.companyName}
-                  <span onClick={clearUserVote}>X</span>
+                <div style={{ marginBottom: '10px' }}>
+                  Your personal vote:{' '}
+                  <Chip
+                    label={userVote.startup.companyName}
+                    onClick={clearUserVote}
+                    onDelete={clearUserVote}
+                  />
                 </div>
               ) : null}
               {groupVote?.startup?.companyName ? (
-                <div>
-                  Your group vote: {groupVote.startup.companyName}
-                  <span onClick={clearGroupVote}>X</span>
+                <div style={{ marginBottom: '10px' }}>
+                  Your group vote:{' '}
+                  <Chip
+                    label={groupVote.startup.companyName}
+                    onClick={clearGroupVote}
+                    onDelete={clearGroupVote}
+                  />
                 </div>
               ) : null}
 
               {value.startups.map(startup => (
                 <VoteForStartup
+                  key={startup.id}
                   userDisabled={userDisabled}
                   groupDisabled={groupdisabled}
                   setGroupVotesToState={setGroupVotesToState}

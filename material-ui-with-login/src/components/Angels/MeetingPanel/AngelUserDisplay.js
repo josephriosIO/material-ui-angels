@@ -6,11 +6,14 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles(theme => ({
-  avatarContainer: {
+  container: {
     display: 'flex',
-    flexFlow: 'colum',
+    flexFlow: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  isUser: {
+    marginBottom: '5px',
   },
 }));
 
@@ -27,19 +30,12 @@ const AngelUserDisplay = ({ user, startup }) => {
       } catch (err) {}
     };
     fetchData();
-  }, []);
+  }, [user]);
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexFlow: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
+    <div className={classes.container}>
       {startup === user.votes.groupVote.startup.companyName ? (
-        <div style={{ marginBottom: '5px' }}>
+        <div className={classes.isUser}>
           {' '}
           <Tooltip title={userInfo.name} placement='left-start'>
             <IconButton aria-label={userInfo.name}>
