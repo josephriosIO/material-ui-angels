@@ -135,7 +135,7 @@ export default function SeeStartups() {
     <React.Fragment>
       <CssBaseline />
       <Container maxWidth='lg' component='main'>
-        {users.length < 1 ? (
+        {users.length < 1 && oldMeetings.length < 1 ? (
           <div className='empty'>
             <div className='empty-icon'>
               <i className='icon icon-people'></i>
@@ -186,13 +186,22 @@ export default function SeeStartups() {
               </div>
               <TabPanel value={value} index={0}>
                 <div>
-                  {users.map(startupsData => (
-                    <MeetingPanels
-                      key={startupsData.id}
-                      users={startupsData}
-                      roles={roles}
-                    />
-                  ))}
+                  {users.length < 1 ? (
+                    <div className='empty'>
+                      <div className='empty-icon'>
+                        <i class='fas fa-users'></i>
+                      </div>
+                      <p className='empty-title h5'>No Upcoming meetings.</p>
+                    </div>
+                  ) : (
+                    users.map(startupsData => (
+                      <MeetingPanels
+                        key={startupsData.id}
+                        users={startupsData}
+                        roles={roles}
+                      />
+                    ))
+                  )}
                 </div>
               </TabPanel>
               <TabPanel value={value} index={1}>
