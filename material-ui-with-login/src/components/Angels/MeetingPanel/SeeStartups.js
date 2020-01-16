@@ -1,7 +1,7 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
-import { getRole, getMeetings } from '../../../../backend/backend';
+import { getMeetings } from '../../../../backend/backend';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
@@ -101,19 +101,16 @@ function a11yProps(index) {
   };
 }
 
-export default function SeeStartups() {
-  const [users, setUsers] = useState([]);
-  const [roles, setRoles] = useState([]);
-  const [oldMeetings, setOldMeetings] = useState([]);
+export default function SeeStartups({ userRoles }) {
+  const [users, setUsers] = useState(undefined);
+  const [oldMeetings, setOldMeetings] = useState(undefined);
   const classes = useStyles();
   const { loading } = useAuth();
   const [value, setValue] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
-      const usersRoles = await getRole();
-
-      if (usersRoles.ADMIN || usersRoles.ANGEL) {
+      if (userRoles.ADMIN || userRoles.ANGEL) {
         const result = await getMeetings();
 
         const sortedDates = result.sort(
@@ -136,16 +133,15 @@ export default function SeeStartups() {
         setOldMeetings(oldDates);
         setUsers(newMeetings.reverse());
       }
-
-      setRoles(usersRoles);
     };
     fetchData();
-    // eslint-disable-next-line
-  }, []);
+  }, [userRoles]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  if (users === undefined || oldMeetings === undefined) return null;
 
   // wait for the user data to load.
   if (loading) {
@@ -156,7 +152,7 @@ export default function SeeStartups() {
     );
   }
 
-  if (!roles.ADMIN && !roles.ANGEL) {
+  if (!userRoles.ADMIN && !userRoles.ANGEL) {
     return (
       <div className='empty'>
         <div className='empty-icon'>
@@ -184,7 +180,7 @@ export default function SeeStartups() {
               Ask your admin to create more meetings!
             </p>
             <p className='empty-subtitle'>
-              {roles.ADMIN ? (
+              {userRoles.ADMIN ? (
                 <Link
                   className={classes.link}
                   to={{
@@ -211,7 +207,7 @@ export default function SeeStartups() {
                   </StyledTabs>
                 </div>
 
-                {roles.ADMIN ? (
+                {userRoles.ADMIN ? (
                   <Tooltip title='Create Meeting' arrow>
                     <Link
                       className={classes.link}
@@ -238,7 +234,7 @@ export default function SeeStartups() {
                       <MeetingPanels
                         key={startupsData.id}
                         users={startupsData}
-                        roles={roles}
+                        roles={userRoles}
                       />
                     ))
                   )}
@@ -256,7 +252,7 @@ export default function SeeStartups() {
                   ) : (
                     oldMeetings.map(startupsData => (
                       <MeetingPanels
-                        roles={roles}
+                        roles={userRoles}
                         key={startupsData.id}
                         users={startupsData}
                       />
