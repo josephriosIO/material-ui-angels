@@ -37,6 +37,9 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexFlow: 'row',
     alignItems: 'center',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '14px',
+    },
   },
   startupLevel: {
     marginRight: '5px',
@@ -49,6 +52,15 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'normal',
     justifyContent: 'space-between',
+    [theme.breakpoints.down('sm')]: {
+      flexFlow: 'column',
+    },
+  },
+  dateAndTitle: {
+    display: 'flex',
+    [theme.breakpoints.down('sm')]: {
+      flexFlow: 'row',
+    },
   },
   voteBtn: {
     color: '#000',
@@ -62,21 +74,41 @@ const useStyles = makeStyles(theme => ({
     flexFlow: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    [theme.breakpoints.down('sm')]: {
+      flexFlow: 'row',
+    },
   },
   startups: {
     display: 'flex',
     flexFlow: 'column',
     marginBottom: '20px',
+    [theme.breakpoints.down('sm')]: {
+      marginBottom: '0',
+    },
   },
   titleForStartups: {
     fontWeight: 'bold',
     marginLeft: '40px',
     marginTop: '25px',
+    [theme.breakpoints.down('sm')]: {
+      margin: '0',
+      fontSize: '14px',
+    },
   },
   checkVotesLink: {
     color: '#000',
     '&:visited': {
       color: '#000',
+    },
+    [theme.breakpoints.down('sm')]: {
+      marginTop: '5px',
+    },
+  },
+  bottomContent: {
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+      alignItems: 'flex-end',
+      justifyContent: 'flex-end',
     },
   },
 }));
@@ -108,7 +140,7 @@ const MeetingPanel = ({ users, roles }) => {
         <div key={d}>
           <Paper elevation={3} className={classes.row}>
             <div className={classes.topContent}>
-              <div style={{ display: 'flex' }}>
+              <div className={classes.dateAndTitle}>
                 <div>
                   <span className={classes.date}>{d.toDateString()}</span>
                   <div className={classes.title}>{users.title}</div>
@@ -133,7 +165,7 @@ const MeetingPanel = ({ users, roles }) => {
                   ))}
                 </div>
               </div>
-              <div>
+              <div className={classes.bottomContent}>
                 <div className={classes.itemHolder}>
                   {roles.ADMIN && !vote ? (
                     <Link
@@ -158,10 +190,14 @@ const MeetingPanel = ({ users, roles }) => {
                     </Tooltip>
                   ) : null}
                   {vote && (
-                    <Tooltip title='Vote' arrow placement='right'>
-                      <button className={classes.voteBtn} onClick={voting}>
-                        <HowToVoteIcon />
-                      </button>
+                    <Tooltip
+                      title='Vote'
+                      arrow
+                      placement='right'
+                      className={classes.voteBtn}
+                      onClick={voting}
+                    >
+                      <HowToVoteIcon />
                     </Tooltip>
                   )}
                 </div>
