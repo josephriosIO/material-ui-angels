@@ -2,7 +2,7 @@ import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
 import { getRole, getMeetings } from '../../../../backend/backend';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
@@ -12,6 +12,34 @@ import MeetingPanels from './MeetingPanel';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { Link } from 'react-router-dom';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import Tooltip from '@material-ui/core/Tooltip';
+
+const StyledTabs = withStyles({
+  indicator: {
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+    '& > div': {
+      maxWidth: 40,
+      width: '100%',
+      backgroundColor: '#5ebeeb',
+    },
+  },
+})(props => <Tabs {...props} TabIndicatorProps={{ children: <div /> }} />);
+
+const StyledTab = withStyles(theme => ({
+  root: {
+    textTransform: 'none',
+    color: '#000',
+    fontWeight: theme.typography.fontWeightRegular,
+    fontSize: theme.typography.pxToRem(15),
+    marginRight: theme.spacing(1),
+    '&:focus': {
+      opacity: 1,
+    },
+  },
+}))(props => <Tab disableRipple {...props} />);
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -44,14 +72,25 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     flexWrap: 'wrap',
+    [theme.breakpoints.down('sm')]: {
+      justifyContent: 'center',
+    },
   },
   link: {
     textDecoration: 'none !important',
     color: '#000 !important',
-    borderBottom: '1px solid #000',
+    '&:hover': {
+      color: '#5dbeeb !important',
+    },
   },
   indicator: {
-    backgroundColor: '#000',
+    backgroundColor: '#eee',
+  },
+  tab: {
+    [theme.breakpoints.down('sm')]: {
+      display: 'flex',
+      flexFlow: 'column',
+    },
   },
 }));
 
@@ -161,27 +200,28 @@ export default function SeeStartups() {
           <Grid>
             <div className={classes.root}>
               <div className={classes.flex}>
-                <h2>Meetings</h2>
-                <Tabs
-                  value={value}
-                  onChange={handleChange}
-                  classes={{
-                    indicator: classes.indicator,
-                  }}
-                >
-                  <Tab label='Upcoming Meetings' {...a11yProps(0)} />
-
-                  <Tab label='Previous Meetings' {...a11yProps(1)} />
-                </Tabs>
-                {roles.ADMIN ? (
-                  <Link
-                    className={classes.link}
-                    to={{
-                      pathname: `/angels/createmeeting`,
-                    }}
+                <div style={{ padding: '20px 10px' }}>
+                  <StyledTabs
+                    value={value}
+                    onChange={handleChange}
+                    aria-label='meetings tab'
                   >
-                    Create Meeting
-                  </Link>
+                    <StyledTab label='Upcoming Meetings' {...a11yProps(0)} />
+                    <StyledTab label='Previous Meetings' {...a11yProps(1)} />
+                  </StyledTabs>
+                </div>
+
+                {roles.ADMIN ? (
+                  <Tooltip title='Create Meeting' arrow>
+                    <Link
+                      className={classes.link}
+                      to={{
+                        pathname: `/angels/createmeeting`,
+                      }}
+                    >
+                      <AddCircleIcon />
+                    </Link>
+                  </Tooltip>
                 ) : null}
               </div>
               <TabPanel value={value} index={0}>

@@ -8,6 +8,7 @@ import EmptyState from '../EmptyStates/EmptyState';
 import { Redirect } from 'react-router-dom';
 import DashboardTable from './DashboardTable';
 import DashboardAngelsList from './DashboardAngelsList';
+import DashboardDialogAngelBox from './DashboardDialogAngelBox';
 
 const useStyles = makeStyles(theme => ({
   heroContent: {
@@ -42,9 +43,7 @@ export default function Dashboard({ userRoles }) {
     fetchData();
   }, [userRoles]);
 
-  if (userRoles === undefined) {
-    return null;
-  }
+  if (userRoles === undefined) return null;
 
   if (!userRoles.ADMIN && !userRoles.ANGEL) {
     return (

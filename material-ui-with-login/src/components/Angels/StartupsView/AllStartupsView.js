@@ -1,7 +1,6 @@
 import '@reshuffle/code-transform/macro';
 import React, { useEffect, useState } from 'react';
 import {
-  getRole,
   getAllStartups,
   archiveStartup,
   vetStartup,
@@ -10,7 +9,7 @@ import {
 } from '../../../../backend/backend';
 import AllStartupsViewTable from './AllStartupsViewTable';
 import Error from '../../Errors/Error';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
 import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
@@ -30,6 +29,32 @@ function a11yProps(index) {
     'aria-controls': `simple-tabpanel-${index}`,
   };
 }
+
+const StyledTabs = withStyles({
+  indicator: {
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+    '& > div': {
+      maxWidth: 40,
+      width: '100%',
+      backgroundColor: '#5ebeeb',
+    },
+  },
+})(props => <Tabs {...props} TabIndicatorProps={{ children: <div /> }} />);
+
+const StyledTab = withStyles(theme => ({
+  root: {
+    textTransform: 'none',
+    color: '#000',
+    fontWeight: theme.typography.fontWeightRegular,
+    fontSize: theme.typography.pxToRem(15),
+    marginRight: theme.spacing(1),
+    '&:focus': {
+      opacity: 1,
+    },
+  },
+}))(props => <Tab disableRipple {...props} />);
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -104,10 +129,17 @@ const useStyles = makeStyles(theme => ({
   padding: {
     padding: '30px',
   },
+  emptyState: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    height: '100vh',
+  },
 }));
 
-const AllStartupsView = () => {
-  const [users, setUsers] = useState([]);
+const AllStartupsView = ({ userRoles }) => {
+  const [users, setUsers] = useState(undefined);
   const [archivedStartups, setArchivedStartups] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
   const [errorStatus, setErrorStatus] = useState('');
@@ -120,9 +152,7 @@ const AllStartupsView = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const usersRoles = await getRole();
-
-        if (usersRoles.ADMIN) {
+        if (userRoles.ADMIN) {
           const result = await getAllStartups();
           const users = await getAllArchivedStartups();
 
@@ -130,13 +160,13 @@ const AllStartupsView = () => {
           setArchivedStartups(users);
         }
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
     fetchData();
-
-    // eslint-disable-next-line
   }, [users]);
+
+  if (userRoles === undefined) return null;
 
   const handleClick = () => {
     setOpen(true);
@@ -214,13 +244,20 @@ const AllStartupsView = () => {
     return;
   };
 
+  if (users === undefined) return null;
+
   if (users.length < 1 && archivedStartups.length < 1) {
     return (
-      <div className='empty'>
+      <div className={`empty ${classes.emptyState}`}>
         <div className='empty-icon'>
           <i className='icon icon-people'></i>
         </div>
-        <p className='empty-title h5'>No startups to vet or archive :(</p>
+        <p className='empty-title h5'>
+          No startups to specially select or archive.
+        </p>
+        <p className='empty-title h5'>
+          Please request some startups to join the platform.
+        </p>
       </div>
     );
   }
@@ -244,18 +281,15 @@ const AllStartupsView = () => {
           />
         </Snackbar>
       </span>
-      <div style={{ padding: '20px' }}>
-        <Tabs
+      <div style={{ padding: '20px 10px' }}>
+        <StyledTabs
           value={value}
           onChange={handleChange}
-          classes={{
-            indicator: classes.indicator,
-          }}
+          aria-label='styled tabs example'
         >
-          >
-          <Tab label='Startups' {...a11yProps(0)} />
-          <Tab label='Archived Startups' {...a11yProps(1)} />
-        </Tabs>
+          <StyledTab label='Startups' {...a11yProps(0)} />
+          <StyledTab label='Archived Startups' {...a11yProps(1)} />
+        </StyledTabs>
       </div>
       <TabPanel value={value} index={0}>
         {users.length < 1 ? (
@@ -264,7 +298,7 @@ const AllStartupsView = () => {
               <i className='icon icon-people'></i>
             </div>
             <p className='empty-title h5'>
-              No startups has been vetted or have all been Archived.
+              No startups has been vetted or have all been archived.
             </p>
           </div>
         ) : (
@@ -322,7 +356,7 @@ const AllStartupsView = () => {
             <div className='empty-icon'>
               <i className='icon icon-people'></i>
             </div>
-            <p className='empty-title h5'>No startups has been Archived.</p>
+            <p className='empty-title h5'>No startups has been archived.</p>
           </div>
         ) : (
           <div>

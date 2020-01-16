@@ -3,12 +3,16 @@ import React, { useState, useEffect } from 'react';
 import { canVote } from '../../../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
 import VotingSystem from './VotingSystem/VotingSystem';
+import Paper from '@material-ui/core/Paper';
 import { Link } from 'react-router-dom';
+import HowToVoteIcon from '@material-ui/icons/HowToVote';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import Tooltip from '@material-ui/core/Tooltip';
 
 const useStyles = makeStyles(theme => ({
   row: {
     padding: '16px 16px 0',
-    border: '1px solid rgba(0,0,0,.12)',
+    height: '150px',
     margin: '20px 0',
   },
   title: {
@@ -43,7 +47,7 @@ const useStyles = makeStyles(theme => ({
   },
   topContent: {
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'normal',
     justifyContent: 'space-between',
   },
   voteBtn: {
@@ -55,13 +59,13 @@ const useStyles = makeStyles(theme => ({
   },
   itemHolder: {
     display: 'flex',
-    flexFlow: 'row',
+    flexFlow: 'column',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   startups: {
     display: 'flex',
-    flexFlow: 'row',
-    marginLeft: '180px',
+    flexFlow: 'column',
     marginBottom: '20px',
   },
   titleForStartups: {
@@ -71,7 +75,6 @@ const useStyles = makeStyles(theme => ({
   },
   checkVotesLink: {
     color: '#000',
-    marginRight: '10px',
     '&:visited': {
       color: '#000',
     },
@@ -103,19 +106,34 @@ const MeetingPanel = ({ users, roles }) => {
         <VotingSystem users={users} />
       ) : (
         <div key={d}>
-          <div className={classes.row}>
+          <Paper elevation={3} className={classes.row}>
             <div className={classes.topContent}>
               <div style={{ display: 'flex' }}>
                 <div>
                   <span className={classes.date}>{d.toDateString()}</span>
                   <div className={classes.title}>{users.title}</div>
                 </div>
+              </div>
+              <div className={classes.startups}>
                 <span className={classes.titleForStartups}>
                   Startups In Meeting:
                 </span>
+                <div className={classes.startupView}>
+                  {users.startups.map((startup, idx) => (
+                    <div key={idx}>
+                      <a
+                        rel='noopener noreferrer'
+                        target='_blank'
+                        href={startup.website}
+                        className={classes.startupLevel}
+                      >
+                        {startup.companyName},
+                      </a>
+                    </div>
+                  ))}
+                </div>
               </div>
               <div>
-                {vote ? <span>Commands</span> : null}
                 <div className={classes.itemHolder}>
                   {roles.ADMIN && !vote ? (
                     <Link
@@ -127,41 +145,29 @@ const MeetingPanel = ({ users, roles }) => {
                   ) : null}
 
                   {roles.ADMIN && vote ? (
-                    <Link
-                      to={{
-                        pathname: `/angels/meeting/${users.id}`,
-                        meeting: { id: users.id },
-                      }}
-                      className={classes.checkVotesLink}
-                    >
-                      Check Votes
-                    </Link>
+                    <Tooltip title='View Votes' arrow placement='right'>
+                      <Link
+                        to={{
+                          pathname: `/angels/meeting/${users.id}`,
+                          meeting: { id: users.id },
+                        }}
+                        className={classes.checkVotesLink}
+                      >
+                        <VisibilityIcon />
+                      </Link>
+                    </Tooltip>
                   ) : null}
                   {vote && (
-                    <button className={classes.voteBtn} onClick={voting}>
-                      Vote here
-                    </button>
+                    <Tooltip title='Vote' arrow placement='right'>
+                      <button className={classes.voteBtn} onClick={voting}>
+                        <HowToVoteIcon />
+                      </button>
+                    </Tooltip>
                   )}
                 </div>
               </div>
             </div>
-            <div className={classes.startups}>
-              <div className={classes.startupView}>
-                {users.startups.map((startup, idx) => (
-                  <div key={idx}>
-                    <a
-                      rel='noopener noreferrer'
-                      target='_blank'
-                      href={startup.website}
-                      className={classes.startupLevel}
-                    >
-                      {startup.companyName},
-                    </a>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          </Paper>
         </div>
       )}
     </div>

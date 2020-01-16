@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
-import Badge from '@material-ui/core/Badge';
 import { makeStyles } from '@material-ui/core/styles';
+import DashboardDialogAngelBox from './DashboardDialogAngelBox';
 
 const useStyles = makeStyles(theme => ({
   angelContainer: {
@@ -23,27 +23,23 @@ const useStyles = makeStyles(theme => ({
       height: '120px',
     },
   },
+  angelsList: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    flexFlow: 'wrap',
+  },
 }));
 
 const DashboardAngelsList = ({ angels }) => {
   const classes = useStyles();
+
+  if (angels === undefined) return null;
+
   return (
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        flexFlow: 'wrap',
-      }}
-    >
+    <div className={classes.angelsList}>
       {angels.map(angel => (
-        <div className={classes.angelContainer}>
-          <Avatar
-            className={classes.avatarResize}
-            src={angel.img}
-            alt={angel.name}
-          />
-        </div>
+        <DashboardDialogAngelBox angel={angel} />
       ))}
     </div>
   );
