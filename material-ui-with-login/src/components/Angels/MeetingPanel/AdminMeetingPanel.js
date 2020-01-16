@@ -12,6 +12,21 @@ import { Doughnut } from 'react-chartjs-2';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 
+const data = [
+  {
+    id: 'joseph',
+    name: 'joseph',
+    personalVotedStartups: [{ google: 0 }, { facebook: 0 }, { reshuffle: 1 }],
+    groupVotedStartups: [{ google: 0 }, { facebook: 1 }, { reshuffle: 0 }],
+  },
+  {
+    id: 'user1',
+    name: 'user1',
+    personalVotedStartups: [{ google: 1 }, { facebook: 0 }, { reshuffle: 0 }],
+    groupVotedStartups: [{ google: 0 }, { facebook: 1 }, { reshuffle: 0 }],
+  },
+];
+
 const useStyles = makeStyles(theme => ({
   container: {
     border: '1px solid black',
@@ -69,6 +84,7 @@ const AdminMeetingPanel = props => {
     const fetchData = async () => {
       try {
         const result = await getVotesByMeeting(props?.location?.meeting?.id);
+        console.log(result);
         const meeting = await getMeeting(props?.location?.meeting?.id);
         const testing = await getStartupsAndPointsByMeetingId(
           props?.location?.meeting?.id,

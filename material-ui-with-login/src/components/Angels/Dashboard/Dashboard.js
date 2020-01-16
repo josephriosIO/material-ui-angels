@@ -1,57 +1,68 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '@reshuffle/react-auth';
-import {
-  getAllAngels,
-  getRole,
-  createOrGetUser,
-} from '../../../../backend/backend';
+import { getAllAngels, createOrGetUser } from '../../../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import EmptyState from '../EmptyStates/EmptyState';
 import { Redirect } from 'react-router-dom';
 import DashboardTable from './DashboardTable';
+import DashboardAngelsList from './DashboardAngelsList';
 
 const useStyles = makeStyles(theme => ({
   heroContent: {
-    padding: '64px 50px',
+    marginTop: '60px',
+    padding: '64px 25px',
+    [theme.breakpoints.down('md')]: {
+      marginTop: '30px',
+    },
   },
 }));
 
-export default function Page() {
-  const [users, setUsers] = useState([]);
+export default function Dashboard({ userRoles }) {
+  const [users, setUsers] = useState(undefined);
   const [userData, setUserData] = useState(undefined);
   const classes = useStyles();
-  const { loading } = useAuth();
-  const [roles, setRoles] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
-      const roles = await getRole();
-      const signedInUser = await createOrGetUser();
+      try {
+        const signedInUser = await createOrGetUser();
 
-      if (roles.ANGEL || roles.ADMIN) {
-        const result = await getAllAngels();
-        setUsers(result);
+        if (userRoles.ADMIN || userRoles.ANGEL) {
+          const result = await getAllAngels();
+          setUsers(result);
+        }
+
+        setUserData(signedInUser);
+      } catch (err) {
+        console.error(err);
       }
-
-      setRoles(roles);
-      setUserData(signedInUser);
     };
     fetchData();
-    // eslint-disable-next-line
-  }, []);
+  }, [userRoles]);
 
-  if (loading) {
+  if (userRoles === undefined) {
+    return null;
+  }
+
+  if (!userRoles.ADMIN && !userRoles.ANGEL) {
     return (
-      <div>
-        <h2>Loading...</h2>
-      </div>
+      <EmptyState
+        title={'Thank you for your request!'}
+        subtitle={
+          'An Admin will accept you shortly if you meet the requirements.'
+        }
+        roles={userRoles}
+      />
     );
   }
 
-  if (roles.ADMIN) {
+  if (users === undefined) {
+    return null;
+  }
+
+  if (userRoles.ADMIN) {
     return (
       <>
         <CssBaseline />
@@ -61,12 +72,17 @@ export default function Page() {
           className={classes.heroContent}
         >
           {users.length > 0 ? (
-            <DashboardTable users={users} />
+            <div>
+              <p style={{ textAlign: 'center', textTransform: 'uppercase' }}>
+                community members
+              </p>
+              <DashboardAngelsList angels={users} />
+            </div>
           ) : (
             <EmptyState
               title={'Admin View'}
               subtitle={'Accept some angels.'}
-              roles={roles}
+              roles={userRoles}
             />
           )}
         </Container>
@@ -76,18 +92,6 @@ export default function Page() {
 
   if (userData !== undefined && !userData.editedProfile) {
     return <Redirect to={`/angels/profile/${userData.id}`} />;
-  }
-
-  if (!roles.ANGEL && !roles.ADMIN && userData?.id) {
-    return (
-      <EmptyState
-        title={'Thank you for your request!'}
-        subtitle={
-          'An Admin will accept you shortly if you meet the requirements.'
-        }
-        roles={roles}
-      />
-    );
   }
 
   return (

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
 import Dashboard from './Dashboard/Dashboard';
 import AdminPage from './AdminPanel/AdminPage';
 import Profile from './Profile/Profile';
@@ -16,7 +15,7 @@ const Routes = props => {
   return (
     <>
       <NavBar />
-      <Route exact path={props.match.path} component={Dashboard} />
+      <Protected exact path={props.match.path} component={Dashboard} />
 
       <Protected
         exact
