@@ -8,12 +8,18 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 import VoteForStartup from './VoteForStartup';
 import Chip from '@material-ui/core/Chip';
+import ListItem from '@material-ui/core/ListItem';
+import Button from '@material-ui/core/Button';
+import Error from '../../../Errors/Error';
+import Snackbar from '@material-ui/core/Snackbar';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 
 const useStyles = makeStyles(theme => ({
-  row: {
+  container: {
     padding: '16px 16px 0',
-    border: '1px solid rgba(0,0,0,.12)',
-    margin: '20px 0',
+    marginBottom: '20px',
   },
   title: {
     textTransform: 'uppercase',
@@ -22,6 +28,15 @@ const useStyles = makeStyles(theme => ({
     lineHeight: 1.6,
     letterSpacing: '-.02em',
     wordSpacing: '.1em',
+  },
+  headerContainer: {
+    marginBottom: '10px',
+    [theme.breakpoints.down('sm')]: {
+      textAlign: 'center',
+    },
+  },
+  header: {
+    fontWeight: 'bold',
   },
   date: {
     stroke: 'transparent',
@@ -34,6 +49,18 @@ const useStyles = makeStyles(theme => ({
     wordSpacing: '.1em',
     textTransform: 'uppercase',
   },
+  center: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  voted: {
+    display: 'flex',
+    flexFlow: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: '25px',
+  },
 }));
 
 const VotingSystem = ({ users }) => {
@@ -41,13 +68,16 @@ const VotingSystem = ({ users }) => {
   const [userDisabled, setUserDisabled] = useState(false);
   const [groupdisabled, setGroupDisabled] = useState(false);
   const [hasUserVoted, setHasUserVoted] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+  const [errorStatus, setErrorStatus] = useState('');
   const [userVote, setUserVote] = useState({
     userVote: 0,
-    startup: {},
+    startup: undefined,
   });
   const [groupVote, setGroupVote] = useState({
     groupVote: 0,
-    startup: {},
+    startup: undefined,
   });
   const classes = useStyles();
 
@@ -63,7 +93,6 @@ const VotingSystem = ({ users }) => {
       setStartups(result);
     };
     fetchData();
-    // eslint-disable-next-line
   }, []);
 
   const setUserVotesToState = (vote, startup) => {
@@ -86,11 +115,30 @@ const VotingSystem = ({ users }) => {
     setGroupDisabled(!groupdisabled);
   };
 
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   const confirmVotes = async () => {
     const votes = {
       userVote,
       groupVote,
     };
+    if (userVote.startup === undefined || groupVote.startup === undefined) {
+      setErrorMsg('Please vote for personal and community.');
+      setErrorStatus('error');
+      handleClick();
+      return;
+    }
+
     try {
       await voteOnStartup(id, votes);
       setHasUserVoted(true);
@@ -115,13 +163,33 @@ const VotingSystem = ({ users }) => {
       {startups.map(({ value }) => {
         const d = new Date(value.date);
         return (
-          <div key={d}>
-            <div className={classes.row}>
-              <span className={classes.date}>{d.toDateString()}</span>
-              <div className={classes.title}>{value.title}</div>
+          <div className={classes.container} key={d}>
+            <Snackbar
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              open={open}
+              autoHideDuration={5000}
+              onClose={handleClose}
+            >
+              <Error
+                onClose={handleClose}
+                variant={errorStatus}
+                message={errorMsg}
+              />
+            </Snackbar>
+            <DialogTitle id='form-dialog-title'>Vote</DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Pick a personal startup you would like to invest in as well as a
+                startup you would like the community to invest!
+              </DialogContentText>
+            </DialogContent>
+            <div className={classes.voted}>
               {userVote?.startup?.companyName ? (
                 <div style={{ marginBottom: '10px' }}>
-                  Your personal vote:{' '}
+                  Personal Vote:{' '}
                   <Chip
                     label={userVote.startup.companyName}
                     onClick={clearUserVote}
@@ -131,7 +199,7 @@ const VotingSystem = ({ users }) => {
               ) : null}
               {groupVote?.startup?.companyName ? (
                 <div style={{ marginBottom: '10px' }}>
-                  Your group vote:{' '}
+                  Community Vote:{' '}
                   <Chip
                     label={groupVote.startup.companyName}
                     onClick={clearGroupVote}
@@ -139,6 +207,11 @@ const VotingSystem = ({ users }) => {
                   />
                 </div>
               ) : null}
+            </div>
+            <div>
+              <div className={classes.headerContainer}>
+                <span className={classes.header}>List of Startups</span>
+              </div>
 
               {value.startups.map(startup => (
                 <VoteForStartup
@@ -151,7 +224,10 @@ const VotingSystem = ({ users }) => {
                 />
               ))}
             </div>
-            <button onClick={confirmVotes}>Submit Votes</button>
+
+            <ListItem className={classes.center}>
+              <Button onClick={confirmVotes}>Submit Votes</Button>
+            </ListItem>
           </div>
         );
       })}

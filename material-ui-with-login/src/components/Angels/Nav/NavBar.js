@@ -319,7 +319,7 @@ const Navbar = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem className={classes.userNameTitle}>
+                <MenuItem disabled className={classes.userNameTitle}>
                   Welcome {user.name}!
                 </MenuItem>
                 <div style={{ display: 'flex', flexFlow: 'column' }}>

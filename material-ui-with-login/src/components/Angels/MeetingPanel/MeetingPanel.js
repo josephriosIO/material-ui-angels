@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import HowToVoteIcon from '@material-ui/icons/HowToVote';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Tooltip from '@material-ui/core/Tooltip';
+import Dialog from '@material-ui/core/Dialog';
 
 const useStyles = makeStyles(theme => ({
   row: {
@@ -118,6 +119,7 @@ const MeetingPanel = ({ users, roles }) => {
   const [isVoting, setIsVoting] = useState(false);
   const classes = useStyles();
   const d = new Date(users.date);
+  const [open, setOpen] = React.useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -132,12 +134,28 @@ const MeetingPanel = ({ users, roles }) => {
     setIsVoting(!isVoting);
   };
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = value => {
+    setOpen(false);
+  };
+
   return (
     <div>
       {isVoting ? (
         <VotingSystem users={users} />
       ) : (
         <div key={d}>
+          <Dialog
+            fullWidth
+            onClose={handleClose}
+            aria-labelledby='simple-dialog-title'
+            open={open}
+          >
+            <VotingSystem users={users} />
+          </Dialog>
           <Paper elevation={3} className={classes.row}>
             <div className={classes.topContent}>
               <div className={classes.dateAndTitle}>
@@ -195,7 +213,7 @@ const MeetingPanel = ({ users, roles }) => {
                       arrow
                       placement='right'
                       className={classes.voteBtn}
-                      onClick={voting}
+                      onClick={handleClickOpen}
                     >
                       <HowToVoteIcon />
                     </Tooltip>
