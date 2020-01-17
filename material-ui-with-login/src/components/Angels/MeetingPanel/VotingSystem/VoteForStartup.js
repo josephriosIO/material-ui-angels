@@ -35,12 +35,16 @@ const VoteForStartup = ({
         {startup.companyName}
       </Typography>
       <Button
+        style={{ marginBottom: '10px' }}
+        variant='contained'
         disabled={userDisabled}
         onClick={() => setUserVotesToState(1, startup)}
       >
         Personal vote
       </Button>
       <Button
+        style={{ marginBottom: '10px' }}
+        variant='contained'
         disabled={groupDisabled}
         onClick={() => setGroupVotesToState(1, startup)}
       >

@@ -22,8 +22,8 @@ const useStyles = makeStyles(theme => ({
     },
   },
   avatarResize: {
-    width: '140px',
-    height: '140px',
+    width: '120px',
+    height: '120px',
     cursor: 'pointer',
     [theme.breakpoints.down('md')]: {
       width: '120px',
@@ -62,6 +62,7 @@ const DashboardDialogAngelBox = ({ angel }) => {
   return (
     <>
       <Dialog
+        fullWidth
         maxWidth='xs'
         onClose={handleClose}
         aria-labelledby='simple-dialog-title'
@@ -87,7 +88,6 @@ const DashboardDialogAngelBox = ({ angel }) => {
 
           <ListItem className={classes.center}>
             <Avatar
-              variant='square'
               className={classes.avatarResize}
               src={angel.img}
               alt={angel.name}

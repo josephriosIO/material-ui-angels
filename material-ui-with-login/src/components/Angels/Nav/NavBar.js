@@ -37,7 +37,10 @@ const useStyles = makeStyles(theme => ({
   toolbar: {
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    paddingRight: '16px',
+    paddingLeft: '16px',
+    [theme.breakpoints.up('md')]: {
+      paddingRight: '16px',
+    },
   },
   toolbarTitle: {
     flexGrow: 1,
@@ -232,12 +235,6 @@ const Navbar = () => {
         </Drawer>
 
         <div style={{ display: 'flex', flexFlow: 'row', alignItems: 'center' }}>
-          <Button
-            onClick={toggleDrawer('left', true)}
-            className={classes.desktopHidden}
-          >
-            <i className='fas fa-bars'></i>
-          </Button>
           <div className={classes.logo}>
             <Link
               style={{ textDecoration: 'none', color: 'black' }}
@@ -343,6 +340,12 @@ const Navbar = () => {
                 src={user.img}
                 alt={user.name}
               />
+              <Button
+                onClick={toggleDrawer('left', true)}
+                className={classes.desktopHidden}
+              >
+                <i className='fas fa-bars'></i>
+              </Button>
             </>
           ) : (
             <p className={classes.link} href={getLoginURL()}>
