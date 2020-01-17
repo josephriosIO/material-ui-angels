@@ -9,6 +9,7 @@ import { Redirect } from 'react-router-dom';
 import DashboardTable from './DashboardTable';
 import DashboardAngelsList from './DashboardAngelsList';
 import DashboardDialogAngelBox from './DashboardDialogAngelBox';
+import SearchBar from '../HelperComponents/SearchBar';
 
 const useStyles = makeStyles(theme => ({
   heroContent: {
@@ -23,6 +24,7 @@ const useStyles = makeStyles(theme => ({
 export default function Dashboard({ userRoles }) {
   const [users, setUsers] = useState(undefined);
   const [userData, setUserData] = useState(undefined);
+  const [filter, setFilter] = useState([]);
   const classes = useStyles();
 
   useEffect(() => {
@@ -44,6 +46,18 @@ export default function Dashboard({ userRoles }) {
   }, [userRoles]);
 
   if (userRoles === undefined) return null;
+
+  const search = e => {
+    const filteredUsers = users.filter(user => {
+      if (user.name.toLowerCase().includes(e.target.value)) {
+        return user;
+      }
+
+      return null;
+    });
+
+    setFilter(filteredUsers);
+  };
 
   if (!userRoles.ADMIN && !userRoles.ANGEL) {
     return (
@@ -72,10 +86,24 @@ export default function Dashboard({ userRoles }) {
         >
           {users.length > 0 ? (
             <div>
-              <p style={{ textAlign: 'center', textTransform: 'uppercase' }}>
-                community members
-              </p>
-              <DashboardAngelsList angels={users} />
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-around',
+                }}
+              >
+                <p style={{ textAlign: 'center', textTransform: 'uppercase' }}>
+                  community members
+                </p>
+                <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                  <SearchBar search={search} title={'Name'} />
+                </div>
+              </div>
+
+              <DashboardAngelsList
+                angels={filter.length > 0 ? filter : users}
+              />
             </div>
           ) : (
             <EmptyState
@@ -97,7 +125,21 @@ export default function Dashboard({ userRoles }) {
     <React.Fragment>
       <CssBaseline />
       <Container maxWidth='lg' component='main' className={classes.heroContent}>
-        <DashboardTable users={users} />
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-around',
+          }}
+        >
+          <p style={{ textAlign: 'center', textTransform: 'uppercase' }}>
+            community members
+          </p>
+          <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+            <SearchBar search={search} title={'Name'} />
+          </div>
+        </div>
+        <DashboardAngelsList angels={filter.length > 0 ? filter : users} />
       </Container>
     </React.Fragment>
   );
