@@ -106,21 +106,22 @@ const LandingPage = () => {
   const [roles, setRoles] = useState([]);
 
   useEffect(() => {
-    const fetchData = async () => {};
+    const fetchData = async () => {
+      try {
+        const roles = await getRole();
+        setRoles(roles);
+      } catch (err) {
+        console.error(err);
+      }
+    };
     fetchData();
     // eslint-disable-next-line
   }, []);
 
-  if (authenticated) {
-    getRole().then(roles => setRoles(roles));
-  }
+  if (authenticated === undefined) return null;
 
-  if (authenticated && roles.length > 0) {
-    if (roles.STARTUP) {
-      return <Redirect to='/startups' />;
-    } else {
-      return <Redirect to='/angels' />;
-    }
+  if (roles?.ANGEL || roles?.ADMIN) {
+    return <Redirect to='/angels' />;
   }
 
   return (
@@ -170,9 +171,7 @@ const LandingPage = () => {
             </span>
           </div>
 
-          <p>
-            A member of our Capitalist Kibbutz.
-          </p>
+          <p>A member of our Capitalist Kibbutz.</p>
           <ColorButton
             href={getLoginURL(`${window.location.origin.toString()}/angels`)}
           >
