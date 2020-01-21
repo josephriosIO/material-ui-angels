@@ -6,9 +6,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
 import EmptyState from '../EmptyStates/EmptyState';
 import { Redirect } from 'react-router-dom';
-import DashboardTable from './DashboardTable';
 import DashboardAngelsList from './DashboardAngelsList';
-import DashboardDialogAngelBox from './DashboardDialogAngelBox';
 import SearchBar from '../HelperComponents/SearchBar';
 
 const useStyles = makeStyles(theme => ({

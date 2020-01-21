@@ -1,7 +1,7 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import { createOrGetUser, getRole } from '../../../../backend/backend';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -222,7 +222,6 @@ const Navbar = () => {
             <NavLink
               activeStyle={{ fontWeight: 'bold' }}
               className={classes.navLinkStyle}
-              exact
               to={`/angels/meetings`}
             >
               <p className={classes.link}> Meetings</p>
@@ -312,7 +311,6 @@ const Navbar = () => {
                 <NavLink
                   activeStyle={{ fontWeight: 'bold' }}
                   className={classes.navLinkStyle}
-                  exact
                   to={`/angels/meetings`}
                 >
                   <p className={classes.link}> Meetings</p>

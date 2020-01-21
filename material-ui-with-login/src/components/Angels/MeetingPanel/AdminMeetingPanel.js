@@ -7,9 +7,7 @@ import {
 } from '../../../../backend/backend';
 import { Redirect } from 'react-router-dom';
 import AngelUserDisplay from './AngelUserDisplay';
-import AngelUsers from './AngelUsers';
 import { Doughnut } from 'react-chartjs-2';
-import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
@@ -177,6 +175,7 @@ const AdminMeetingPanel = props => {
 
                       return (
                         <AngelUserDisplay
+                          key={column.id}
                           value={value}
                           votes={votes}
                           column={column}

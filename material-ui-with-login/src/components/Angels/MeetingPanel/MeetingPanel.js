@@ -130,10 +130,6 @@ const MeetingPanel = ({ users, roles }) => {
     fetchData();
   }, [users]);
 
-  const voting = () => {
-    setIsVoting(!isVoting);
-  };
-
   const handleClickOpen = () => {
     setOpen(true);
   };
