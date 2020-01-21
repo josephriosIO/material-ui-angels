@@ -23,7 +23,6 @@ const AngelUserDisplay = ({ value, column, votes }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log(value, votes);
         if (value) {
           const result = await getAngelById(value);
 
