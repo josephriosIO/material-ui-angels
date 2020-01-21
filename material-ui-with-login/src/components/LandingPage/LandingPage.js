@@ -8,7 +8,8 @@ import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
 import { useAuth } from '@reshuffle/react-auth';
 import { Redirect } from 'react-router-dom';
-import { getRole } from '../../../backend/backend';
+import { getRole, hasCredentials } from '../../../backend/backend';
+import EnvKeyBanner from '../EnvKeyBanner';
 
 const useStyles = makeStyles({
   title: {
@@ -104,12 +105,16 @@ const LandingPage = () => {
   const matches = useMediaQuery('(min-width:800px)');
   const { getLoginURL, authenticated } = useAuth();
   const [roles, setRoles] = useState([]);
+  const [hasCreds, setHasCreds] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const creds = await hasCredentials();
+        setHasCreds(creds)
         const roles = await getRole();
         setRoles(roles);
+
       } catch (err) {
         console.error(err);
       }
@@ -126,6 +131,9 @@ const LandingPage = () => {
 
   return (
     <>
+      {!hasCreds && (
+        <EnvKeyBanner />
+      )}
       <div className={classes.header}>
         <div className={classes.logo}>
           <p>J-Ventures</p>
@@ -141,7 +149,7 @@ const LandingPage = () => {
           <div
             className={`${
               matches ? classes.bodyHeaders : classes.bodyHeadersMobile
-            }`}
+              }`}
           >
             <h2>Startups</h2>
             <span>
@@ -163,7 +171,7 @@ const LandingPage = () => {
           <div
             className={`${
               matches ? classes.bodyHeaders : classes.bodyHeadersMobile
-            }`}
+              }`}
           >
             <h2>J-Ventures members</h2>
             <span>

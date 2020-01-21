@@ -18,6 +18,14 @@ const Roles = {
   GUEST: 'GUEST',
 };
 
+/**
+ * Checking if .env is found and has a VALID_HOSTED_DOMAIN domain
+ * 
+/* @expose */
+export async function hasCredentials() {
+  return ADMIN_USER_EMAIL;
+}
+
 const makeDefaultRole = () => {
   return Object.keys(Roles).reduce((aggr, curr) => {
     return {
