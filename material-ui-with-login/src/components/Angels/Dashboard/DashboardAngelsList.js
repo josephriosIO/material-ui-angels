@@ -37,8 +37,8 @@ const DashboardAngelsList = ({ angels }) => {
 
   return (
     <div className={classes.angelsList}>
-      {angels.map(angel => (
-        <DashboardDialogAngelBox angel={angel} />
+      {angels.map((angel, idx) => (
+        <DashboardDialogAngelBox key={idx} angel={angel} />
       ))}
     </div>
   );
