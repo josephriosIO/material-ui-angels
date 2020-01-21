@@ -11,20 +11,18 @@ import AngelUsers from './AngelUsers';
 import { Doughnut } from 'react-chartjs-2';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TablePagination from '@material-ui/core/TablePagination';
+import TableRow from '@material-ui/core/TableRow';
 
-const data = [
-  {
-    id: 'joseph',
-    name: 'joseph',
-    personalVotedStartups: [{ google: 0 }, { facebook: 0 }, { reshuffle: 1 }],
-    groupVotedStartups: [{ google: 0 }, { facebook: 1 }, { reshuffle: 0 }],
-  },
-  {
-    id: 'user1',
-    name: 'user1',
-    personalVotedStartups: [{ google: 1 }, { facebook: 0 }, { reshuffle: 0 }],
-    groupVotedStartups: [{ google: 0 }, { facebook: 1 }, { reshuffle: 0 }],
-  },
+const columns = [
+  { id: 'id', align: 'left', label: "Angel's Name", minWidth: 170 },
+  { id: 'groupVote', align: 'left', label: 'Group Vote', minWidth: 100 },
+  { id: 'userVote', align: 'left', label: 'Personal Vote', minWidth: 100 },
 ];
 
 const useStyles = makeStyles(theme => ({
@@ -78,13 +76,15 @@ const AdminMeetingPanel = props => {
   const [notVotes, setNoVotes] = useState(false);
   const [startups, setStartups] = useState([]);
   const [points, setPoints] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const classes = useStyles();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await getVotesByMeeting(props?.location?.meeting?.id);
-        console.log(result);
+
         const meeting = await getMeeting(props?.location?.meeting?.id);
         const testing = await getStartupsAndPointsByMeetingId(
           props?.location?.meeting?.id,
@@ -104,6 +104,15 @@ const AdminMeetingPanel = props => {
     };
     fetchData();
   }, [props]);
+
+  const handleChangePage = (e, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = event => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
 
   const options = {
     maintainAspectRatio: true,
@@ -137,53 +146,58 @@ const AdminMeetingPanel = props => {
 
   return (
     <div className={classes.container}>
-      <Paper>
-        <div className={classes.topContent}>
-          <span className={classes.title}>Group votes</span>
-          <div className={classes.userContainer}>
-            {startups.map(startup => (
-              <div className={classes.startupInfo}>
-                <>
-                  <span className={classes.companyName}>
-                    {startup.companyName}
-                  </span>
-                  <div className={classes.flexCenter}>
-                    {allVotes.map(user => {
+      <Grid>
+        <div className={classes.tableWrapper}>
+          <Table stickyHeader aria-label='sticky table'>
+            <TableHead>
+              <TableRow>
+                {columns.map(column => (
+                  <TableCell
+                    key={column.id}
+                    align={column.align}
+                    style={{ minWidth: column.minWidth }}
+                  >
+                    {column.label}
+                  </TableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {allVotes
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map(row => (
+                  <TableRow tabIndex={-1} key={row.id}>
+                    {columns.map(column => {
+                      let value = row[column.id];
+                      let votes = row.votes[column.id];
+
+                      if (value === '' || value === null) {
+                        value = 'N/A';
+                      }
+
                       return (
-                        <AngelUserDisplay
-                          key={user.id}
-                          user={user}
-                          startup={startup.companyName}
-                        />
+                        <TableCell key={column.id} align={column.align}>
+                          <div className={classes.cellTable}>{`${
+                            value ? value : votes.startup.companyName
+                          }`}</div>
+                        </TableCell>
                       );
                     })}
-                  </div>
-                </>
-              </div>
-            ))}
-          </div>{' '}
-          <span className={classes.title}>Personal Votes</span>
-          <div className={classes.userContainer}>
-            {startups.map(startup => (
-              <div className={classes.startupInfo}>
-                <>
-                  <div className={classes.flexCenter}>
-                    {allVotes.map(user => {
-                      return (
-                        <AngelUsers
-                          key={user.id}
-                          user={user}
-                          startup={startup.companyName}
-                        />
-                      );
-                    })}
-                  </div>
-                </>
-              </div>
-            ))}
-          </div>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
         </div>
-      </Paper>
+        <TablePagination
+          rowsPerPageOptions={[1, 5, 25]}
+          component='div'
+          count={allVotes.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+        />
+      </Grid>
 
       <div className={classes.bottomContainer}>
         <div className={classes.startupInfo}>
