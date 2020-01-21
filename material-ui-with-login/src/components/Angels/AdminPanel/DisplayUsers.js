@@ -58,8 +58,7 @@ const DisplayUsers = props => {
       });
     };
     fetchData();
-    // eslint-disable-next-line
-  }, []);
+  }, [user.id]);
 
   const { admin, angel } = state;
 

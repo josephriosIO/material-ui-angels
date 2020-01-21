@@ -152,11 +152,11 @@ const AdminPage = props => {
 
   const callErrors = boolean => {
     if (boolean) {
-      setErrorMsg('Saved.');
+      setErrorMsg('Saved Data.');
       setErrorStatus('success');
       handleClick();
     } else {
-      setErrorMsg('Removed.');
+      setErrorMsg('Removed Role.');
       setErrorStatus('success');
       handleClick();
     }

@@ -14,14 +14,15 @@ const useStyles = makeStyles(theme => ({
 const SearchBar = props => {
   const classes = useStyles();
   return (
-    <form noValidate autoComplete='on' className={classes.formHolder}>
+    <div className={classes.formHolder}>
       <TextField
+        type='search'
         className={classes.text}
-        id='standard-basic'
+        id='search'
         onKeyDown={props.search}
         label={`Search By ${props.title}`}
       />
-    </form>
+    </div>
   );
 };
 

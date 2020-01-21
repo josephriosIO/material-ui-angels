@@ -46,6 +46,10 @@ export default function Dashboard({ userRoles }) {
   if (userRoles === undefined) return null;
 
   const search = e => {
+    if (e.target.value.length < 2) {
+      setFilter([]);
+      return null;
+    }
     const filteredUsers = users.filter(user => {
       if (user.name.toLowerCase().includes(e.target.value)) {
         return user;
@@ -92,7 +96,7 @@ export default function Dashboard({ userRoles }) {
                 }}
               >
                 <p style={{ textAlign: 'center', textTransform: 'uppercase' }}>
-                  community members
+                  Community Members
                 </p>
                 <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
                   <SearchBar search={search} title={'Name'} />
@@ -131,7 +135,7 @@ export default function Dashboard({ userRoles }) {
           }}
         >
           <p style={{ textAlign: 'center', textTransform: 'uppercase' }}>
-            community members
+            Community Members
           </p>
           <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
             <SearchBar search={search} title={'Name'} />
