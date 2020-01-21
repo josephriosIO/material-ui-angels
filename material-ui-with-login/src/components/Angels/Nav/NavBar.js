@@ -179,7 +179,9 @@ const Navbar = () => {
           <ListItem button>
             <div style={{ marginTop: '1px' }}>
               <NavLink
+                activeStyle={{ fontWeight: 'bold' }}
                 className={`${classes.link} ${classes.navLinkStyle}`}
+                exact
                 to={{
                   pathname: `/angels`,
                 }}
@@ -194,6 +196,7 @@ const Navbar = () => {
                 <NavLink
                   activeStyle={{ fontWeight: 'bold' }}
                   className={`${classes.link} ${classes.navLinkStyle}`}
+                  exact
                   to={{
                     pathname: `/angels/admin`,
                   }}
@@ -205,6 +208,7 @@ const Navbar = () => {
                 <NavLink
                   activeStyle={{ fontWeight: 'bold' }}
                   className={`${classes.link} ${classes.navLinkStyle}`}
+                  exact
                   to={{
                     pathname: `/angels/startups`,
                   }}
@@ -218,6 +222,7 @@ const Navbar = () => {
             <NavLink
               activeStyle={{ fontWeight: 'bold' }}
               className={classes.navLinkStyle}
+              exact
               to={`/angels/meetings`}
             >
               <p className={classes.link}> Meetings</p>
@@ -270,7 +275,9 @@ const Navbar = () => {
               <div className={classes.mobileHidden}>
                 <div style={{ marginTop: '1px' }}>
                   <NavLink
+                    activeStyle={{ fontWeight: 'bold' }}
                     className={`${classes.link} ${classes.navLinkStyle}`}
+                    exact
                     to={{
                       pathname: `/angels`,
                     }}
@@ -283,6 +290,7 @@ const Navbar = () => {
                     <NavLink
                       activeStyle={{ fontWeight: 'bold' }}
                       className={`${classes.link} ${classes.navLinkStyle}`}
+                      exact
                       to={{
                         pathname: `/angels/admin`,
                       }}
@@ -292,6 +300,7 @@ const Navbar = () => {
                     <NavLink
                       activeStyle={{ fontWeight: 'bold' }}
                       className={`${classes.link} ${classes.navLinkStyle}`}
+                      exact
                       to={{
                         pathname: `/angels/startups`,
                       }}
@@ -303,6 +312,7 @@ const Navbar = () => {
                 <NavLink
                   activeStyle={{ fontWeight: 'bold' }}
                   className={classes.navLinkStyle}
+                  exact
                   to={`/angels/meetings`}
                 >
                   <p className={classes.link}> Meetings</p>

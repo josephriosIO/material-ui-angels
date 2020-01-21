@@ -2,8 +2,7 @@ import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import { getAngelById } from '../../../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
+import TableCell from '@material-ui/core/TableCell';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -17,34 +16,30 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const AngelUserDisplay = ({ user, startup }) => {
+const AngelUserDisplay = ({ value, column, votes }) => {
   const [userInfo, setUserInfo] = useState({});
   const classes = useStyles();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await getAngelById(user.id);
+        console.log(value, votes);
+        if (value) {
+          const result = await getAngelById(value);
 
-        setUserInfo(...result);
+          setUserInfo(...result);
+        }
       } catch (err) {}
     };
     fetchData();
-  }, [user.id]);
+  }, []);
 
   return (
-    <div className={classes.container}>
-      {startup === user.votes.groupVote.startup.companyName ? (
-        <div className={classes.isUser}>
-          {' '}
-          <Tooltip title={userInfo.name} placement='left-start'>
-            <IconButton aria-label={userInfo.name}>
-              <i className='fas fa-check-square'></i>
-            </IconButton>
-          </Tooltip>
-        </div>
-      ) : null}
-    </div>
+    <TableCell key={column.id} align={column.align}>
+      <div className={classes.cellTable}>{`${
+        value ? userInfo.name : votes.startup.companyName
+      }`}</div>
+    </TableCell>
   );
 };
 

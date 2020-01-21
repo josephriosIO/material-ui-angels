@@ -176,11 +176,11 @@ const AdminMeetingPanel = props => {
                       }
 
                       return (
-                        <TableCell key={column.id} align={column.align}>
-                          <div className={classes.cellTable}>{`${
-                            value ? value : votes.startup.companyName
-                          }`}</div>
-                        </TableCell>
+                        <AngelUserDisplay
+                          value={value}
+                          votes={votes}
+                          column={column}
+                        />
                       );
                     })}
                   </TableRow>

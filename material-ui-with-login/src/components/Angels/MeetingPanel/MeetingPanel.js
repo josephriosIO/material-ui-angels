@@ -195,7 +195,7 @@ const MeetingPanel = ({ users, roles }) => {
                   ) : null}
 
                   {roles.ADMIN && vote ? (
-                    <Tooltip title='View Votes' arrow placement='right'>
+                    <Tooltip title='View Votes' arrow placement='left'>
                       <Link
                         to={{
                           pathname: `/angels/meeting/${users.id}`,
@@ -211,7 +211,7 @@ const MeetingPanel = ({ users, roles }) => {
                     <Tooltip
                       title='Vote'
                       arrow
-                      placement='right'
+                      placement='left'
                       className={classes.voteBtn}
                       onClick={handleClickOpen}
                     >
