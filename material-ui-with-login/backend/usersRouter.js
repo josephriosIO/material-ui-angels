@@ -212,7 +212,7 @@ router.get('/allstartups', validateRole, async (req, res) => {
 	}
 });
 
-router.get('/hasvoted:/id', validateRole, async (req, res) => {
+router.get('/hasvoted/:id', validateRole, async (req, res) => {
 	try {
 		const voted = await get(`${votingPrefix}${req.params.id}${req.user.id}`);
 

@@ -124,7 +124,7 @@ const MeetingPanel = ({ users, roles }) => {
   useEffect(() => {
     const fetchData = async () => {
       const date = users.date;
-      const result = await axios.post('/api/admin/canvote', { date });
+      const result = await axios.post('/api/users/canvote', { date });
 
       setVote(result.data);
     };

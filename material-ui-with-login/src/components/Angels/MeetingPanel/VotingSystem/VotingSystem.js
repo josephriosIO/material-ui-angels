@@ -84,9 +84,10 @@ const VotingSystem = ({ users }) => {
       const hasVoted = await axios(`/api/users/hasvoted/${id}`);
       const result = await axios(`/api/users/getmeeting/${id}`);
 
+
       setHasUserVoted(hasVoted.data);
 
-      setStartups(result);
+      setStartups(result.data);
     };
     fetchData();
   }, []);

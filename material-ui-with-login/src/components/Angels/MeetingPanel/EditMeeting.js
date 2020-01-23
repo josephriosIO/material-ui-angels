@@ -119,7 +119,6 @@ const EditMeeting = props => {
   const [filter, setFilter] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
   const [errorStatus, setErrorStatus] = useState('');
-  const [roles, setRoles] = useState([]);
   const [open, setOpen] = useState(false);
   const [meeting, setMeeting] = useState({
     startDate: new Date(),

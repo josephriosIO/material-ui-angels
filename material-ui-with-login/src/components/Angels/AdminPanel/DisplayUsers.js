@@ -6,11 +6,6 @@ import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import { makeStyles } from '@material-ui/core/styles';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import {
-  getRolesOfUsers,
-  makeUserAdmin,
-  makeUserAngel,
-} from '../../../../backend/backend';
 import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({

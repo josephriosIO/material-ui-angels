@@ -87,7 +87,7 @@ const AdminMeetingPanel = props => {
         const startups = meetingData.map(({ startups }) => startups);
 
         setAllVotes(result.data);
-        setMeeting(meetingData.data);
+        setMeeting(meetingData);
         setPoints(testing.data);
         setStartups(...startups);
       } catch (err) {
