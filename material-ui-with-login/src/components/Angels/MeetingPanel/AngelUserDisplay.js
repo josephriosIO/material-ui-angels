@@ -1,8 +1,8 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
-import { getAngelById } from '../../../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
 import TableCell from '@material-ui/core/TableCell';
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -24,11 +24,12 @@ const AngelUserDisplay = ({ value, column, votes }) => {
     const fetchData = async () => {
       try {
         if (value) {
-          const result = await getAngelById(value);
-
-          setUserInfo(...result);
+          const result = await axios(`/api/admin/angel/${value}`);
+          setUserInfo(...result.data);
         }
-      } catch (err) {}
+      } catch (err) {
+        console.error(err);
+      }
     };
     fetchData();
   }, [value]);
@@ -36,8 +37,8 @@ const AngelUserDisplay = ({ value, column, votes }) => {
   return (
     <TableCell key={column.id} align={column.align}>
       <div className={classes.cellTable}>{`${
-        value ? userInfo.name : votes.startup.companyName
-      }`}</div>
+        value ? userInfo?.name : votes.startup.companyName
+        }`}</div>
     </TableCell>
   );
 };

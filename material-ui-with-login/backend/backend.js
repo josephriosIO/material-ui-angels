@@ -403,46 +403,6 @@ export async function vetStartup(id) {
 }
 
 /* @expose */
-export async function getUnseenStartups() {
-  const profile = await createOrGetUser();
-  await validateRole([Roles.ANGEL, Roles.ADMIN]);
-
-  const rolesQuery = await find(
-    Q.filter(Q.all(Q.key.startsWith(rolesPrefix), Q.value.STARTUP.eq(true))),
-  );
-
-  const userIds = rolesQuery.map(({ key, value }) => {
-    return key.slice(rolesPrefix.length, key.length);
-  });
-
-  if (userIds.length < 1) {
-    return [];
-  }
-
-  const startupsQuery = await find(
-    Q.filter(
-      Q.any(
-        ...userIds.map(id => {
-          return Q.key.startsWith(`${startupsPrefix}${id}`);
-        }),
-      ),
-    ),
-  );
-
-  if (profile.lastSeenStartup === null) {
-    return startupsQuery.map(({ value }) => value);
-  }
-
-  const unseen = startupsQuery.filter(({ value }) => {
-    if (value.registered > profile.lastSeenStartup) {
-      return value;
-    }
-  });
-
-  return unseen;
-}
-
-/* @expose */
 export async function createMeeting(meetingInfo) {
   await validateRole([Roles.ADMIN]);
   const meetingId = uuidv4();

@@ -1,5 +1,5 @@
 import '@reshuffle/code-transform/macro';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -12,6 +12,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { NavLink } from 'react-router-dom';
 import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   '@global': {
@@ -44,10 +45,18 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Navbar = () => {
-  const [addedUser, setAddedUser] = useState(true);
   const classes = useStyles();
   const { authenticated, profile, getLoginURL, getLogoutURL } = useAuth();
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios('/api/startups/createOrGetStartup');
+
+    };
+    fetchData();
+  }, []);
+
 
   const handleClick = event => {
     setAnchorEl(anchorEl ? null : event.currentTarget);
@@ -60,11 +69,6 @@ const Navbar = () => {
     setAnchorEl(null);
   };
 
-  if (authenticated && addedUser) {
-    createOrGetStartup(profile);
-
-    setAddedUser(false);
-  }
 
   return (
     <AppBar
@@ -112,7 +116,7 @@ const Navbar = () => {
                 >
                   <span>Startups</span>
                   <span>
-                    <AllInclusiveIcon style={{ marginLeft: '3px', fontSize: '1rem' }}/>
+                    <AllInclusiveIcon style={{ marginLeft: '3px', fontSize: '1rem' }} />
                   </span>
                 </div>
               </NavLink>

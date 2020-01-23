@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import { createOrGetUser, getRole } from '../../../../backend/backend';
+import { createOrGetUser } from '../../../../backend/backend';
 import Toolbar from '@material-ui/core/Toolbar';
 import Avatar from '@material-ui/core/Avatar';
 import Menu from '@material-ui/core/Menu';
@@ -13,6 +13,7 @@ import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import Button from '@material-ui/core/Button';
+import axios from 'axios';
 
 import { Link, NavLink } from 'react-router-dom';
 
@@ -114,10 +115,9 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Navbar = () => {
+const Navbar = ({ userRoles }) => {
   const classes = useStyles();
   const [user, setUser] = useState([]);
-  const [roles, setRoles] = useState({});
   const [addedUser, setAddedUser] = useState(true);
   const { authenticated, getLoginURL, getLogoutURL } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -148,12 +148,10 @@ const Navbar = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await createOrGetUser();
+      const result = await axios('/api/users/createOrGetUser');
 
-      const roles = await getRole();
+      setUser(result.data);
 
-      setUser(result);
-      setRoles(roles);
     };
     fetchData();
   }, []);
@@ -190,7 +188,7 @@ const Navbar = () => {
               </NavLink>
             </div>
           </ListItem>
-          {roles.ADMIN ? (
+          {userRoles.ADMIN ? (
             <div style={{ marginTop: '1px' }}>
               <ListItem button>
                 <NavLink
@@ -284,7 +282,7 @@ const Navbar = () => {
                     Community
                   </NavLink>
                 </div>
-                {roles.ADMIN ? (
+                {userRoles.ADMIN ? (
                   <div style={{ marginTop: '1px' }}>
                     <NavLink
                       activeStyle={{ fontWeight: 'bold' }}
@@ -356,10 +354,10 @@ const Navbar = () => {
               </Button>
             </>
           ) : (
-            <p className={classes.link} href={getLoginURL()}>
-              Login
+              <p className={classes.link} href={getLoginURL()}>
+                Login
             </p>
-          )}
+            )}
         </div>
       </Toolbar>
     </AppBar>

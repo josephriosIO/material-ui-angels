@@ -1,12 +1,5 @@
 import '@reshuffle/code-transform/macro';
 import React, { useEffect, useState } from 'react';
-import {
-  getAllStartups,
-  archiveStartup,
-  vetStartup,
-  getAllArchivedStartups,
-  deleteStartup,
-} from '../../../../backend/backend';
 import AllStartupsViewTable from './AllStartupsViewTable';
 import Error from '../../Errors/Error';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
@@ -22,6 +15,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import axios from 'axios';
 
 function a11yProps(index) {
   return {
@@ -153,11 +147,11 @@ const AllStartupsView = ({ userRoles }) => {
     const fetchData = async () => {
       try {
         if (userRoles.ADMIN) {
-          const result = await getAllStartups();
-          const users = await getAllArchivedStartups();
+          const result = await axios('/api/users/allstartups');
+          const users = await axios('/api/admin/archivedstartups');
 
-          setUsers(result);
-          setArchivedStartups(users);
+          setUsers(result.data);
+          setArchivedStartups(users.data);
         }
       } catch (err) {
         console.error(err);
@@ -194,7 +188,7 @@ const AllStartupsView = ({ userRoles }) => {
   };
 
   const archive = async (startup, archieved) => {
-    await archiveStartup(startup.id);
+    await axios(`/api/admin/archivestartup/${startup.id}`);
     const index = users.indexOf(startup);
     if (index > -1) {
       users.splice(index, 1);
@@ -221,7 +215,7 @@ const AllStartupsView = ({ userRoles }) => {
   };
 
   const removeStartupById = async (startup, removed) => {
-    await deleteStartup(startup.id);
+    await axios.delete(`/api/admin/deletestartup/${startup.id}`);
     if (removed) {
       setErrorMsg('Startup Deleted from list.');
       setErrorStatus('success');
@@ -230,7 +224,7 @@ const AllStartupsView = ({ userRoles }) => {
   };
 
   const vettedStartup = async (startup, vetted) => {
-    await vetStartup(startup.id);
+    await axios(`/api/admin/vettstartup/${startup.id}`);
     if (!vetted) {
       setErrorMsg('Startup vetted.');
       setErrorStatus('success');
@@ -302,64 +296,6 @@ const AllStartupsView = ({ userRoles }) => {
             </p>
           </div>
         ) : (
-          <div className={classes.root}>
-            <Grid>
-              <div className={classes.tableWrapper}>
-                <Table stickyHeader aria-label='sticky table'>
-                  <TableHead>
-                    <TableRow>
-                      {columns.map(column => (
-                        <TableCell
-                          key={column.id}
-                          align={column.align}
-                          style={{ minWidth: column.minWidth }}
-                        >
-                          {column.label}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {users
-                      .slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage,
-                      )
-                      .map(row => (
-                        <AllStartupsViewTable
-                          key={row.id}
-                          user={row}
-                          removeStartupById={removeStartupById}
-                          archived={archive}
-                          vett={vettedStartup}
-                        />
-                      ))}
-                  </TableBody>
-                </Table>
-              </div>
-              <TablePagination
-                rowsPerPageOptions={[1, 5, 25]}
-                component='div'
-                count={users.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-              />
-            </Grid>
-          </div>
-        )}
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        {archivedStartups.length < 1 ? (
-          <div className='empty'>
-            <div className='empty-icon'>
-              <i className='icon icon-people'></i>
-            </div>
-            <p className='empty-title h5'>No startups has been archived.</p>
-          </div>
-        ) : (
-          <div>
             <div className={classes.root}>
               <Grid>
                 <div className={classes.tableWrapper}>
@@ -378,7 +314,7 @@ const AllStartupsView = ({ userRoles }) => {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {archivedStartups
+                      {users
                         .slice(
                           page * rowsPerPage,
                           page * rowsPerPage + rowsPerPage,
@@ -406,8 +342,66 @@ const AllStartupsView = ({ userRoles }) => {
                 />
               </Grid>
             </div>
+          )}
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        {archivedStartups.length < 1 ? (
+          <div className='empty'>
+            <div className='empty-icon'>
+              <i className='icon icon-people'></i>
+            </div>
+            <p className='empty-title h5'>No startups has been archived.</p>
           </div>
-        )}
+        ) : (
+            <div>
+              <div className={classes.root}>
+                <Grid>
+                  <div className={classes.tableWrapper}>
+                    <Table stickyHeader aria-label='sticky table'>
+                      <TableHead>
+                        <TableRow>
+                          {columns.map(column => (
+                            <TableCell
+                              key={column.id}
+                              align={column.align}
+                              style={{ minWidth: column.minWidth }}
+                            >
+                              {column.label}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {archivedStartups
+                          .slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage,
+                          )
+                          .map(row => (
+                            <AllStartupsViewTable
+                              key={row.id}
+                              user={row}
+                              removeStartupById={removeStartupById}
+                              archived={archive}
+                              vett={vettedStartup}
+                            />
+                          ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                  <TablePagination
+                    rowsPerPageOptions={[1, 5, 25]}
+                    component='div'
+                    count={users.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                  />
+                </Grid>
+              </div>
+            </div>
+          )}
       </TabPanel>
     </div>
   );

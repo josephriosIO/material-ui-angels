@@ -11,6 +11,7 @@ import {
   makeUserAdmin,
   makeUserAngel,
 } from '../../../../backend/backend';
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   infoHolder: {
@@ -50,11 +51,11 @@ const DisplayUsers = props => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const usersRoles = await getRolesOfUsers(user.id);
+      const usersRoles = await axios(`/api/admin/getroles/user/${user.id}`);
 
       setState({
-        admin: usersRoles.ADMIN,
-        angel: usersRoles.ANGEL,
+        admin: usersRoles.data.ADMIN,
+        angel: usersRoles.data.ANGEL,
       });
     };
     fetchData();
@@ -62,15 +63,15 @@ const DisplayUsers = props => {
 
   const { admin, angel } = state;
 
-  const handleChangeAdmin = e => {
+  const handleChangeAdmin = async  e => {
     setState({ ...state, admin: !admin });
-    makeUserAdmin(user.id);
+    await axios(`/api/admin/add/adminrole/user/${user.id}`);
     callErrors(!admin);
   };
 
-  const handleChangeAngel = e => {
+  const handleChangeAngel = async e => {
     setState({ ...state, angel: !angel });
-    makeUserAngel(user.id);
+    await axios(`/api/admin/add/angelrole/user/${user.id}`);
     callErrors(!angel);
   };
 

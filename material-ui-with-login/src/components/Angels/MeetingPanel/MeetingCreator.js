@@ -1,12 +1,6 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
-import {
-  getAllVettedStartups,
-  getRole,
-  createMeeting,
-  archiveStartup,
-} from '../../../../backend/backend';
 import SearchBar from '../HelperComponents/SearchBar';
 import StartupDataTable from './StartupDataTable';
 import { makeStyles } from '@material-ui/core/styles';
@@ -17,6 +11,7 @@ import Error from '../../Errors/Error';
 import Snackbar from '@material-ui/core/Snackbar';
 import { Link } from 'react-router-dom';
 import Chip from '@material-ui/core/Chip';
+import axios from 'axios';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -107,7 +102,6 @@ const MeetingCreator = props => {
   const [filter, setFilter] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
   const [errorStatus, setErrorStatus] = useState('');
-  const [roles, setRoles] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [form, setForm] = useState({
     title: '',
@@ -119,14 +113,11 @@ const MeetingCreator = props => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const usersRoles = await getRole();
 
-      if (usersRoles.ADMIN || usersRoles.ANGEL) {
-        const result = await getAllVettedStartups();
-        setUsers(result);
+      if (props.userRoles.ADMIN || props.userRoles.ANGEL) {
+        const result = await axios('/api/admin/vettedstartups');
+        setUsers(result.data);
       }
-
-      setRoles(usersRoles);
     };
     fetchData();
     // eslint-disable-next-line
@@ -178,7 +169,7 @@ const MeetingCreator = props => {
 
   const onChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
-  if (!roles.ADMIN) {
+  if (!props.userRoles.ADMIN) {
     return (
       <div className='empty'>
         <div className='empty-icon'>
@@ -225,10 +216,10 @@ const MeetingCreator = props => {
     setErrorStatus('success');
     handleClick();
     createdMeeting.map(async startup => {
-      await archiveStartup(startup.id);
+      await axios(`/api/admin/archivestartup/${startup.id}`);
     });
-    await createMeeting(data);
-    setTimeout(function() {
+    await axios.post('/api/admin/createmeeting', { data });
+    setTimeout(function () {
       props.history.push('/angels/meetings');
     }, 3000);
   };

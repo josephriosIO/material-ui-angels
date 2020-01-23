@@ -4,6 +4,7 @@ import { getAngelById } from '../../../../backend/backend';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles } from '@material-ui/core/styles';
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -24,10 +25,12 @@ const AngelUsers = ({ user, startup }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await getAngelById(user.id);
+        const result = await axios(`/api/admin/angel/${value}`);
 
-        setUserInfo(...result);
-      } catch (err) {}
+        setUserInfo(...result.data);
+      } catch (err) {
+        console.error(err);
+      }
     };
     fetchData();
   }, [user.id]);

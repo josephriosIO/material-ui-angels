@@ -1,8 +1,8 @@
 import '@reshuffle/code-transform/macro';
 import React, { useEffect, useState } from 'react';
-import { getRole } from '../../../backend/backend';
 import { useAuth } from '@reshuffle/react-auth';
 import { Route, Redirect } from 'react-router-dom';
+import axios from 'axios';
 
 const Protected = ({ component: Component, ...rest }) => {
   const { authenticated } = useAuth();
@@ -10,9 +10,10 @@ const Protected = ({ component: Component, ...rest }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const roles = await getRole();
+      const test = await axios('api/users/createOrGetUser');
+      const roles = await axios('/api/users/getroles');
 
-      setRoles(roles);
+      setRoles(roles.data);
     };
     fetchData();
   }, []);
@@ -28,8 +29,8 @@ const Protected = ({ component: Component, ...rest }) => {
         authenticated ? (
           <Component {...props} userRoles={roles} />
         ) : (
-          <Redirect to='/' />
-        )
+            <Redirect to='/' />
+          )
       }
     />
   );

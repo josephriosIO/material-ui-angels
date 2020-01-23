@@ -1,10 +1,5 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
-import {
-  getMeeting,
-  voteOnStartup,
-  checkIfUserVoted,
-} from '../../../../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
 import VoteForStartup from './VoteForStartup';
 import Chip from '@material-ui/core/Chip';
@@ -15,6 +10,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -85,10 +81,10 @@ const VotingSystem = ({ users }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const hasVoted = await checkIfUserVoted(id);
-      const result = await getMeeting(id);
+      const hasVoted = await axios(`/api/users/hasvoted/${id}`);
+      const result = await axios(`/api/users/getmeeting/${id}`);
 
-      setHasUserVoted(hasVoted);
+      setHasUserVoted(hasVoted.data);
 
       setStartups(result);
     };
@@ -140,7 +136,7 @@ const VotingSystem = ({ users }) => {
     }
 
     try {
-      await voteOnStartup(id, votes);
+      await axios.post(`/api/users/vote/meeting/${id}`, { votes });
       setHasUserVoted(true);
     } catch (err) {
       console.error(err);

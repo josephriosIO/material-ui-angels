@@ -1,14 +1,6 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
-import {
-  getAllVettedStartups,
-  getRole,
-  updateMeeting,
-  archiveStartup,
-  getMeeting,
-  deleteMeeting,
-} from '../../../../backend/backend';
 import SearchBar from '../HelperComponents/SearchBar';
 import StartupDataTable from './StartupDataTable';
 import { makeStyles } from '@material-ui/core/styles';
@@ -18,6 +10,7 @@ import TextField from '@material-ui/core/TextField';
 import Error from '../../Errors/Error';
 import Snackbar from '@material-ui/core/Snackbar';
 import Chip from '@material-ui/core/Chip';
+import axios from 'axios';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -141,10 +134,9 @@ const EditMeeting = props => {
   useEffect(() => {
     const fetchData = async () => {
       const { id } = props.match.params;
-      const usersRoles = await getRole();
-      const editableMeeting = await getMeeting(id);
+      const editableMeeting = await axios(`/api/users/getmeeting/${id}`);
 
-      const meeting = editableMeeting.map(({ value }) => value);
+      const meeting = editableMeeting.data.map(({ value }) => value);
 
       setMeeting({
         ...meeting,
@@ -153,17 +145,16 @@ const EditMeeting = props => {
         startups: meeting[0].startups,
       });
 
-      if (usersRoles.ADMIN || usersRoles.ANGEL) {
-        const result = await getAllVettedStartups();
+      if (props.userRoles.ADMIN || props.userRoles.ANGEL) {
+        const result = await axios('/api/admin/vettedstartups');
 
-        if (result.length < 1) {
+        if (result.data.length < 1) {
           setUsers(meeting[0].startups);
         } else {
-          setUsers(result);
+          setUsers(result.data);
         }
       }
 
-      setRoles(usersRoles);
     };
     fetchData();
     // eslint-disable-next-line
@@ -216,7 +207,7 @@ const EditMeeting = props => {
   const onChange = e =>
     setMeeting({ ...meeting, [e.target.name]: e.target.value });
 
-  if (!roles.ADMIN) {
+  if (!props.userRoles.ADMIN) {
     return (
       <div className='empty'>
         <div className='empty-icon'>
@@ -250,23 +241,25 @@ const EditMeeting = props => {
     setErrorStatus('success');
     handleClick();
     startups.map(async startup => {
-      await archiveStartup(startup.id);
-    });
-    await updateMeeting(data, id);
+      await axios(`/api/admin/archivestartup/${startup.id}`);
 
-    setTimeout(function() {
+    });
+    await axios.put(`/api/admin/updatemeeting/${id}`, { data });
+
+
+    setTimeout(function () {
       props.history.push('/angels/meetings');
     }, 3000);
   };
 
   const removeMeeting = async () => {
     const { id } = props.match.params;
-    await deleteMeeting(id);
+    await axios.delete(`/api/admin/deletemeeting/${id}`);
     setErrorMsg('Deleted meeting.');
     setErrorStatus('success');
     handleClick();
 
-    setTimeout(function() {
+    setTimeout(function () {
       props.history.push('/angels/meetings');
     }, 3000);
   };

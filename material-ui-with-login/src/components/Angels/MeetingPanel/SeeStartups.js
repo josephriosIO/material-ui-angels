@@ -1,7 +1,6 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
-import { getMeetings } from '../../../../backend/backend';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
@@ -14,6 +13,7 @@ import Box from '@material-ui/core/Box';
 import { Link } from 'react-router-dom';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Tooltip from '@material-ui/core/Tooltip';
+import axios from 'axios';
 
 const StyledTabs = withStyles({
   indicator: {
@@ -111,27 +111,34 @@ export default function SeeStartups({ userRoles }) {
   useEffect(() => {
     const fetchData = async () => {
       if (userRoles.ADMIN || userRoles.ANGEL) {
-        const result = await getMeetings();
+        const result = await axios('/api/users/getmeetings');
+        console.log(result);
 
-        const sortedDates = result.sort(
-          (a, b) => new Date(b.date) - new Date(a.date),
-        );
+        if (result.data !== '') {
 
-        const newMeetings = sortedDates.filter(d => {
-          let meetingDate = new Date(d.date);
-          let currentDate = new Date();
-          meetingDate.setHours(0, 0, 0, 0);
-          currentDate.setHours(0, 0, 0, 0);
+          const sortedDates = result.data.sort(
+            (a, b) => new Date(b.date) - new Date(a.date),
+          );
 
-          return meetingDate >= currentDate;
-        });
+          const newMeetings = sortedDates.filter(d => {
+            let meetingDate = new Date(d.date);
+            let currentDate = new Date();
+            meetingDate.setHours(0, 0, 0, 0);
+            currentDate.setHours(0, 0, 0, 0);
 
-        const oldDates = sortedDates.filter(d => {
-          return new Date(d.date).getTime() <= new Date().getTime();
-        });
+            return meetingDate >= currentDate;
+          });
 
-        setOldMeetings(oldDates);
-        setUsers(newMeetings.reverse());
+          const oldDates = sortedDates.filter(d => {
+            return new Date(d.date).getTime() <= new Date().getTime();
+          });
+
+          setOldMeetings(oldDates);
+          setUsers(newMeetings.reverse());
+        } else {
+          setOldMeetings([]);
+          setUsers([]);
+        }
       }
     };
     fetchData();
@@ -193,76 +200,76 @@ export default function SeeStartups({ userRoles }) {
             </p>
           </div>
         ) : (
-          <Grid>
-            <div className={classes.root}>
-              <div className={classes.flex}>
-                <div style={{ padding: '20px 10px' }}>
-                  <StyledTabs
-                    value={value}
-                    onChange={handleChange}
-                    aria-label='meetings tab'
-                  >
-                    <StyledTab label='Upcoming Meetings' {...a11yProps(0)} />
-                    <StyledTab label='Previous Meetings' {...a11yProps(1)} />
-                  </StyledTabs>
-                </div>
-
-                {userRoles.ADMIN ? (
-                  <Tooltip title='Create Meeting' arrow>
-                    <Link
-                      className={classes.link}
-                      to={{
-                        pathname: `/angels/createmeeting`,
-                      }}
+            <Grid>
+              <div className={classes.root}>
+                <div className={classes.flex}>
+                  <div style={{ padding: '20px 10px' }}>
+                    <StyledTabs
+                      value={value}
+                      onChange={handleChange}
+                      aria-label='meetings tab'
                     >
-                      <AddCircleIcon />
-                    </Link>
-                  </Tooltip>
-                ) : null}
+                      <StyledTab label='Upcoming Meetings' {...a11yProps(0)} />
+                      <StyledTab label='Previous Meetings' {...a11yProps(1)} />
+                    </StyledTabs>
+                  </div>
+
+                  {userRoles.ADMIN ? (
+                    <Tooltip title='Create Meeting' arrow>
+                      <Link
+                        className={classes.link}
+                        to={{
+                          pathname: `/angels/createmeeting`,
+                        }}
+                      >
+                        <AddCircleIcon />
+                      </Link>
+                    </Tooltip>
+                  ) : null}
+                </div>
+                <TabPanel value={value} index={0}>
+                  <div>
+                    {users.length < 1 ? (
+                      <div className='empty'>
+                        <div className='empty-icon'>
+                          <i className='fas fa-users'></i>
+                        </div>
+                        <p className='empty-title h5'>No Upcoming meetings.</p>
+                      </div>
+                    ) : (
+                        users.map(startupsData => (
+                          <MeetingPanels
+                            key={startupsData.id}
+                            users={startupsData}
+                            roles={userRoles}
+                          />
+                        ))
+                      )}
+                  </div>
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                  <div>
+                    {oldMeetings.length < 1 ? (
+                      <div className='empty'>
+                        <div className='empty-icon'>
+                          <i className='fas fa-users'></i>
+                        </div>
+                        <p className='empty-title h5'>No previous meetings.</p>
+                      </div>
+                    ) : (
+                        oldMeetings.map(startupsData => (
+                          <MeetingPanels
+                            roles={userRoles}
+                            key={startupsData.id}
+                            users={startupsData}
+                          />
+                        ))
+                      )}
+                  </div>
+                </TabPanel>
               </div>
-              <TabPanel value={value} index={0}>
-                <div>
-                  {users.length < 1 ? (
-                    <div className='empty'>
-                      <div className='empty-icon'>
-                        <i className='fas fa-users'></i>
-                      </div>
-                      <p className='empty-title h5'>No Upcoming meetings.</p>
-                    </div>
-                  ) : (
-                    users.map(startupsData => (
-                      <MeetingPanels
-                        key={startupsData.id}
-                        users={startupsData}
-                        roles={userRoles}
-                      />
-                    ))
-                  )}
-                </div>
-              </TabPanel>
-              <TabPanel value={value} index={1}>
-                <div>
-                  {oldMeetings.length < 1 ? (
-                    <div className='empty'>
-                      <div className='empty-icon'>
-                        <i className='fas fa-users'></i>
-                      </div>
-                      <p className='empty-title h5'>No previous meetings.</p>
-                    </div>
-                  ) : (
-                    oldMeetings.map(startupsData => (
-                      <MeetingPanels
-                        roles={userRoles}
-                        key={startupsData.id}
-                        users={startupsData}
-                      />
-                    ))
-                  )}
-                </div>
-              </TabPanel>
-            </div>
-          </Grid>
-        )}
+            </Grid>
+          )}
       </Container>
     </React.Fragment>
   );

@@ -14,7 +14,8 @@ import EditMeeting from './MeetingPanel/EditMeeting';
 const Routes = props => {
   return (
     <>
-      <NavBar />
+      <Protected path={props.match.path} component={NavBar} />
+
       <Protected exact path={props.match.path} component={Dashboard} />
 
       <Protected

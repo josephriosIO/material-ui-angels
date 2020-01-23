@@ -2,14 +2,11 @@ import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import {
-  createOrGetStartup,
-  updateStartupProfile,
-} from '../../../../backend/backend';
 import Error from '../../Errors/Error';
 import MenuItem from '@material-ui/core/MenuItem';
 import { makeStyles } from '@material-ui/core/styles';
 import Snackbar from '@material-ui/core/Snackbar';
+import axios from 'axios';
 
 const employeesValues = [
   '0 - 10',
@@ -128,18 +125,19 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const user = await createOrGetStartup();
+      const user = await axios('/api/startups/createOrGetStartup');
+      console.log(user)
 
-      setProfile(user);
+      setProfile(user.data);
 
       setForm({
-        companyName: user.companyName,
-        missionStatement: user.missionStatement,
-        website: user.website,
-        location: user.location,
-        phoneNumber: user.phoneNumber,
-        funded: user.funded,
-        companySize: user.companySize,
+        companyName: user.data.companyName,
+        missionStatement: user.data.missionStatement,
+        website: user.data.website,
+        location: user.data.location,
+        phoneNumber: user.data.phoneNumber,
+        funded: user.data.funded,
+        companySize: user.data.companySize,
       });
     };
     fetchData();
@@ -160,7 +158,8 @@ const Profile = () => {
   const handleSubmits = async event => {
     try {
       event.preventDefault();
-      await updateStartupProfile(form);
+      await axios.put('/api/startups/update', { form });
+
       setErrorMsg('Saved.');
       setErrorStatus('success');
       handleClick()

@@ -1,9 +1,5 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
-import {
-  updateStartupProfile,
-  createOrGetStartup,
-} from '../../../../backend/backend';
 import Error from '../../Errors/Error';
 import { Redirect } from 'react-router-dom';
 import { useAuth } from '@reshuffle/react-auth';
@@ -12,6 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
+import axios from 'axios';
 
 const employeesValues = [
   '0 - 10',
@@ -86,8 +83,9 @@ const Questionaire = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const startup = await createOrGetStartup();
-      setProfile(startup);
+      const startup = await axios('/api/startups/createOrGetStartup');
+      console.log(startup)
+      setProfile(startup.data);
 
       setForm({
         companyName: startup.companyName,
@@ -116,7 +114,7 @@ const Questionaire = () => {
 
   const handleSubmits = async event => {
     event.preventDefault();
-    await updateStartupProfile(form);
+    await axios.put(`/api/startups/update`, { form });
     setErrorMsg('Saved.');
     setErrorStatus('success');
     handleClick()

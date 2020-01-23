@@ -8,8 +8,9 @@ import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
 import { useAuth } from '@reshuffle/react-auth';
 import { Redirect } from 'react-router-dom';
-import { getRole, hasCredentials } from '../../../backend/backend';
+import { hasCredentials } from '../../../backend/backend';
 import EnvKeyBanner from '../EnvKeyBanner';
+import axios from 'axios';
 
 const useStyles = makeStyles({
   title: {
@@ -112,8 +113,8 @@ const LandingPage = () => {
       try {
         const creds = await hasCredentials();
         setHasCreds(creds)
-        const roles = await getRole();
-        setRoles(roles);
+        const roles = await axios('/api/users/getroles');
+        setRoles(roles.data);
 
       } catch (err) {
         console.error(err);

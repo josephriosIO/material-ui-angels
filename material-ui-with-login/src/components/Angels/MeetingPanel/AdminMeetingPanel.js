@@ -1,10 +1,5 @@
 import '@reshuffle/code-transform/macro';
 import React, { useEffect, useState } from 'react';
-import {
-  getVotesByMeeting,
-  getMeeting,
-  getStartupsAndPointsByMeetingId,
-} from '../../../../backend/backend';
 import { Redirect } from 'react-router-dom';
 import AngelUserDisplay from './AngelUserDisplay';
 import { Doughnut } from 'react-chartjs-2';
@@ -16,6 +11,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
+import axios from 'axios';
 
 const columns = [
   { id: 'id', align: 'left', label: "Angel's Name", minWidth: 170 },
@@ -78,23 +74,21 @@ const AdminMeetingPanel = props => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const classes = useStyles();
 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await getVotesByMeeting(props?.location?.meeting?.id);
+        const result = await axios(`/api/admin/votes/meeting/${props?.location?.meeting?.id}`);
+        const meeting = await axios(`/api/users/getmeeting/${props?.location?.meeting?.id}`);
+        const testing = await axios(`/api/admin/totalpoints/meeting/${props?.location?.meeting?.id}`);
 
-        const meeting = await getMeeting(props?.location?.meeting?.id);
-        const testing = await getStartupsAndPointsByMeetingId(
-          props?.location?.meeting?.id,
-        );
-
-        const meetingData = meeting.map(({ value }) => value);
+        const meetingData = meeting.data.map(({ value }) => value);
 
         const startups = meetingData.map(({ startups }) => startups);
 
-        setAllVotes(result);
-        setMeeting(meetingData);
-        setPoints(testing);
+        setAllVotes(result.data);
+        setMeeting(meetingData.data);
+        setPoints(testing.data);
         setStartups(...startups);
       } catch (err) {
         setNoVotes(true);
@@ -117,7 +111,7 @@ const AdminMeetingPanel = props => {
   };
 
   if (notVotes) {
-    setTimeout(function() {
+    setTimeout(function () {
       setNoVotes(false);
       setReload(true);
     }, 5000);

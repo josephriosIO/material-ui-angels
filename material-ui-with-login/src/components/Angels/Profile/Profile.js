@@ -4,6 +4,7 @@ import { updateUser, createOrGetUser } from '../../../../backend/backend';
 import Error from '../../Errors/Error';
 import ProfileForm from './ProfileForm';
 import Snackbar from '@material-ui/core/Snackbar';
+import axios from 'axios';
 
 
 const Profile = () => {
@@ -16,20 +17,21 @@ const Profile = () => {
     bio: '',
     phoneNumber: '',
   });
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
 
   useEffect(() => {
     const fetchData = async () => {
-      const user = await createOrGetUser();
+      const user = await axios('/api/users/createOrGetUser');
+      console.log(user.data)
 
-      setProfile(user);
+      setProfile(user.data);
 
       setForm({
-        name: user.name,
-        bio: user.bio,
-        location: user.location,
-        phoneNumber: user.phoneNumber,
+        name: user.data.name,
+        bio: user.data.bio,
+        location: user.data.location,
+        phoneNumber: user.data.phoneNumber,
       });
     };
     fetchData();
@@ -50,10 +52,21 @@ const Profile = () => {
 
   const handleSubmits = async event => {
     event.preventDefault();
-    await updateUser(form);
-    setErrorMsg('Updated Profile.');
-    setErrorStatus('success');
-    handleClick()
+    try {
+
+      const test = await axios.put(`/api/users/updateuser/${profile.id}`, { form });
+      console.log(test);
+
+      setErrorMsg('Updated Profile.');
+      setErrorStatus('success');
+      handleClick()
+    } catch (err) {
+      console.log(err);
+      setErrorMsg('Error Updating Profile.');
+      setErrorStatus('danger');
+      handleClick()
+    }
+
   };
 
   const onChange = e => setForm({ ...form, [e.target.name]: e.target.value });

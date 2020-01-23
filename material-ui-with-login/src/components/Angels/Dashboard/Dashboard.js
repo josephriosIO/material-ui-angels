@@ -1,6 +1,5 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
-import { getAllAngels, createOrGetUser } from '../../../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
@@ -8,6 +7,7 @@ import EmptyState from '../EmptyStates/EmptyState';
 import { Redirect } from 'react-router-dom';
 import DashboardAngelsList from './DashboardAngelsList';
 import SearchBar from '../HelperComponents/SearchBar';
+import axios from 'axios'
 
 const useStyles = makeStyles(theme => ({
   heroContent: {
@@ -28,11 +28,11 @@ export default function Dashboard({ userRoles }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const signedInUser = await createOrGetUser();
+        const signedInUser = await axios('api/users/createOrGetUser');
 
         if (userRoles.ADMIN || userRoles.ANGEL) {
-          const result = await getAllAngels();
-          setUsers(result);
+          const result = await axios('/api/users/getangels');
+          setUsers(result.data);
         }
 
         setUserData(signedInUser);
@@ -108,12 +108,12 @@ export default function Dashboard({ userRoles }) {
               />
             </div>
           ) : (
-            <EmptyState
-              title={'Admin View'}
-              subtitle={'Accept some angels.'}
-              roles={userRoles}
-            />
-          )}
+              <EmptyState
+                title={'Admin View'}
+                subtitle={'Accept some angels.'}
+                roles={userRoles}
+              />
+            )}
         </Container>
       </>
     );

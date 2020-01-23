@@ -1,6 +1,5 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState, useEffect } from 'react';
-import { canVote } from '../../../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
 import VotingSystem from './VotingSystem/VotingSystem';
 import Paper from '@material-ui/core/Paper';
@@ -9,6 +8,7 @@ import HowToVoteIcon from '@material-ui/icons/HowToVote';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Tooltip from '@material-ui/core/Tooltip';
 import Dialog from '@material-ui/core/Dialog';
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   row: {
@@ -123,9 +123,10 @@ const MeetingPanel = ({ users, roles }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await canVote(users.date);
+      const date = users.date;
+      const result = await axios.post('/api/admin/canvote', { date });
 
-      setVote(result);
+      setVote(result.data);
     };
     fetchData();
   }, [users]);
@@ -143,83 +144,83 @@ const MeetingPanel = ({ users, roles }) => {
       {isVoting ? (
         <VotingSystem users={users} />
       ) : (
-        <div key={d}>
-          <Dialog
-            fullWidth
-            onClose={handleClose}
-            aria-labelledby='simple-dialog-title'
-            open={open}
-          >
-            <VotingSystem users={users} />
-          </Dialog>
-          <Paper elevation={3} className={classes.row}>
-            <div className={classes.topContent}>
-              <div className={classes.dateAndTitle}>
-                <div>
-                  <span className={classes.date}>{d.toDateString()}</span>
-                  <div className={classes.title}>{users.title}</div>
+          <div key={d}>
+            <Dialog
+              fullWidth
+              onClose={handleClose}
+              aria-labelledby='simple-dialog-title'
+              open={open}
+            >
+              <VotingSystem users={users} />
+            </Dialog>
+            <Paper elevation={3} className={classes.row}>
+              <div className={classes.topContent}>
+                <div className={classes.dateAndTitle}>
+                  <div>
+                    <span className={classes.date}>{d.toDateString()}</span>
+                    <div className={classes.title}>{users.title}</div>
+                  </div>
                 </div>
-              </div>
-              <div className={classes.startups}>
-                <span className={classes.titleForStartups}>
-                  Startups In Meeting:
+                <div className={classes.startups}>
+                  <span className={classes.titleForStartups}>
+                    Startups In Meeting:
                 </span>
-                <div className={classes.startupView}>
-                  {users.startups.map((startup, idx) => (
-                    <div key={idx}>
-                      <a
-                        rel='noopener noreferrer'
-                        target='_blank'
-                        href={startup.website}
-                        className={classes.startupLevel}
-                      >
-                        {startup.companyName},
+                  <div className={classes.startupView}>
+                    {users.startups.map((startup, idx) => (
+                      <div key={idx}>
+                        <a
+                          rel='noopener noreferrer'
+                          target='_blank'
+                          href={startup.website}
+                          className={classes.startupLevel}
+                        >
+                          {startup.companyName},
                       </a>
-                    </div>
-                  ))}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-              <div className={classes.bottomContent}>
-                <div className={classes.itemHolder}>
-                  {roles.ADMIN && !vote ? (
-                    <Link
-                      to={`/angels/editmeeting/${users.id}`}
-                      className={classes.checkVotesLink}
-                    >
-                      Edit
-                    </Link>
-                  ) : null}
-
-                  {roles.ADMIN && vote ? (
-                    <Tooltip title='View Votes' arrow placement='left'>
+                <div className={classes.bottomContent}>
+                  <div className={classes.itemHolder}>
+                    {roles.ADMIN && !vote ? (
                       <Link
-                        to={{
-                          pathname: `/angels/meeting/${users.id}`,
-                          meeting: { id: users.id },
-                        }}
+                        to={`/angels/editmeeting/${users.id}`}
                         className={classes.checkVotesLink}
                       >
-                        <VisibilityIcon />
-                      </Link>
-                    </Tooltip>
-                  ) : null}
-                  {vote && (
-                    <Tooltip
-                      title='Vote'
-                      arrow
-                      placement='left'
-                      className={classes.voteBtn}
-                      onClick={handleClickOpen}
-                    >
-                      <HowToVoteIcon />
-                    </Tooltip>
-                  )}
+                        Edit
+                    </Link>
+                    ) : null}
+
+                    {roles.ADMIN && vote ? (
+                      <Tooltip title='View Votes' arrow placement='left'>
+                        <Link
+                          to={{
+                            pathname: `/angels/meeting/${users.id}`,
+                            meeting: { id: users.id },
+                          }}
+                          className={classes.checkVotesLink}
+                        >
+                          <VisibilityIcon />
+                        </Link>
+                      </Tooltip>
+                    ) : null}
+                    {vote && (
+                      <Tooltip
+                        title='Vote'
+                        arrow
+                        placement='left'
+                        className={classes.voteBtn}
+                        onClick={handleClickOpen}
+                      >
+                        <HowToVoteIcon />
+                      </Tooltip>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          </Paper>
-        </div>
-      )}
+            </Paper>
+          </div>
+        )}
     </div>
   );
 };

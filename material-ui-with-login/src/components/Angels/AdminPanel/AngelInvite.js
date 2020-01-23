@@ -1,11 +1,11 @@
 import '@reshuffle/code-transform/macro';
 import React, { useState } from 'react';
 import { useAuth } from '@reshuffle/react-auth';
-import { consumeInvite } from '../../../../backend/backend';
 import { Redirect } from 'react-router-dom';
 import Snackbar from '@material-ui/core/Snackbar';
 import Error from '../../Errors/Error';
 import { makeStyles } from '@material-ui/core/styles';
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   fullEmptyScreen: {
@@ -45,7 +45,7 @@ const AngelInvite = props => {
         try {
           const urlPath = props.location.pathname;
           const invite = urlPath.slice(8);
-          const invited = await consumeInvite(invite);
+          const invited = await axios.post("http://localhost:3000/api/admin/consumeInvite", { invite });
 
           if (invited) {
             return setConsumed(true);

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import StartupProfile from './Profile/StartupProfile';
 import { createOrGetStartup } from '../../../backend/backend';
 import { makeStyles } from '@material-ui/core/styles';
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -16,9 +17,9 @@ const HomePage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const user = await createOrGetStartup();
+      const user = await axios('/api/startups/createOrGetStartup');
 
-      setUser(user);
+      setUser(user.data);
     };
     fetchData();
   }, []);

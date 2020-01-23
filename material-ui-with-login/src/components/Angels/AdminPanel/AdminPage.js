@@ -9,11 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TablePagination from '@material-ui/core/TablePagination';
 import Button from '@material-ui/core/Button';
 import Snackbar from '@material-ui/core/Snackbar';
-
-import {
-  getAllUsersThatAreNotAStartup,
-  createOrGetInvite,
-} from '../../../../backend/backend';
+import axios from 'axios';
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -117,13 +113,14 @@ const AdminPage = props => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await getAllUsersThatAreNotAStartup();
-      const createdInvite = await createOrGetInvite();
+      const result = await axios('/api/users/getusers');
+      const createdInvite = await axios('/api/admin/createinvite');
 
-      setInvite(createdInvite);
+
+      setInvite(createdInvite.data);
 
       if (result) {
-        setUsers(result);
+        setUsers(result.data);
       }
     };
     fetchData();
@@ -206,23 +203,23 @@ const AdminPage = props => {
             <div className={classes.tableWrapper}>
               {filter.length > 0
                 ? filter
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map(user => (
-                      <DisplayUsers
-                        key={user.id}
-                        callErrors={callErrors}
-                        user={user}
-                      />
-                    ))
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map(user => (
+                    <DisplayUsers
+                      key={user.id}
+                      callErrors={callErrors}
+                      user={user}
+                    />
+                  ))
                 : users
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map(user => (
-                      <DisplayUsers
-                        key={user.id}
-                        callErrors={callErrors}
-                        user={user}
-                      />
-                    ))}
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map(user => (
+                    <DisplayUsers
+                      key={user.id}
+                      callErrors={callErrors}
+                      user={user}
+                    />
+                  ))}
             </div>
             <TablePagination
               rowsPerPageOptions={[1, 5, 10]}
